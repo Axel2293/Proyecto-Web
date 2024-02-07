@@ -7,7 +7,6 @@
 
 body {
     background-color: #f5faf6;
-    /* background-image: url('https://wizi.academy/assets/img/landings/Fondo-ITESO.webp'); */
     background-size: cover;
     display: flex;
     align-items: center;
@@ -15,23 +14,6 @@ body {
     height: 100vh;
     padding: 0 20px;
 }
-/* **IF FIXED, THE BACKGROUND WILL SHOW UP W/ BLUR FILTER**
-.background-image {
-    position: fixed;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    display: block;
-    background-image: url('https://wizi.academy/assets/img/landings/Fondo-ITESO.webp');
-    width: 1200px;
-    height: 800px;
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
-} 
-*/
 
 .container {
     display: flex;
@@ -166,4 +148,59 @@ button:hover {
 .form-control.error input,
 .form-control.error textarea {
     border-color: #e74c3c;
+}
+
+/* Remember me and Forgot Password */
+.rememberAndForgotPassword{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.rememberMe{
+    color: #555;
+    cursor: pointer;
+}
+.rememberMe:hover{
+    box-shadow: 0 1px 0 0 #5c615d;
+    transition: 0.11s;
+}
+.rememberMe input{
+    margin-right: 5px;
+}
+
+.forgotPassword a{
+    text-decoration: none;
+    color: #5c615d;
+    box-shadow: 0 1px 0 0 #5c615d;
+}
+.forgotPassword p{
+    color: #555;
+}
+
+/* Dont have an account? */
+.ChangeForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+.ChangeForm p{
+    color: #555;
+}
+.ChangeForm a{
+    text-decoration: none;
+    color: #5c615d;
+    box-shadow: 0 1px 0 0 #5c615d;
+}
+
+footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: #f5faf6;
+    box-shadow: 0 0 10px 0 #5c615d;
 }

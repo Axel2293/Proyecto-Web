@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <title>Register</title>
+    <title>Login</title>
 </head>
+
 <body>
     <div class="background-image"></div>
     <div class="container">
         <img src="bg-login.jpg">
         <form id="mainForm" novalidate>
-            <h2>Register</h2>
-            <div class="form-control">
-                <label for="name">Name</label>
-                <input type="text" id="name"
-                placeholder="Enter your name"
-                autocomplete="off">
-                <i class="icon"></i>
-            </div>
-
+            <h2>Login</h2>
             <div class="form-control">
                 <label for="email">Email</label>
-                <input type="email" id="email"
-                placeholder="Enter your email"
-                autocomplete="off">
+                <input type="email" id="email" placeholder="Enter your email" autocomplete="off">
                 <i class="icon"></i>
             </div>
 
             <div class="form-control">
                 <label for="password">Password</label>
-                <input type="password" id="password"
-                placeholder="Enter your password"
-                autocomplete="off">
+                <input type="password" id="password" placeholder="Enter your password" autocomplete="off">
                 <i class="icon"></i>
             </div>
-
-            <button type="submit">Submit</button>
-            <div class="ChangeForm">
-                <p>Already have an account? <a href="login.html">Login</a></p>
+            <!-- Remember Me and Forgot Password-->
+            <div class="rememberAndForgotPassword">
+                <div class="rememberMe">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Remember me</label>
+                </div>
+                <div class="forgotPassword">
+                    <p>Forgot <a href="#">Password?</a></p>
+                </div>
             </div>
+            <!-- Submit Button -->
+            <button type="submit">Submit</button>
+            <!-- Dont have an account? -->
+            <div class="ChangeForm">
+                <p>Don't have an account? <a href="register.html">Register</a></p>
         </form>
     </div>
 
@@ -53,4 +53,5 @@
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
