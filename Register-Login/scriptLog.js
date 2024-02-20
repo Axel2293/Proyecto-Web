@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         if(checkInputs()){
             showModal();
+            setTimeout(() => {
+                window.location.href = '../Dashboard/dashboard.html';
+            }, 3000);
         }
     });
 
