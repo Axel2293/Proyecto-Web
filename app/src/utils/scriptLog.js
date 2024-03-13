@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if(checkInputs()){
             showModal();
             setTimeout(() => {
-                window.location.href = '../Dashboard/dashboard.html';
+                window.location.href = '../views/dashboard.html';
             }, 3000);
         }
     });

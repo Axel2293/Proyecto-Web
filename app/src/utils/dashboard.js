@@ -1,5 +1,7 @@
 const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logout)');
 
+// Hide sidebar when window is less than 768px
+
 sideLinks.forEach(item => {
     const li = item.parentElement;
     item.addEventListener('click', () => {
@@ -12,6 +14,22 @@ sideLinks.forEach(item => {
 
 const menuBar = document.querySelector('.content nav .bx.bx-menu');
 const sideBar = document.querySelector('.sidebar');
+
+
+// if cursor not on top of the sidebar, hide it, else show it
+sideBar.addEventListener('mouseleave', () => {
+    sideBar.classList.add('close');
+});
+sideBar.addEventListener('mouseenter', () => {
+    sideBar.classList.remove('close');
+});
+// Hide the sidebar at first, but hide it after some time
+const first = setTimeout(() => {
+    sideBar.classList.add('close');
+    clearTimeout(first);
+}, 1750);
+
+
 
 menuBar.addEventListener('click', () => {
     sideBar.classList.toggle('close');

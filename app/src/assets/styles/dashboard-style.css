@@ -75,7 +75,7 @@ body {
     width: 60px;
 }
 
-.sidebar .logo {
+.sidebar .logo{
     font-weight: 700;
     align-items: center;
     padding-bottom: 5px;
@@ -86,6 +86,16 @@ body {
     box-sizing: content-box;
     padding-top: 7px;
     z-index: 500;
+    padding-left: 15px;
+    position: absolute;
+}
+
+.sidebar .space{
+    padding-bottom: 5px;
+    display: flex;
+    height: 69px;
+    box-sizing: content-box;
+    padding-top: 7px;
 }
 
 .sidebar .logo .logo-name span {
@@ -93,10 +103,10 @@ body {
 }
 
 .sidebar .logo .bx {
-    justify-content: center;
-    min-width: 30%;
     display: flex;
     font-size: 2.2rem;
+    justify-content: center;
+    /* min-width: calc(60px - ((4px + 6px) * 2)); */
 }
 
 .sidebar .side-menu {
