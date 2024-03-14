@@ -1,6 +1,9 @@
 const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logout)');
 
 // Hide sidebar when window is less than 768px
+if (window.innerWidth < 768) {
+    document.querySelector('.sidebar').classList.add('close');
+}
 
 sideLinks.forEach(item => {
     const li = item.parentElement;

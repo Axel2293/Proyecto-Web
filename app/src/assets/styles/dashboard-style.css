@@ -86,7 +86,7 @@ body {
     box-sizing: content-box;
     padding-top: 7px;
     z-index: 500;
-    padding-left: 15px;
+    padding-left: 13px;
     position: absolute;
 }
 
@@ -106,7 +106,7 @@ body {
     display: flex;
     font-size: 2.2rem;
     justify-content: center;
-    /* min-width: calc(60px - ((4px + 6px) * 2)); */
+    min-width: calc(60px - ((4px + 6px) * 2));
 }
 
 .sidebar .side-menu {
