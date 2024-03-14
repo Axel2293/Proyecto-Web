@@ -17,20 +17,21 @@ The user can get help of an especific course they are interested in, and the tea
 ## Technologies
 - HTML
 - CSS
+- Tailwind
 - JavaScript
-[x] Bootstrap
-- Node.js
+- ~~Bootstrap~~
+- NodeJS
 - MongoDB
 
 <!-- Installation -->
 ## Installation
 To install the project you need to have Node.js and MongoDB installed in your computer, then you need to clone the repository and run the following commands:
-```bash
+```sh
 npm install
 npm start
 ```
+
 Then you can open the web page in your browser with the following link:
-```bash
+```sh
 git clone https://github.com/Axel2293/Proyecto-Web.git
 ```
-

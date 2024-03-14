@@ -8,15 +8,12 @@ class UserException {
 
 // Class User
 class User {
-  constructor(name, email, role, status) {
-    if (validateEmail(email) === false) {
-      throw new UserException("Invalid email");
-    }
+  constructor(name, email, role, available) {
     this.uid = uid(name);
     this.name = name;
     this.email = email;
     this.role = role;
-    this.status = status;
+    this.available = available;
   }
 
   //setters and getters
@@ -42,9 +39,6 @@ class User {
   }
 
   set email(value) {
-    if (validateEmail(value) === false) {
-      throw new UserException("Invalid email");
-    }
     this._email = value;
   }
 
@@ -56,22 +50,15 @@ class User {
     this._role = value;
   }
 
-  get status() {
-    return this._status;
+  get available() {
+    return this._available;
   }
 
-  set status(value) {
-    this._status = value;
+  set available(value) {
+    this._available = value;
   }
 
   //Methods
-  logIn() {
-    console.log(`Hello, my name is ${this.name}`);
-  }
-
-  logOff() {
-    console.log("Goodbye");
-  }
 
   //CRUD functions for users
 }

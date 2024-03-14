@@ -1,0 +1,14 @@
+{
+  "name": "study-buddy-hub",
+  "version": "1.0.0",
+  "description": "<!-- Credits -->\r ## Credits\r - Axel Escoto\r - Emiliano Figueroa\r - Jorge Figueroa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
