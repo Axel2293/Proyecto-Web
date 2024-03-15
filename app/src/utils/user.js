@@ -31,6 +31,8 @@ class User {
   }
 
   set name(value) {
+    if (!value || value=='')
+      throw new UserException("Name cannot be empty or undefined");
     this._name = value;
   }
 
@@ -39,7 +41,9 @@ class User {
   }
 
   set email(value) {
-    this._email = value;
+    if(!value || value=='')
+      throw new UserException("Email connot be empty or undefined");
+    this._email = email;
   }
 
   get role() {
@@ -47,6 +51,8 @@ class User {
   }
 
   set role(value) {
+    if(!value || value=='')
+      throw new UserException("Role connot be empty or undefined");
     this._role = value;
   }
 
