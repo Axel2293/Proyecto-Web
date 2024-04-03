@@ -4,11 +4,16 @@
   "description": "<!-- Credits -->\r ## Credits\r - Axel Escoto\r - Emiliano Figueroa\r - Jorge Figueroa",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.3"
+    "express": "^4.18.3",
+    "nanoid": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
