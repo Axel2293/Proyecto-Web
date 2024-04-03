@@ -10,18 +10,6 @@ class UserControllerException extends Error {
 }
 
 class UserController {
-  static getUsers() {
-    return this.readUserData();
-  }
-
-  static userExist(user) {
-    let data = this.readUserData();
-    return data.some(
-      (existing_user) =>
-        existing_user.email === user.email && existing_user.role === user.role
-    );
-  }
-
   static readUserData() {
     try {
       const users_path = path.join(__dirname, "../data/users.json");
@@ -33,14 +21,26 @@ class UserController {
     }
   }
 
-  static writeUserData(user_data) {
+  static writeUserData(data) {
     try {
       const users_path = path.join(__dirname, "../data/users.json");
-      const data = JSON.stringify(user_data, null, 2);
+      const data = JSON.stringify(data, null, 2);
       fs.writeFileSync(users_path, data, "utf-8");
     } catch (err) {
       console.error("Error writing user data:", err);
     }
+  }
+
+  static getUsers() {
+    return this.readUserData();
+  }
+
+  static userExist(user) {
+    let data = this.readUserData();
+    return data.some(
+      (existing_user) =>
+        existing_user.email === user.email && existing_user.role === user.role
+    );
   }
 
   static findUserByEmail(email, role, data) {

@@ -2,13 +2,7 @@ const fs = require("fs"); // Módulo para operaciones de sistema de archivos
 const path = require("path"); // Módulo para manipular rutas de archivos
 
 const Advisory = require("../models/advisory"); // Importa la clase User del archivo user.js
-
-// Ruta al archivo advisories.json que contiene los datos de los usuarios
-const advisories_path = path.join(__dirname, "../data/advisories.json");
-// Lee los datos del archivo advisories.json y los convierte en una cadena de texto
-const advisories_json_data = fs.readFileSync(advisories_path, "utf8");
-// Parsea la cadena de texto JSON en un objeto JavaScript
-const advisories_data = JSON.parse(advisories_json_data);
+const UserController = require("./user-controller");
 
 class AdvisoryControllerException extends Error {
   constructor(message) {
@@ -18,86 +12,88 @@ class AdvisoryControllerException extends Error {
 }
 
 class AdvisoryController {
-  // Método estático para obtener todos los usuarios
-  static getAdvisories() {
-    return advisories_data;
-  }
-
-  // Método estático para buscar una asesoria por su ID
-  static findAdvisoryById(id, show_message) {
+  static readAdvisoryData() {
     try {
-      let advisory_to_find = advisories_data.find(
-        (advisory) => advisory.id === id
-      );
-      if (advisory_to_find) {
-        return advisory_to_find;
-      } else {
-        if (show_message) {
-          throw new AdvisoryControllerException(
-            "ERROR: Advisory not found by ID."
-          );
-        }
-      }
-    } catch (error) {
-      console.error(error.message);
-      return false;
+      const advisories_path = path.join(__dirname, "../data/advisories.json");
+      const data = fs.readFileSync(advisories_path, "utf8");
+      return JSON.parse(data);
+    } catch (err) {
+      console.error("Error reading advisory data:", err);
+      return [];
     }
   }
 
-  static createAdvisory(advisory) {
+  static writeAdvisoryData(data) {
     try {
-      const new_advisory = Advisory.fromObject(advisory);
-      if (advisoryExistsById(id, false)) {
-        throw new AdvisoryControllerException("ERROR: ID already exists.");
-      }
-      advisories_data.push(new_advisory);
-      fs.writeFileSync(
-        advisories_path,
-        JSON.stringify(advisories_data),
-        "utf8"
-      );
-      return new_advisory;
-    } catch (error) {
-      if (error instanceof AdvisoryControllerException) {
-        console.error(error.message);
-      } else {
-        console.error("Error creating advisory:", error.message);
-      }
+      const advisories_path = path.join(__dirname, "../data/advisories.json");
+      const data = JSON.stringify(data, null, 2);
+      fs.writeFileSync(advisories_path, data, "utf-8");
+    } catch (err) {
+      console.error("Error writing advisory data:", err);
+    }
+  }
+
+  // Método estático para obtener todos los usuarios
+  static getAdvisories() {
+    return this.readAdvisoryData();
+  }
+
+  // Método estático para buscar una asesoria por su ID
+  static findAdvisoryById(id, data) {
+    return data.find((advisory) => advisory.id === id);
+  }
+
+  // Método estático para verificar si una asesoria existe
+  static advisoryExists(advisory) {
+    let data = this.readAdvisoryData();
+    return data.some(
+      (existing_advisory) =>
+        existing_advisory.user_student_id === advisory.user_student_id &&
+        existing_advisory.user_teacher_id === advisory.user_teacher_id &&
+        existing_advisory.subject === advisory.subject &&
+        existing_advisory.date === advisory.date &&
+        existing_advisory.time === advisory.time &&
+        existing_advisory.status === advisory.status
+    );
+  }
+  // IDEA: Verifcar que el estudiante y el profesor existan (X)
+  // IDEA: Verificar que la fecha y hora no estén ocupadas ()
+  // IDEA: Verificar que la fecha y hora no estén en el pasado ()
+  // IDEA: Verificar que la hora no este ocupada por otra asesoria ()
+  // Los horarios default son de 7:00 a 21:00 ()
+
+  static createAdvisory(advisory) {
+    console.log("Creating advisory...");
+    const data = this.readAdvisoryData();
+
+    // Check if the advisory already exists
+    if (this.advisoryExists(advisory)) {
+      console.log("Advisory already exists.");
       return false;
+    } else {
+      let advisory = Advisory.fromObject(advisory);
+      if (
+        UserController.userExistsById(advisory.student_id) &&
+        UserController.userExistsById(advisory.teacher_id)
+      ) {
+        data.push(advisory);
+        this.writeAdvisoryData(data);
+        return advisory;
+      }
     }
   }
 
   static updateAdvisory(id, advisory_data) {
-    if (!this.advisoryExistsById(id)) {
-      throw new AdvisoryControllerException("ERROR: Advisory not found");
-    } else {
-      let update_flag = false;
-      let advisory_to_update = this.findAdvisoryById(id);
+    let advisories_data = this.readAdvisoryData();
+    let advisory_to_update = this.findAdvisoryById(id, advisories_data);
 
-      // Obtiene las claves de las propiedades públicas definidas en la clase User (excluyendo 'id')
-      let valid_properties = Advisory.validProperties;
-
-      // Itera sobre las claves en advisory_data
-      Object.keys(advisory_data).forEach((key) => {
-        if (valid_properties.includes(key)) {
-          // Verifica si la propiedad existe en advisory_to_update y no es 'id'
-          if (key in advisory_to_update && key !== "id") {
-            if (advisory_to_update[key] != advisory_data[key]) {
-              // Actualiza la propiedad en advisory_to_update
-              advisory_to_update[key] = advisory_data[key];
-              update_flag = true;
-            }
-          }
-        }
+    if (advisory_to_update){
+      let advisory_data_keys = Object.keys(advisory_data);
+      advisory_data_keys.forEach((key) => {
+        advisory_to_update[key] = advisory_data[key];
       });
-
-      if (!update_flag) {
-        throw new AdvisoryControllerException("ERROR: No properties to update");
-      } else {
-        // Escribe los datos actualizados en el archivo users.json
-        fs.writeFileSync(users_path, JSON.stringify(advisory_data), "utf8");
-        return advisory_to_update; // Devuelve verdadero para indicar que el usuario ha sido actualizado correctamente
-      }
+      this.writeAdvisoryData(advisories_data);
+      return advisory_to_update;
     }
   }
 

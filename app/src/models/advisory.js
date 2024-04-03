@@ -1,9 +1,9 @@
 const { nanoid } = require("nanoid");
 class Advisory {
-  constructor(user_student_id, user_teacher_id, subject, date, time, status = "pending") {
+  constructor(student_id, teacher_id, subject, date, time, status = "pending") {
     this.id = nanoid();
-    this.user_student = user_student_id;
-    this.user_teacher = user_teacher_id;
+    this.student_id = student_id;
+    this.teacher_id = teacher_id;
     this.subject = subject;
     this.date = date;
     this.time = time;

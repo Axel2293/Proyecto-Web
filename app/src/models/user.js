@@ -10,6 +10,8 @@ class User {
     this.status = status;
   }
 
+  // IDEA: Crear un array de fechas con horas no disponibles
+  // IDEA: 
   static get validProperties() {
     return ["id", "name", "email", "password", "role", "status"];
   }
