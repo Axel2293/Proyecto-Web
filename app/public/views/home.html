@@ -1,135 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../assets/styles/index-style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../assets/styles/index-style.css" />
     <title>Home Page</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <nav>
-        <div class="logo">
-            <img
-                src="https://logowik.com/content/uploads/images/iteso-universidad-jesuita-de-guadalajara8899.logowik.com.webp">
-            <a href="#">Home</a>
-        </div>
-        <div class="nav-links">
-            <a href="home.html" class="selected">Home</a>
-            <a id="login-btn" href="login.html">Login</a>
-            <a href="#">About</a>
-        </div>
+      <div class="logo">
+        <img
+          id="logo-redirect-btn"
+          src="https://logowik.com/content/uploads/images/iteso-universidad-jesuita-de-guadalajara8899.logowik.com.webp"
+        />
+        <a id="study-buddy-redirect-btn">StudyBuddy HUB</a>
+      </div>
+      <div class="nav-links">
+        <a id="home-redirect-btn" class="selected">Home</a>
+        <a id="login-redirect-btn">Login</a>
+        <a href="#">About</a>
+      </div>
     </nav>
 
     <div class="main">
-        <div class="info">
-            <h1>Get help by classmates!</h1>
-            <!-- PONER MÁS COSAS -->
-            <p id="parragraf-main-xd">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae praesentium architecto suscipit exercitationem neque modi dolorum veniam, a, aliquid iusto ex facere perspiciatis aspernatur sint culpa dolor nulla! Blanditiis perspiciatis autem quisquam sint maiores aliquid quas aliquam nostrum quasi, iusto voluptatum aut a perferendis quod earum accusamus nobis voluptatibus debitis.</p>
-            <form action="register.html">
-                <input type="submit" value="Get Started" class="button">
-            </form>
-        </div>
-        <img src="../assets/images/logo.webp">
+      <div class="info">
+        <h1>Get help by classmates!</h1>
+        <!-- PONER MÁS COSAS -->
+        <p id="parragraf-main-xd">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae
+          praesentium architecto suscipit exercitationem neque modi dolorum
+          veniam, a, aliquid iusto ex facere perspiciatis aspernatur sint culpa
+          dolor nulla! Blanditiis perspiciatis autem quisquam sint maiores
+          aliquid quas aliquam nostrum quasi, iusto voluptatum aut a perferendis
+          quod earum accusamus nobis voluptatibus debitis.
+        </p>
+        <form id="register-redirect-btn">
+          <input type="submit" value="Get Started" class="button" />
+        </form>
+      </div>
+      <img src="../assets/images/logo.webp" />
     </div>
 
     <div class="recent">
-        <div class="header">
-            <h4>Opinions</h4>
-            <!-- <a href="#">View all</a> -->
+      <div class="header">
+        <h4>Opinions</h4>
+        <!-- <a href="#">View all</a> -->
+      </div>
+      <div class="posts">
+        <div class="post-item">
+          <!-- OPINIONES -->
+          <h3>Op 1</h3>
+          <div class="info">
+            <h5>12 Jan 2024</h5>
+            <h5>|</h5>
+            <!-- MATERIA ESPECÍFICA -->
+            <h5>Topico</h5>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
+            pariatur porro quaerat provident corporis facere ex voluptatibus
+            laudantium voluptates quos.
+          </p>
         </div>
-        <div class="posts">
-            <div class="post-item">
-                <!-- OPINIONES -->
-                <h3>Op 1</h3>
-                <div class="info">
-                    <h5>12 Jan 2024</h5>
-                    <h5>|</h5>
-                    <!-- MATERIA ESPECÍFICA -->
-                    <h5>Topico</h5>
-                </div>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet pariatur porro quaerat provident
-                    corporis facere ex voluptatibus laudantium voluptates quos.</p>
-            </div>
-            <div class="post-item">
-                <!-- OPINIONES -->
-                <h3>Op 2</h3>
-                <div class="info">
-                    <h5>5 Jan 2024</h5>
-                    <h5>|</h5>
-                    <!-- MATERIA ESPECÍFICA -->
-                    <h5>Topico</h5>
-                </div>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet pariatur porro quaerat provident
-                    corporis facere ex voluptatibus laudantium voluptates quos.</p>
-            </div>
+        <div class="post-item">
+          <!-- OPINIONES -->
+          <h3>Op 2</h3>
+          <div class="info">
+            <h5>5 Jan 2024</h5>
+            <h5>|</h5>
+            <!-- MATERIA ESPECÍFICA -->
+            <h5>Topico</h5>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
+            pariatur porro quaerat provident corporis facere ex voluptatibus
+            laudantium voluptates quos.
+          </p>
         </div>
+      </div>
     </div>
 
     <div class="separator">
-        <h4>Featured Works</h4>
+      <h4>Featured Works</h4>
     </div>
 
     <div class="featured">
-        <div class="item">
-            <!-- COLOCAR IMÁGEN -->
-            <img src="https://images.prismic.io/prodigy-website/3b23b533-c408-4380-bce6-0820b89131e9_math-on-board.jpeg?auto=compress%2Cformat&rect=0%2C874%2C6048%2C2016&w=1920&h=640&fit=max">
-            <div class="details">
-                <!-- PONER TIPO DE TRABAJO -->
-                <h3>Trabajo 1</h3>
-                <div class="item-info">
-                    <div class="year-badge">2023</div>
-                    <!-- PONER MATERIAS Y COSAS RELACIONADAS CON ELLAS -->
-                    <h4>Matemáticas</h4>
-                </div>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos eos ratione beatae voluptas
-                    aliquam illo maxime.</p>
-            </div>
+      <div class="item">
+        <!-- COLOCAR IMÁGEN -->
+        <img
+          src="https://images.prismic.io/prodigy-website/3b23b533-c408-4380-bce6-0820b89131e9_math-on-board.jpeg?auto=compress%2Cformat&rect=0%2C874%2C6048%2C2016&w=1920&h=640&fit=max"
+        />
+        <div class="details">
+          <!-- PONER TIPO DE TRABAJO -->
+          <h3>Trabajo 1</h3>
+          <div class="item-info">
+            <div class="year-badge">2023</div>
+            <!-- PONER MATERIAS Y COSAS RELACIONADAS CON ELLAS -->
+            <h4>Matemáticas</h4>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
+            eos ratione beatae voluptas aliquam illo maxime.
+          </p>
         </div>
-        <div class="item">
-            <!-- COLOCAR IMÁGEN -->
-            <img src="https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/79306/chemistry-lab-clipart-xl.png">
-            <div class="details">
-                <!-- PONER TIPO DE TRABAJO -->
-                <h3>Trabajo 2</h3>
-                <div class="item-info">
-                    <div class="year-badge">2023</div>
-                    <!-- PONER MATERIAS Y COSAS RELACIONADAS CON ELLAS -->
-                    <h4>Química</h4>
-                </div>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos eos ratione beatae voluptas
-                    aliquam illo maxime.</p>
-            </div>
+      </div>
+      <div class="item">
+        <!-- COLOCAR IMÁGEN -->
+        <img
+          src="https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/79306/chemistry-lab-clipart-xl.png"
+        />
+        <div class="details">
+          <!-- PONER TIPO DE TRABAJO -->
+          <h3>Trabajo 2</h3>
+          <div class="item-info">
+            <div class="year-badge">2023</div>
+            <!-- PONER MATERIAS Y COSAS RELACIONADAS CON ELLAS -->
+            <h4>Química</h4>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
+            eos ratione beatae voluptas aliquam illo maxime.
+          </p>
         </div>
-        <div class="item">
-            <!-- COLOCAR IMÁGEN -->
-            <img src="https://cdn-icons-png.flaticon.com/512/5190/5190400.png">
-            <div class="details">
-                <!-- PONER TIPO DE TRABAJO -->
-                <h3>Trabajo 3</h3>
-                <div class="item-info">
-                    <div class="year-badge">2024</div>
-                    <!-- PONER MATERIAS Y COSAS RELACIONADAS CON ELLAS -->
-                    <h4>Física</h4>
-                </div>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos eos ratione beatae voluptas
-                    aliquam illo maxime.</p>
-            </div>
+      </div>
+      <div class="item">
+        <!-- COLOCAR IMÁGEN -->
+        <img src="https://cdn-icons-png.flaticon.com/512/5190/5190400.png" />
+        <div class="details">
+          <!-- PONER TIPO DE TRABAJO -->
+          <h3>Trabajo 3</h3>
+          <div class="item-info">
+            <div class="year-badge">2024</div>
+            <!-- PONER MATERIAS Y COSAS RELACIONADAS CON ELLAS -->
+            <h4>Física</h4>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
+            eos ratione beatae voluptas aliquam illo maxime.
+          </p>
         </div>
+      </div>
     </div>
 
     <footer>
-        <div class="socials">
-            <i class='bx bxl-facebook-square'></i>
-            <i class='bx bxl-instagram'></i>
-            <i class='bx bxl-twitter'></i>
-            <i class='bx bxl-linkedin-square'></i>
-        </div>
-        <p>Copyright ©2024, All rights reserved.</p>
+      <div class="socials">
+        <i class="bx bxl-facebook-square"></i>
+        <i class="bx bxl-instagram"></i>
+        <i class="bx bxl-twitter"></i>
+        <i class="bx bxl-linkedin-square"></i>
+      </div>
+      <p>Copyright ©2024, All rights reserved.</p>
     </footer>
 
-</body>
-
+    <script src="../scripts/home.js"></script>
+  </body>
 </html>
