@@ -19,7 +19,12 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "public"), { index: false }));
 
-app.get("/", (req, res) => {});
+app.get("/", (req, res) => {
+  let login_redirect = document.getElementById("login-btn-redirect");
+  login_redirect.addEventListener("click", () => {
+    res.redirect("/login");
+  });
+});
 
 app.use("/register", register_route);
 
