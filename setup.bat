@@ -8,6 +8,14 @@ REM Install nanoid package
 echo Installing Nanoid...
 npm install nanoid@3.0.0
 
+REM Install mongoose package
+echo Installing Mongoose...
+npm install mongoose --save
+
+REM Install dotenv package
+echo Installing Dotenv...
+npm install dotenv --save
+
 REM Install nodemon as a development dependency
 echo Installing Nodemon for development...
 npm install nodemon --save-dev

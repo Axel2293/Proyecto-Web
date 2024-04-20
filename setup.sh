@@ -11,6 +11,14 @@ npm init -y
 echo "Installing Nanoid..."
 npm install nanoid@3.0.0
 
+# Install mongoose package
+echo "Installing Mongoose..."
+npm install mongoose --save
+
+#install dotenv package
+echo "Installing Dotenv..."
+npm install dotenv --save
+
 # Install nodemon as a development dependency
 echo "Installing Nodemon for development..."
 npm install nodemon --save-dev
