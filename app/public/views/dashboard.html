@@ -7,6 +7,8 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../assets/styles/dashboard-style.css">
     <!-- TIP: Si quieren utilizar BS-5 Haganlo, igual cuando quieran y puedan, quiten este comentario -->
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <title>Dashboard</title>
 </head>
@@ -27,22 +29,22 @@
         <ul class="side-menu">
             <li class="active"><a href="#"><i class='bx bxs-dashboard'>
                     </i>Dashboard</a></li>
-            <li><a href="courses.html"><i class='bx bx-objects-horizontal-right'>
+            <li><a href="/courses"><i class='bx bx-objects-horizontal-right'>
                     </i>Courses</a></li>
-            <li><a href="teach.html"><i class='bx bx-group'>
+            <li><a href="/teach"><i class='bx bx-group'>
                     </i>Teach</a></li>
-            <li><a href="statistics.html"><i class='bx bx-line-chart'>
+            <li><a href="/statistics"><i class='bx bx-line-chart'>
                     </i>Statistics</a></li>
-            <li><a href="help.html"><i class='bx bxs-chat'>
+            <li><a href="/help"><i class='bx bxs-chat'>
                     </i>Help</a></li>
-            <li><a href="settings.html"><i class='bx bx-cog'>
+            <li><a href="/settings"><i class='bx bx-cog'>
                     </i>Settings</a></li>
         </ul>
         <ul class="side-menu">
             <li>
-                <a href="home.html" class="logout">
+                <a href="#" class="logout" id="logout">
                     <i class='bx bx-log-out-circle'></i>
-                    Logout
+                    <span>Logout</span>
                 </a>
             </li>
         </ul>

@@ -5,14 +5,17 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
-body {
+html, body {
+    width: 100%;
+    height: 100%;
     background-color: #f5faf6;
     background-size: cover;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
     padding: 0 20px;
+}
+
+body.lock-scroll {
+    overflow: hidden;  /* Lock the scroll when modal is active */
 }
 
 .container {
@@ -20,9 +23,11 @@ body {
     gap: 20px;
     background-color: #fff;
     width: 100%;
-    max-width: 920px;
+    max-width: 920px;  /* Maximum width of the container */
+    margin: auto;  /* Centering the container */
     padding: 25px;
     border-radius: 10px;
+    overflow-y: auto;  /* Allow vertical scrolling inside the container if content is larger than the container */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -93,28 +98,7 @@ button:hover {
     color: #e74c3c;
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 2;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
 
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    width: 80%;
-    border: 1px solid #888;
-    max-width: 500px;
-    border-radius: 10px;
-    text-align: center;
-}
 
 .close-button {
     color: #aaa;

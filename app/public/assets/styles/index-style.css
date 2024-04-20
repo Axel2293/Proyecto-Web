@@ -1,5 +1,6 @@
 html{
     scroll-behavior: smooth;
+    cursor: default;
 }
 
 *{
@@ -23,10 +24,17 @@ img{
 nav{
     padding: 20px 148px;
     background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-weight: 600;
+    /* add a line under the nav */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 nav .logo{
@@ -73,6 +81,7 @@ nav .nav-links a.selected{
 .main .info h1{
     font-size: 44px;
     margin-bottom: 40px;
+    margin-top: 40px;
 }
 
 .main .info p{
@@ -106,7 +115,7 @@ nav .nav-links a.selected{
 
 .recent{
     padding: 60px 148px;
-    background-color: #dbedf2;
+    background-color: #dbedf2a9;
 }
 
 .recent .header{
@@ -502,7 +511,7 @@ footer p{
 
     .featured,
     .separator{
-        padding: 40px 20px 0;
+        padding: 40px 10px 0;
     }
 
     .featured .item,
@@ -513,14 +522,16 @@ footer p{
 
     .featured .item img,
     .works-list .item img{
-        width: 100%;
+        width: 300px;
         height: auto;
+        margin: 0 auto;
     }
 
     .featured .item .details h3,
     .works-list .details .item h3{
         font-size: 24px;
         margin-bottom: 12px;
+        text-align: center;
     }
 
     .featured .item .details .item-info .year-badge,

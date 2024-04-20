@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/styles/register-login-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <title>Login</title>
 </head>
 
@@ -17,21 +19,14 @@
             <h2>Login</h2>
             <div class="form-control">
                 <label for="email">Email</label>
-                <input type="email" id="email"
-                placeholder="Enter your email"
-                autocomplete="off">
+                <input type="email" id="email" placeholder="Enter your email" autocomplete="off">
                 <i class="icon"></i>
             </div>
-
             <div class="form-control">
                 <label for="password">Password</label>
-                <input type="password" id="password"
-                placeholder="Enter your password"
-                autocomplete="off">
+                <input type="password" id="password" placeholder="Enter your password" autocomplete="off">
                 <i class="icon"></i>
             </div>
-
-            <!-- Remember Me and Forgot Password-->
             <div class="rememberAndForgotPassword">
                 <div class="rememberMe">
                     <input type="checkbox" id="rememberMe">
@@ -41,24 +36,14 @@
                     <p>Forgot <a href="#">Password?</a></p>
                 </div>
             </div>
-            <!-- Submit Button -->
             <button type="submit">Submit</button>
-            <!-- Dont have an account? -->
             <div class="ChangeForm">
-                <p>Don't have an account? <a href="register.html">Register</a></p>
-                <!-- Return to home -->
-                <p>Return to <a href="home.html">Home</a></p>
+                <p>Don't have an account? <a href="/register">Register</a></p>
+                <p>Return to <a href="/">Home</a></p>
             </div>
         </form>
     </div>
-
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>Welcome!</h2>
-            <p>In a few seconds you will be redirected.</p>
-        </div>
-    </div>
     <script src="../scripts/scriptLog.js"></script>
 </body>
+
 </html>
