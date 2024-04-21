@@ -19,6 +19,10 @@ npm install mongoose --save
 echo "Installing Dotenv..."
 npm install dotenv --save
 
+#install JWT package
+echo Installing JWT...
+npm install jsonwebtoken --save
+
 # Install nodemon as a development dependency
 echo "Installing Nodemon for development..."
 npm install nodemon --save-dev

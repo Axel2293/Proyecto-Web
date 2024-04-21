@@ -16,6 +16,10 @@ REM Install dotenv package
 echo Installing Dotenv...
 npm install dotenv --save
 
+REM Install JWT package
+echo Installing JWT...
+npm install jsonwebtoken
+
 REM Install nodemon as a development dependency
 echo Installing Nodemon for development...
 npm install nodemon --save-dev
