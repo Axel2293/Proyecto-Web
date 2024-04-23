@@ -2,34 +2,42 @@
 
 REM Set up the project
 echo Creating package.json...
-npm init -y
+call npm init -y
+if errorlevel 1 exit /b %errorlevel%
 
 REM Install nanoid package
 echo Installing Nanoid...
-npm install nanoid@3.0.0
+call npm install nanoid@3.0.0
+if errorlevel 1 exit /b %errorlevel%
 
 REM Install mongoose package
 echo Installing Mongoose...
-npm install mongoose --save
+call npm install mongoose --save
+if errorlevel 1 exit /b %errorlevel%
 
 REM Install dotenv package
 echo Installing Dotenv...
-npm install dotenv --save
+call npm install dotenv --save
+if errorlevel 1 exit /b %errorlevel%
 
 REM Install JWT package
 echo Installing JWT...
-npm install jsonwebtoken
+call npm install jsonwebtoken
+if errorlevel 1 exit /b %errorlevel%
 
 REM Install nodemon as a development dependency
 echo Installing Nodemon for development...
-npm install nodemon --save-dev
+call npm install nodemon --save-dev
+if errorlevel 1 exit /b %errorlevel%
 
 REM Install express
 echo Installing Express...
-npm install express
+call npm install express
+if errorlevel 1 exit /b %errorlevel%
 
 REM Add custom scripts and modify package.json using Node.js
 echo Modifying package.json to add custom scripts...
-node -e "const fs = require('fs'); let pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.scripts.dev = 'nodemon app/server.js'; pkg.description = '## Credits\r - Axel Escoto\r - Emiliano Figueroa\r - Jorge Figueroa'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
+call node -e "const fs = require('fs'); let pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.scripts.dev = 'nodemon app/server.js'; pkg.description = '## Credits\r - Axel Escoto\r - Emiliano Figueroa\r - Jorge Figueroa'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
+if errorlevel 1 exit /b %errorlevel%
 
 echo Setup complete!
