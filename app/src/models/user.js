@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
-const User = require('./user');
-w
+const mongoose = require('../db/connection');
+
 // User schema
 let userSchema = new mongoose.Schema({
     email:{
@@ -24,12 +23,39 @@ let userSchema = new mongoose.Schema({
 });
 
 // Operations on the Users endpoint
-userSchema.statics.findUsrById =  async (_id) => {
-    let data = await User.find({
-        _id: {$eq:_id}
-    })
+userSchema.statics.saveUser = async (data)=>{
+    try {
+        const usr = new User(data); 
+        return await usr.save();
+    } catch (error) {
+        return null;   
+    }
+};
+
+// Get all teachers info
+userSchema.static.findTeachers = async ()=>{
+    const teachers = User.find(
+        {accountType:"teacher"}
+    )
+
+    return teachers;
+};
+
+userSchema.statics.updateUser = async (data)=>{
+    const email = data.email;
+    const updt = await User.where("email")
+                        .equals(email)
 }
 
-module.exports = mongoose.model('User', userSchema);
+//Internal that searches the user
+userSchema.statics.findUsrByEmail =  async (email) => {
+    let user = await User.find({
+        email: {$eq:email}
+    })
+
+    return user;
+};
+
+module.exports = mongoose.model('Users', userSchema);
 
 

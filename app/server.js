@@ -5,10 +5,13 @@ const path = require("path");
 
 const port = 3151;
 
-const User = require("./src/models/user");
+const User = require("./src/models/User");
 const UserController = require("./src/controllers/user-controller");
 
-const register_route = require("./src/routes/register");
+const authRoute = require("./src/routes/auth");
+
+//Parsing body as json middleware
+app.use(express.json());
 
 app.use(
   express.static(path.join(__dirname, "public/views"), {
@@ -26,7 +29,9 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/register", register_route);
+// Auth routes
+app.use("/auth", authRoute);
+
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);

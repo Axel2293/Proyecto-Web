@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const User = require("../models/user");
+const User = require("../models/User");
 
 class UserControllerException extends Error {
   constructor(message) {
