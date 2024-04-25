@@ -2,8 +2,10 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 const path = require("path");
+require("dotenv").config();
 
-const port = 3151;
+// const port = 3151;
+const port = process.env.PORT || 3151;
 
 const User = require("./src/models/User");
 const UserController = require("./src/controllers/user-controller");
