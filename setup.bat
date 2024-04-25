@@ -40,4 +40,9 @@ echo Modifying package.json to add custom scripts...
 call node -e "const fs = require('fs'); let pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.scripts.dev = 'nodemon app/server.js'; pkg.description = '## Credits\r - Axel Escoto\r - Emiliano Figueroa\r - Jorge Figueroa'; pkg.main = 'app/server.js'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
 if errorlevel 1 exit /b %errorlevel%
 
+REM Audit fix
+echo Auditing...
+call npm audit fix
+if errorlevel 1 exit /b %errorlevel%
+
 echo Setup complete!
