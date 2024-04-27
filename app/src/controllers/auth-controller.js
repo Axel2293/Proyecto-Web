@@ -38,7 +38,7 @@ async function loginUser(req, res) {
     }
 }
 
-function registerUser(req, res) {
+async function registerUser(req, res) {
     const {email, password, name} = req.body;
 
     if (!name || name=="") {
@@ -80,7 +80,7 @@ function registerUser(req, res) {
     
 
     try {
-        usr.save();
+        await usr.save();
         res.status(201).send({
             msg:"User created correctly"
         });
