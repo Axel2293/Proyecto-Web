@@ -70,6 +70,7 @@ function registerUser(req, res) {
             name: name,
             accountType: 'student'
         });
+        console.log("Registered user "+usr);
     } catch (error) {
         res.status(500).send({
             error:"Bad new account information"
@@ -77,7 +78,7 @@ function registerUser(req, res) {
         return;
     }
     
-    console.log("Registered user "+usr);
+
     try {
         usr.save();
         res.status(201).send({
