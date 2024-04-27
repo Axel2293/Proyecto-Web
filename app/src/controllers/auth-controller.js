@@ -12,19 +12,23 @@ function loginUser(req, res) {
             let hashCode = bcrypt.hashSync(password, 10);
             if (bcrypt.compareSync(userData["passHash"], hashCode) && email==userData["email"]) {
                 //Create JWT token (valid for 1 hour)
-                const auth = jwt.sign(userData.email, process.env.JWT_SECRET,{
+                const sToken = jwt.sign(userData.email, process.env.JWT_SECRET,{
                     algorithm:"ES256",
-                    expiresIn:
+                    expiresIn: 3600
                 })
+                res.send({sToken})
             }else{
                 res.status(401).send({
                     authError: "Password or email are not correct."
                 })
+                return;
+                
             }
         }else{
             res.status(404).send({
                 authError: "Account with given email not found."
             })
+            return;
         }
     }
     else{
@@ -59,13 +63,20 @@ function registerUser(req, res) {
         return;
     }
 
-    // Create user from Model
-    const usr = new User({
-        email: email,
-        passHash: bcrypt.hashSync(password),
-        name: name,
-        accountType: 'student'
-    });
+    try {
+        // Create user from Model
+        const usr = new User({
+            email: email,
+            passHash: bcrypt.hashSync(password),
+            name: name,
+            accountType: 'student'
+        });
+    } catch (error) {
+        res.status(500).send({
+            error:"Bad new account information"
+        });
+        return;
+    }
     
     console.log("Registered user "+usr);
     try {
