@@ -3,17 +3,16 @@ const mongoose = require("../db/connection");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-function loginUser(req, res) {
+async function loginUser(req, res) {
     const {email, password} = req.body;
 
     if(password && email && password!='' && email!=''){
-        let userData = User.findUsrByEmail(email);
-        if (userData) {
-            let hashCode = bcrypt.hashSync(password, 10);
-            if (bcrypt.compareSync(userData["passHash"], hashCode) && email==userData["email"]) {
+        const userData = await User.findUsrByEmail(email);
+        console.log("Login attempt for ", userData)
+        if (userData){
+            if (bcrypt.compareSync(password, userData["passHash"]) && email==userData["email"]) {
                 //Create JWT token (valid for 1 hour)
-                const sToken = jwt.sign(userData.email, process.env.JWT_SECRET,{
-                    algorithm:"ES256",
+                const sToken = jwt.sign({email:userData.email}, process.env.JWT_SECRET,{
                     expiresIn: 3600
                 })
                 res.send({sToken})
