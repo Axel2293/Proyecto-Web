@@ -1,7 +1,7 @@
-const mongoose = require('../db/connection');
+const {mongoose} = require('../db/connection');
 
 // User schema
-let userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     email:{
         type: String,
         unique: true,
@@ -56,6 +56,7 @@ userSchema.statics.findUsrByEmail =  async (email) => {
     return user;
 };
 
-module.exports = mongoose.model('Users', userSchema);
+
+module.exports = mongoose.model('User', userSchema);
 
 

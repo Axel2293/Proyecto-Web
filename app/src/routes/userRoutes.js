@@ -1,6 +1,5 @@
 const router = require("express").Router()
-const User = require("../models/User");
-
+const userController = require("../controllers/user-controller")
 
 // Get info of the users
 router.get('/', ()=>{

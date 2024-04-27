@@ -7,14 +7,14 @@ require("dotenv").config();
 // const port = 3151;
 const port = process.env.PORT || 3151;
 
-const User = require("./src/models/User");
 const UserController = require("./src/controllers/user-controller");
 
-const authRoute = require("./src/routes/auth");
+const authRoute = require("./src/routes/authRoutes");
 
 //Parsing body as json middleware
 app.use(express.json());
 
+// Public routes
 app.use(
   express.static(path.join(__dirname, "public/views"), {
     index: "home.html",

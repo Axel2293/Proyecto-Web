@@ -5,6 +5,6 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     dbName: process.env.DB_NAME,
     getUrl: function (){
-      return `mongodb+srv://${this.user}:${this.password}@${this.dbName}.vlafr2x.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+      return `mongodb+srv://${this.user}:${this.password}@${this.dbName}.kgpbo46.mongodb.net/API?retryWrites=true&w=majority&appName=Cluster0`
     }
 }
