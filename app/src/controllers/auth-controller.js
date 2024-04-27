@@ -38,7 +38,7 @@ async function loginUser(req, res) {
     }
 }
 
-async function registerUser(req, res) {
+function registerUser(req, res) {
     const {email, password, name} = req.body;
 
     if (!name || name=="") {
@@ -71,24 +71,22 @@ async function registerUser(req, res) {
             accountType: 'student'
         });
         console.log("Registered user "+usr);
+        try {
+            usr.save();
+            res.status(201).send({
+                msg:"User created correctly"
+            });
+        } catch (error) {
+            res.status(500).send({
+                error:"Something bad happened :( User not created"+error
+            });
+        };
     } catch (error) {
         res.status(500).send({
             error:"Bad new account information"
         });
         return;
     }
-    
-
-    try {
-        await usr.save();
-        res.status(201).send({
-            msg:"User created correctly"
-        });
-    } catch (error) {
-        res.status(500).send({
-            error:"Something bad happened :( User not created"
-        });
-    };
 }
 
 module.exports = {loginUser, registerUser};
