@@ -4,7 +4,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 async function loginUser(req, res) {
-    const {email, password} = req.body;
+    const {email, password} = await req.body;
+    console.log(req.body);
 
     if(password && email && password!='' && email!=''){
         const userData = await User.findUsrByEmail(email);
@@ -31,8 +32,8 @@ async function loginUser(req, res) {
         }
     }
     else{
-        res.status(404).send({
-            error:"No email or password was given"
+        res.status(400).send({
+            authError:"No email or password was given"
         })
         return;
     }
