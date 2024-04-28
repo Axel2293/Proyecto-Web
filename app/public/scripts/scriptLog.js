@@ -8,9 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const isValid = checkInputs(); // Checks all inputs and sets form validity
         if (isValid) {
             showModal(isEmail(email.value), isPassword(password.value)); // Call showModal with validation results
-            setTimeout(() => {
-                window.location.href = '/dashboard'; // Redirect after 3 seconds
-            }, 1500);
         } else {
             showModal(isEmail(email.value), isPassword(password.value)); // Call showModal with validation results
         }
@@ -68,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return password.length >= 8; // && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
     }
 
-    function showModal(isEmailValid, isPasswordValid) {
+    async function showModal(isEmailValid, isPasswordValid) {
         if (!isEmailValid || !isPasswordValid) {
             Swal.fire({
                 icon: 'error',
@@ -77,13 +74,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 footer: '<p><a href="#">Need help?</a></p>',
             });
         } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Login Successful! Welcome aboard!',
-                text: 'Welcome aboard!',
-                showConfirmButton: false,
-                timer: 1500
-            });
+            await login();
         }
     }
+
+    //LOGIN FUNCTION
+    async function login(){
+        const userCred = {
+            "email": email.value,
+            "password": password.value
+        }
+        console.log(JSON.stringify(userCred))
+        //Send request to get token if valid
+        const res = await fetch("http://localhost:3151/auth/login", {
+            method:"POST",
+            body:JSON.stringify(userCred)
+        }).then(res=>{
+            if(res.ok){
+                const sToken = res.body.sToken;
+                console.log(sToken);
+                sessionStorage.setItem("sToken", sToken);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Successful! Welcome aboard!',
+                    text: 'Welcome aboard!',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
 });
+

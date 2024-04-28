@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 
 async function loginUser(req, res) {
     const {email, password} = req.body;
+    console.log(req.body);
 
     if(password && email && password!='' && email!=''){
         const userData = await User.findUsrByEmail(email);
@@ -31,7 +32,7 @@ async function loginUser(req, res) {
         }
     }
     else{
-        res.status(404).send({
+        res.status(400).send({
             error:"No email or password was given"
         })
         return;
