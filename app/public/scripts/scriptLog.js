@@ -88,22 +88,39 @@ document.addEventListener('DOMContentLoaded', function () {
         //Send request to get token if valid
         const res = await fetch("http://localhost:3151/auth/login", {
             method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
             body:JSON.stringify(userCred)
-        }).then(res=>{
+        }).then( async res=>{
+            const body = await res.json();
             if(res.ok){
-                const sToken = res.body.sToken;
-                console.log(sToken);
-                sessionStorage.setItem("sToken", sToken);
+                console.log(body["sToken"]);
+                sessionStorage.setItem("sToken", body["sToken"]);
                 Swal.fire({
                     icon: 'success',
                     title: 'Login Successful! Welcome aboard!',
-                    text: 'Welcome aboard!',
-                    showConfirmButton: false,
-                    timer: 3000
+                    text: 'Redirecting to dashboard...',
+                    showConfirmButton: false
+                });
+                setTimeout(() => {
+                    window.location.href = 'http://localhost:3151/dashboard';
+                }, 1500);
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: body["authError"],
+                    text: 'Login failed',
+                    showConfirmButton: true
                 });
             }
         }).catch(err=>{
-            console.log(err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Something went wrong: '+err,
+                text: 'Internal error :p',
+                showConfirmButton: true
+            });
         })
     }
 });
