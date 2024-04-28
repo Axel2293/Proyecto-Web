@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('mainForm');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
+    const host = 'http://localhost:3151';
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -86,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         console.log(JSON.stringify(userCred))
         //Send request to get token if valid
-        const res = await fetch("http://localhost:3151/auth/login", {
+        const res = await fetch(host+"/auth/login", {
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     showConfirmButton: false
                 });
                 setTimeout(() => {
-                    window.location.href = 'http://localhost:3151/dashboard';
+                    window.location.href = host+'/dashboard';
                 }, 1500);
             }else{
                 Swal.fire({
