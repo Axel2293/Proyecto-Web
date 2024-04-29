@@ -39,7 +39,7 @@ async function loginUser(req, res) {
     }
 }
 
-function registerUser(req, res) {
+async function registerUser(req, res) {
     const {email, password, name} = req.body;
 
     if (!name || name=="") {
@@ -71,23 +71,26 @@ function registerUser(req, res) {
             name: name,
             accountType: 'student'
         });
-        console.log("Registered user "+usr);
+        console.log("Registered user "+usr)
+
         try {
-            usr.save();
+            await usr.save();
             res.status(201).send({
                 msg:"User created correctly"
             });
+            return;
         } catch (error) {
             res.status(500).send({
-                error:"Something bad happened :( User not created"+error
+                error:"Something bad happened :(. User not created"+error
             });
+            return;
         };
     } catch (error) {
         res.status(500).send({
             error:"Bad new account information"
         });
         return;
-    }
+    };
 }
 
 module.exports = {loginUser, registerUser};
