@@ -8,7 +8,7 @@ async function loginUser(req, res) {
     console.log(req.body);
 
     if(password && email && password!='' && email!=''){
-        const userData = await User.findUsrByEmail(email);
+        const userData = await User.findByEmail(email);
         console.log("Login attempt for ", userData)
         if (userData){
             if (bcrypt.compareSync(password, userData["passHash"]) && email==userData["email"]) {
