@@ -12,6 +12,17 @@ const tokent_md = require("./src/middleware/tokens");
 const usersRoute = require("./src/routes/userRoutes");
 const authRoute = require("./src/routes/authRoutes");
 
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); // O restringe a tu origen específico
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  if (req.method === 'OPTIONS') {
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
+      return res.status(200).json({});
+  }
+  next();
+});
+
 // Public routes
 app.use(
   express.static(path.join(__dirname, "public/views"), {
