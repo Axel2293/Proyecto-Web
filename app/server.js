@@ -7,12 +7,10 @@ require("dotenv").config();
 // const port = 3151;
 const port = process.env.PORT || 3151;
 
-const UserController = require("./src/controllers/user-controller");
+const tokent_md = require("./src/middleware/tokens"); 
 
+const usersRoute = require("./src/routes/userRoutes");
 const authRoute = require("./src/routes/authRoutes");
-
-//Parsing body as json middleware
-app.use(express.json());
 
 // Public routes
 app.use(
@@ -31,8 +29,11 @@ app.get("/", (req, res) => {
   });
 });
 
+//Users routes
+app.use("/users", express.json(), tokent_md.verifyAuthToken, usersRoute);
+
 // Auth routes
-app.use("/auth", authRoute);
+app.use("/auth", express.json(), authRoute);
 
 
 app.listen(port, () => {

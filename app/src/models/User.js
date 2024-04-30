@@ -40,7 +40,7 @@ userSchema.statics.updateUser = async (data)=>{
 }
 
 //Internal that searches the user
-userSchema.statics.findUsrByEmail =  async function(email) {
+userSchema.statics.findByEmail =  async function(email) {
     const user = await this.findOne({
         email: {$eq:email}
     })
