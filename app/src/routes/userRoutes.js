@@ -5,9 +5,6 @@ const userController = require("../controllers/user-controller")
 router.get('/', userController.getUserInfo);
 
 // Modify user data
-router.put('/', ()=>{
-    const {name, email, password} = req.body;
-    
-});
+router.put('/', userController.updateUser);
 
 module.exports = router;

@@ -8,6 +8,7 @@ function verifyAuthToken(req, res, next) {
         try {
             decoded=jwt.verify(sToken, process.env.JWT_SECRET);
             req.email = decoded.email;
+            req.id = decoded.id;
             next();
             return;
         } catch (error) {

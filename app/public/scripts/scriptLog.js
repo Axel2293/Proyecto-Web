@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('mainForm');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
-    const host = 'http://localhost:3151';
+    const host = 'https://proyecto-web-0bpb.onrender.com';
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
