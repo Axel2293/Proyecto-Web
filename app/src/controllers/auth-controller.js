@@ -13,8 +13,8 @@ async function loginUser(req, res) {
         if (userData){
             if (bcrypt.compareSync(password, userData["passHash"]) && email==userData["email"]) {
                 //Create JWT token (valid for 1 hour)
-                const sToken = jwt.sign({email:userData.email}, process.env.JWT_SECRET,{
-                    expiresIn: 3600
+                const sToken = jwt.sign({email:userData.email, id:userData._id}, process.env.JWT_SECRET,{
+                    expiresIn: 18000
                 })
                 res.send({sToken})
             }else{
@@ -40,7 +40,7 @@ async function loginUser(req, res) {
 }
 
 async function registerUser(req, res) {
-    const {email, password, name} = req.body;
+    const {email, password, name, accountType} = req.body;
 
     if (!name || name=="") {
         res.status(400).send({
@@ -63,13 +63,21 @@ async function registerUser(req, res) {
         return;
     }
 
+    const types = ["teacher", "student", "both"]
+    if (!accountType || types.indexOf(accountType)==-1) {
+        res.status(400).send({
+            error:"Bad or no account type"
+        });
+        return;
+    }
+
     try {
         // Create user from Model
         const usr = new User({
             email: email,
             passHash: bcrypt.hashSync(password),
             name: name,
-            accountType: 'student'
+            accountType: accountType
         });
         console.log("Registered user "+usr)
 

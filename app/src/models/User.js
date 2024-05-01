@@ -24,27 +24,30 @@ const userSchema = new mongoose.Schema({
 
 // Operations on the Users endpoint
 
-// Get all teachers info
-userSchema.static.findTeachers = async ()=>{
+// Get teachers info (name and email)
+userSchema.statics.findTeachers = async function (page = 1, pagesize = 6){
     const teachers = this.find(
-        {accountType:"teacher"}
+        {accountType:"teacher"},
+        {name: 1,
+        email: 1}
     )
-
+    .skip((page-1) * pagesize)
+    .limit(pagesize);
     return teachers;
 };
-
-userSchema.statics.updateUser = async (data)=>{
-    const email = data.email;
-    const updt = await this.where("email")
-                        .equals(email)
-}
 
 //Internal that searches the user
 userSchema.statics.findByEmail =  async function(email) {
     const user = await this.findOne({
         email: {$eq:email}
     })
+    return user;
+};
 
+userSchema.statics.findById =  async function(id) {
+    const user = await this.findOne({
+        _id: {$eq:id}
+    })
     return user;
 };
 
