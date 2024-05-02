@@ -1,31 +1,44 @@
-const mongoose = require('mongoose');
+const { mongoose } = require("../db/connection");
 
-let sessionSchema = new mongoose.Schema({
-    isAvailable: {
-        type: Boolean,
-        required: true,
-        
-    },
-    date: {
-        type: Date,
-        required: true
-    },
-    location: {
-        type: String,
-        required: true
-    },
-    teacher: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true
-    },
-    student: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: false
-    },
-    subject: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true
-    }
+const sessionSchema = new mongoose.Schema({
+  teacher_uuid: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: true,
+  },
+  student_uuid: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: false,
+  },
+  subject_uuid: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: true,
+  },
+  start: {
+    type: Date,
+    required: true,
+  },
+  end: {
+    type: Date,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: true,
+  },
+  created_at: {
+    type: Date,
+    required: true,
+  },
+  updated_at: {
+    type: Date,
+  },
+  updated_session: {
+    type: mongoose.SchemaTypes.ObjectId,
+  },
 });
 
-module.exports = mongoose.model('Session', sessionSchema);
+// Static methods
+
+// Instance methods
+
+module.exports = mongoose.model("Session", sessionSchema);
