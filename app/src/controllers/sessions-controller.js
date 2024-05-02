@@ -1,4 +1,5 @@
 const Session = require("../models/Session");
+const User = require("../models/User");
 
 //const filterSessionsByDate = async (startDate, endDate) => {
 //  const dateStart = new Date(startDate);
@@ -34,11 +35,11 @@ const Session = require("../models/Session");
 async function createSession(req, res) {
   try {
     console.log(req.body);
-    const { student_uuid, tutor_uuid, subject_uuid, start, end } = req.body;
+    const { student_uuid, teacher_uuid, subject_uuid, start, end } = req.body;
 
     const session = {
       student_uuid,
-      tutor_uuid,
+      teacher_uuid,
       subject_uuid,
       start,
       end,
@@ -46,21 +47,25 @@ async function createSession(req, res) {
       created_at: new Date(),
     };
 
-    //const student = await User.findStudent({ uuid: student_uuid });
-    //if (!student) {
-    //  return res.status(400).json({ error: "Student not found" });
-    //}
-    //
-    //const tutor = await User.findTutor({ uuid: tutor_uuid });
-    //if (!tutor) {
-    //  return res.status(400).json({ error: "Tutor not found" });
-    //}
-    //
+
+    //IDEA: Must check that student and teacher does not have a session at the same time
+    //IDEA: Must check that student and teacher are not the same person
+    
+    const student = await User.findById({ uuid: student_uuid });
+    if (!student) {
+      return res.status(400).json({ error: "Student not found" });
+    }
+
+    const teacher = await User.findById({ uuid: teacher_uuid });
+    if (!teacher) {
+      return res.status(400).json({ error: "Teacher not found" });
+    }
+
     //const subject = await Subject.findOne({ uuid: subject_uuid });
     //if (!subject) {
     //  return res.status(400).json({ error: "Subject not found" });
     //}
-    
+
     const newSession = new Session(session);
     await newSession.save();
     res.status(201).json(newSession);
