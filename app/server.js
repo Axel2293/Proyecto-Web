@@ -7,14 +7,23 @@ require("dotenv").config();
 // const port = 3151;
 const port = process.env.PORT || 3151;
 
-const User = require("./src/models/User");
-const UserController = require("./src/controllers/user-controller");
+const tokent_md = require("./src/middleware/tokens"); 
 
-const authRoute = require("./src/routes/auth");
+const usersRoute = require("./src/routes/userRoutes");
+const authRoute = require("./src/routes/authRoutes");
 
-//Parsing body as json middleware
-app.use(express.json());
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); // O restringe a tu origen específico
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  if (req.method === 'OPTIONS') {
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
+      return res.status(200).json({});
+  }
+  next();
+});
+
+// Public routes
 app.use(
   express.static(path.join(__dirname, "public/views"), {
     index: "home.html",
@@ -31,8 +40,11 @@ app.get("/", (req, res) => {
   });
 });
 
+//Users routes
+app.use("/users", express.json(), tokent_md.verifyAuthToken, usersRoute);
+
 // Auth routes
-app.use("/auth", authRoute);
+app.use("/auth", express.json(), authRoute);
 
 
 app.listen(port, () => {

@@ -3,15 +3,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const name = document.getElementById('name');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
+    const host = 'https://proyecto-web-0bpb.onrender.com';
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         const isValid = checkInputs(); // Checks all inputs and sets form validity
         if (isValid) {
             showModal(isValid, isEmail(email.value), isPassword(password.value)); // Call showModal with validation results
-            setTimeout(() => {
-                window.location.href = '/login'; // Redirect after 3 seconds
-            }, 1500);
         } else {
             showModal(isValid, isEmail(email.value), isPassword(password.value)); // Call showModal with validation results
         }
@@ -75,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return password.length >= 8; // && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
     }
 
-    function showModal(isNameValid, isEmailValid, isPasswordValid) {
+    async function showModal(isNameValid, isEmailValid, isPasswordValid) {
         if (!isNameValid || !isEmailValid || !isPasswordValid) {
             Swal.fire({
                 icon: 'error',
@@ -84,13 +82,50 @@ document.addEventListener('DOMContentLoaded', function () {
                 footer: '<p><a href="#">Need help?</a></p>',
             });
         } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Registration Successful!',
-                text: 'Welcome aboard!',
-                showConfirmButton: false,
-                timer: 1500
-            });
+            await register();
         }
+    }
+
+    async function register(){
+        const regUser = {
+            "email": email.value,
+            "password": password.value,
+            "name": name.value
+        }
+
+        const res = await fetch(host+"/auth/register", {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(regUser)
+        }).then( async res=>{
+            const body = await res.json();
+            if(res.ok){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Register Successful! Welcome aboard!',
+                    text: 'Redirecting to login...',
+                    showConfirmButton: false
+                });
+                setTimeout(() => {
+                    window.location.href = host+'/login';
+                }, 1500);
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Register failed',
+                    text: body["error"],
+                    showConfirmButton: true
+                });
+            }
+        }).catch(err=>{
+            Swal.fire({
+                icon: 'error',
+                title: 'Something went wrong: ',
+                text: 'Internal error :p: '+err,
+                showConfirmButton: true
+            });
+        });
     }
 });

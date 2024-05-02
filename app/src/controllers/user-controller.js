@@ -1,121 +1,76 @@
-const fs = require("fs");
-const path = require("path");
-const User = require("../models/User");
+const User = require("../models/User")
+const bcrypt = require("bcryptjs");
 
-class UserControllerException extends Error {
-  constructor(message) {
-    super(message);
-    this.name = this.constructor.name;
-  }
-}
+async function getUserInfo(req, res) {
+  const id = req.id;
+  const {teachers, page, pagesize} = req.query;
+  console.log(req.query);
 
-class UserController {
-  static readUserData() {
-    try {
-      const users_path = path.join(__dirname, "../data/users.json");
-      const data = fs.readFileSync(users_path, "utf8");
-      return JSON.parse(data);
-    } catch (err) {
-      console.error("Error reading user data:", err);
-      return [];
-    }
-  }
-
-  static writeUserData(data) {
-    try {
-      const users_path = path.join(__dirname, "../data/users.json");
-      const data = JSON.stringify(data, null, 2);
-      fs.writeFileSync(users_path, data, "utf-8");
-    } catch (err) {
-      console.error("Error writing user data:", err);
-    }
-  }
-
-  static getUsers() {
-    return this.readUserData();
-  }
-
-  static userExist(user) {
-    let data = this.readUserData();
-    return data.some(
-      (existing_user) =>
-        existing_user.email === user.email && existing_user.role === user.role
-    );
-  }
-
-  static findUserByEmail(email, role, data) {
-    return data.find((user) => user.email === email && user.role === role);
-  }
-
-  static findUserById(id, data) {
-    return data.find((user) => user.id === id);
-  }
-
-  static createUser(user) {
-    console.log("Creating user...");
-    const data = this.readUserData();
-
-    // Check if the user already exists
-    if (this.userExist(user)) {
-      console.log("User already exists.");
-      // If the user already exists, return false
-      return false;
-    }
-
-    // If the user doesn't exist, create a new User instance
-    let new_user = User.fromObject(user);
-
-    // Add the new user to the userData array
-    data.push(new_user);
-    console.log("User created successfully.");
-    // Write the updated userData array to the user_data file
-    this.writeUserData(data);
-
-    // Return true to indicate that the user was created successfully
-    return true;
-  }
-
-  // IDEA: En roles crear un array con los roles que tiene permitido el usuario
-
-  static updateUser(id, user_data) {
-    let data = this.readUserData();
-    let user_to_update = this.findUserById(id, data);
-
-    if (user_to_update) {
-      console.log("Updating user...");
-      let update_flag = false;
-      let valid_properties = User.validProperties;
-
-      Object.keys(user_data).forEach((key) => {
-        if (valid_properties.includes(key)) {
-          if (key in user_to_update && key !== "id") {
-            if (user_to_update[key] != user_data[key]) {
-              // busca si el valor de la propiedad es diferente a el de todos los usuarios
-              if (data.some((user) => user[key] === user_data[key])) {
-                console.log("Property already exists in another user.");
-                return false;
-              }
-
-              user_to_update[key] = user_data[key];
-              update_flag = true;
-            }
-          }
-        }
+  if (teachers && teachers == 1) {
+    const teachersData = await User.findTeachers(page, pagesize);
+    res.send(
+      teachersData
+    )
+    return;
+    
+  }else{
+      // Search for user un DB
+    const user = await User.findById(id)
+    if (user) {
+      console.log(user);
+      res.send({
+        name: user.name,
+        accountType: user.accountType,
+        email: user.email
       });
-
-      if (update_flag) {
-        this.writeUserData(data);
-        console.log("User updated successfully.");
-        return user_to_update;
-      } else {
-        console.log("No properties to update.");
-        return false;
-      }
-    } else {
-      console.log("User to update not found.");
-      return false;
+      return;
+    }else{
+      res.status(404).send({
+        error: "User not found"
+      });
+      return;
     }
   }
 }
 
-module.exports = UserController;
+async function updateUser(req, res){
+  const data = req.body;
+  const id = req.id;
+  const query = {};
+
+  if ("name" in data) {
+    query.name = data["name"];
+  }
+  if ("email" in data) {
+    try {
+      query.email = data["email"]
+    } catch (error) {
+      res.status(400).send({
+        error: "Could not update email "+error
+      })
+    }
+  }
+  if ("password" in data) {
+    query.passHash = bcrypt.hashSync(data["password"], 10)
+  }
+  //Save user
+  try {
+    await User.updateOne(
+      {_id:id},
+      query
+    )
+    res.status(200).send({
+        msg:"User updated correctly"
+    });
+    return;
+  } catch (error) {
+      res.status(500).send({
+          error:"User not updated "+error
+      });
+      return;
+  };
+
+  
+}
+
+module.exports = {getUserInfo, updateUser}

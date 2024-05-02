@@ -2,15 +2,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('mainForm');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
+    const host = 'https://proyecto-web-0bpb.onrender.com';
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         const isValid = checkInputs(); // Checks all inputs and sets form validity
         if (isValid) {
             showModal(isEmail(email.value), isPassword(password.value)); // Call showModal with validation results
-            setTimeout(() => {
-                window.location.href = '/dashboard'; // Redirect after 3 seconds
-            }, 1500);
         } else {
             showModal(isEmail(email.value), isPassword(password.value)); // Call showModal with validation results
         }
@@ -68,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return password.length >= 8; // && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
     }
 
-    function showModal(isEmailValid, isPasswordValid) {
+    async function showModal(isEmailValid, isPasswordValid) {
         if (!isEmailValid || !isPasswordValid) {
             Swal.fire({
                 icon: 'error',
@@ -77,13 +75,54 @@ document.addEventListener('DOMContentLoaded', function () {
                 footer: '<p><a href="#">Need help?</a></p>',
             });
         } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Login Successful! Welcome aboard!',
-                text: 'Welcome aboard!',
-                showConfirmButton: false,
-                timer: 1500
-            });
+            await login();
         }
     }
+
+    //LOGIN FUNCTION
+    async function login(){
+        const userCred = {
+            "email": email.value,
+            "password": password.value
+        }
+        console.log(JSON.stringify(userCred))
+        //Send request to get token if valid
+        const res = await fetch(host+"/auth/login", {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(userCred)
+        }).then( async res=>{
+            const body = await res.json();
+            if(res.ok){
+                console.log(body["sToken"]);
+                sessionStorage.setItem("sToken", body["sToken"]);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Successful! Welcome aboard!',
+                    text: 'Redirecting to dashboard...',
+                    showConfirmButton: false
+                });
+                setTimeout(() => {
+                    window.location.href = host+'/dashboard';
+                }, 1500);
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: body["authError"],
+                    text: 'Login failed',
+                    showConfirmButton: true
+                });
+            }
+        }).catch(err=>{
+            Swal.fire({
+                icon: 'error',
+                title: 'Something went wrong: '+err,
+                text: 'Internal error :p',
+                showConfirmButton: true
+            });
+        })
+    }
 });
+
