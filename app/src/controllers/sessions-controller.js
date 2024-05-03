@@ -89,8 +89,8 @@ async function getSessions(req, res) {
 
 async function getSession(req, res) {
   try {
-    const { uuid } = req.query;
-    const session = await Session.findOne(uuid);
+    const { uuid } = req.params;
+    const session = await Session.findOne({ _id: uuid });
     if (!session) {
       return res.status(404).json({ error: "Session not found" });
     }
@@ -100,64 +100,63 @@ async function getSession(req, res) {
   }
 }
 
-async function filterSessions(req, res) {
-  // filter by query params every parameter is optional
-  // if no query params are passed, return all sessions
+//async function filterSessions(req, res) {
+//  // filter by query params every parameter is optional
+//  // if no query params are passed, return all sessions
+//
+//  const { teacher_uuid, subject_uuid, start, end, status } = req.query;
+//  const query = {};
+//
+//  if (teacher_uuid) query.teacher_uuid = teacher_uuid;
+//  if (subject_uuid) query.subject_uuid = subject_uuid;
+//  if (start) query.start = start;
+//  if (end) query.end = end;
+//  if (status) query.status = status;
+//
+//  if (start && end) {
+//    query.start = { $gte: new Date(start), $lte: new Date(end) };
+//  }
+//
+//  const sessions = await Session.find(query);
+//
+//  if (!sessions) {
+//    return res.status(404).json({ error: "No sessions found" });
+//  }
+//
+//  res.status(200).json(sessions);
+//}
 
-  const { teacher_uuid, subject_uuid, start, end, status } = req.query;
-  const query = {};
-
-  if (teacher_uuid) query.teacher_uuid = teacher_uuid;
-  if (subject_uuid) query.subject_uuid = subject_uuid;
-  if (start) query.start = start;
-  if (end) query.end = end;
-  if (status) query.status = status;
-
-  if (start && end) {
-    query.start = { $gte: new Date(start), $lte: new Date(end) };
-  }
-
-  const sessions = await Session.find(query);
-
-  if (!sessions) {
-    return res.status(404).json({ error: "No sessions found" });
-  }
-
-  res.status(200).json(sessions);
-}
-
-const updateSession = async (req, res) => {
+async function updateSession(req, res) {
   try {
     const { uuid } = req.params;
-    const { student_uuid, teacher_uuid, subject_uuid, start, end, status } =
-      req.body;
-
-    const session = await Session.findOne({ uuid });
+    const session = await Session.findOne({ _id: uuid });
     if (!session) {
       return res.status(404).json({ error: "Session not found" });
     }
 
+    const { status } = req.body;
     session.status = status;
     await session.save();
     res.status(200).json(session);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
-const deleteSession = async (req, res) => {
+async function deleteSession(req, res) {
   try {
-    const { uuid } = req.params;
-    const session = await Session.findOne({ uuid });
+    const { uuid } = req.query;
+    const session = await Session.findOne({ _id: uuid });
     if (!session) {
       return res.status(404).json({ error: "Session not found" });
     }
+
     await session.remove();
-    res.status(204).end();
+    res.status(204).json();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 module.exports = {
   createSession,

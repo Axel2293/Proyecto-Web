@@ -56,6 +56,9 @@ app.use("/auth", authRoute);
 
 app.use("/sessions", tokent_md.verifyAuthToken, sessionsRoute);
 
+
+//app.use("/sessions/:uuid", tokent_md.verifyAuthToken, sessionsRoute);
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
