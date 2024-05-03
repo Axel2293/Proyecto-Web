@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 
-const auth = require("../middleware/tokens");
 const SessionsController = require("../controllers/sessions-controller");
 
 app.use(express.urlencoded({ extended: true }));
@@ -23,12 +22,12 @@ router.post("/", (req, res) => {
   SessionsController.createSession(req, res);
 });
 
-router.put("/{id}", (req, res) => {
+router.put("/:id", (req, res) => {
   console.log("Updating session");
   SessionsController.updateSession(req, res);
 });
 
-router.delete("/{id}", (req, res) => {
+router.delete("/:id", (req, res) => {
   console.log("Deleting session");
   SessionsController.deleteSession(req, res);
 });
