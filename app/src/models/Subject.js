@@ -1,31 +1,19 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-let sessionSchema = new mongoose.Schema({
-    isAvailable: {
-        type: Boolean,
-        required: true,
-        
-    },
-    date: {
-        type: Date,
-        required: true
-    },
-    location: {
-        type: String,
-        required: true
-    },
-    teacher: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true
-    },
-    student: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: false
-    },
-    subject: {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true
-    }
+let subjectSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  teacher_id: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: true,
+  },
+  status: {
+    type: Boolean,
+    required: true,
+  },
 });
 
-module.exports = mongoose.model('Subject', sessionSchema);
+// Como saber el status... El teacher decide el status
+module.exports = mongoose.model("Subject", sessionSchema);
