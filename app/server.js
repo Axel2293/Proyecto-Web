@@ -7,18 +7,23 @@ require("dotenv").config();
 // const port = 3151;
 const port = process.env.PORT || 3151;
 
-const tokent_md = require("./src/middleware/tokens"); 
+const tokent_md = require("./src/middleware/tokens");
 
 const usersRoute = require("./src/routes/userRoutes");
+const sessionsRoute = require("./src/routes/session-route");
 const authRoute = require("./src/routes/authRoutes");
 
+app.use(express.json());
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // O restringe a tu origen específico
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  if (req.method === 'OPTIONS') {
-      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
-      return res.status(200).json({});
+  res.header("Access-Control-Allow-Origin", "*"); // O restringe a tu origen específico
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
+    return res.status(200).json({});
   }
   next();
 });
@@ -44,11 +49,12 @@ app.get("/", (req, res) => {
 app.use("/subjects", express.json(), require("./src/routes/subject-route"));
 
 //Users routes
-app.use("/users", express.json(), tokent_md.verifyAuthToken, usersRoute);
+app.use("/users", tokent_md.verifyAuthToken, usersRoute);
 
 // Auth routes
-app.use("/auth", express.json(), authRoute);
+app.use("/auth", authRoute);
 
+app.use("/sessions", tokent_md.verifyAuthToken, sessionsRoute);
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
