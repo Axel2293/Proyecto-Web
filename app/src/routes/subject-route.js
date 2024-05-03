@@ -13,4 +13,8 @@ router.get('/name', SubjectController.getSubjectByName);
 // Create a new subject
 router.post('/', SubjectController.createSubject);
 
+// Update a subject status by ID
+router.put('/:id', SubjectController.updateSubject);
+
+
 module.exports = router;
