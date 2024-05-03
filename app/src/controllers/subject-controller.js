@@ -40,3 +40,9 @@ async function getTeacherSubject(req, res) {
         }
     }
 }
+
+module.exports = {
+    createSubject,
+    getSubjects,
+    getTeacherSubject,
+};
