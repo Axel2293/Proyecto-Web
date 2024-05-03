@@ -41,8 +41,42 @@ async function getTeacherSubject(req, res) {
     }
 }
 
+// Get subjects by ID
+async function getSubject(req, res) {
+    const { id } = req.params;
+    const subject = await Subject.findById(id);
+    if (subject) {
+        res.send(subject);
+    } else {
+        res.status(404).send({
+            error: 'Subject not found',
+        });
+    }
+}
+
+// Get subjets by name
+async function getSubjectByName(req, res) {
+    const { name } = req.query;
+    if (name) {
+        const subject = await Subject.findOne({ name: name });
+        if (subject) {
+            res.send(subject);
+        } else {
+            res.status(404).send({
+                error: 'Subject not found',
+            });
+        }
+    } else {
+        res.status(404).send({
+            error: 'Subject not found',
+        });
+    }
+}
+
 module.exports = {
     createSubject,
     getSubjects,
     getTeacherSubject,
+    getSubject,
+    getSubjectByName,
 };

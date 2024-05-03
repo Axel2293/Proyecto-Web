@@ -5,7 +5,10 @@ const SubjectController = require("../controllers/subject-controller")
 router.get('/', SubjectController.getSubjects);
 
 // Get info a subject
-//router.get('/:id', SubjectController.getSubject);
+router.get('/:id', SubjectController.getSubject);
+
+// Get info of a subject by name
+router.get('/name', SubjectController.getSubjectByName);
 
 // Create a new subject
 router.post('/', SubjectController.createSubject);
