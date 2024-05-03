@@ -40,6 +40,9 @@ app.get("/", (req, res) => {
   });
 });
 
+//Subjects routes
+app.use("/subjects", express.json(), require("./src/routes/subject-route"));
+
 //Users routes
 app.use("/users", express.json(), tokent_md.verifyAuthToken, usersRoute);
 
