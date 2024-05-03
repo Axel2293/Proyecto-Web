@@ -47,10 +47,9 @@ async function createSession(req, res) {
       created_at: new Date(),
     };
 
-
     //IDEA: Must check that student and teacher does not have a session at the same time
     //IDEA: Must check that student and teacher are not the same person
-    
+
     const student = await User.findById({ uuid: student_uuid });
     if (!student) {
       return res.status(400).json({ error: "Student not found" });
@@ -76,7 +75,6 @@ async function createSession(req, res) {
 
 async function getSessions(req, res) {
   try {
-    console.log("Getting sessions from database");
     const sessions = await Session.find();
     console.log("Sessions:", sessions);
     res.status(200).json(sessions);
@@ -85,7 +83,7 @@ async function getSessions(req, res) {
   }
 }
 
-const getSession = async (req, res) => {
+async function getSession(req, res) {
   try {
     const { uuid } = req.params;
     const session = await Session.findOne({ uuid });
@@ -96,12 +94,39 @@ const getSession = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
+
+async function filterSessions(req, res) {
+  // filter by query params every parameter is optional
+  // if no query params are passed, return all sessions
+
+  const { teacher_uuid, subject_uuid, start, end, status } = req.query;
+  const query = {};
+
+  if (teacher_uuid) query.teacher_uuid = teacher_uuid;
+  if (subject_uuid) query.subject_uuid = subject_uuid;
+  if (start) query.start = start;
+  if (end) query.end = end;
+  if (status) query.status = status;
+
+  if (start && end) {
+    query.start = { $gte: new Date(start), $lte: new Date(end) };
+  }
+
+  const sessions = await Session.find(query);
+
+  if (!sessions) {
+    return res.status(404).json({ error: "No sessions found" });
+  }
+
+  res.status(200).json(sessions);
+}
 
 const updateSession = async (req, res) => {
   try {
     const { uuid } = req.params;
-    const { status } = req.body;
+    const { student_uuid, teacher_uuid, subject_uuid, start, end, status } =
+      req.body;
 
     const session = await Session.findOne({ uuid });
     if (!session) {
