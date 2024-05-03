@@ -1,5 +1,6 @@
 const Session = require("../models/Session");
 const User = require("../models/User");
+const Subject = require("../models/Subject");
 
 //const filterSessionsByDate = async (startDate, endDate) => {
 //  const dateStart = new Date(startDate);
@@ -47,25 +48,28 @@ async function createSession(req, res) {
       created_at: new Date(),
     };
 
+    console.log("Session:", session);
+
     //IDEA: Must check that student and teacher does not have a session at the same time
     //IDEA: Must check that student and teacher are not the same person
 
-    const student = await User.findById({ uuid: student_uuid });
+    const student = await User.findById(student_uuid);
     if (!student) {
       return res.status(400).json({ error: "Student not found" });
     }
 
-    const teacher = await User.findById({ uuid: teacher_uuid });
+    const teacher = await User.findById(teacher_uuid);
     if (!teacher) {
       return res.status(400).json({ error: "Teacher not found" });
     }
 
-    //const subject = await Subject.findOne({ uuid: subject_uuid });
-    //if (!subject) {
-    //  return res.status(400).json({ error: "Subject not found" });
-    //}
+    const subject = await Subject.findById(subject_uuid);
+    if (!subject) {
+      return res.status(400).json({ error: "Subject not found" });
+    }
 
     const newSession = new Session(session);
+    console.log("New session:", newSession);
     await newSession.save();
     res.status(201).json(newSession);
   } catch (error) {
@@ -85,8 +89,8 @@ async function getSessions(req, res) {
 
 async function getSession(req, res) {
   try {
-    const { uuid } = req.params;
-    const session = await Session.findOne({ uuid });
+    const { uuid } = req.query;
+    const session = await Session.findOne(uuid);
     if (!session) {
       return res.status(404).json({ error: "Session not found" });
     }

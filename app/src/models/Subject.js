@@ -16,4 +16,4 @@ let subjectSchema = new mongoose.Schema({
 });
 
 // Como saber el status... El teacher decide el status
-module.exports = mongoose.model("Subject", sessionSchema);
+module.exports = mongoose.model("Subject", subjectSchema);
