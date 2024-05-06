@@ -12,6 +12,7 @@ const auth = require("./src/middleware/tokens");
 const usersRoute = require("./src/routes/userRoutes");
 const sessionsRoute = require("./src/routes/session-route");
 const authRoute = require("./src/routes/authRoutes");
+const dashboardRoute = require("./src/routes/dashboard-route");
 
 app.use(express.json());
 
@@ -54,10 +55,11 @@ app.use("/users", auth.verifyAuthToken, usersRoute);
 // Auth routes
 app.use("/auth", authRoute);
 
+// Sessions routes
 app.use("/sessions", auth.verifyAuthToken, sessionsRoute);
 
-
-//app.use("/sessions/:uuid", auth.verifyAuthToken, sessionsRoute);
+// Dashboard routes
+app.use("/dashboard", auth.verifyAuthToken, dashboardRoute);
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
