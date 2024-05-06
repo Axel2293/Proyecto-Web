@@ -7,7 +7,7 @@ require("dotenv").config();
 // const port = 3151;
 const port = process.env.PORT || 3151;
 
-const tokent_md = require("./src/middleware/tokens");
+const auth = require("./src/middleware/tokens");
 
 const usersRoute = require("./src/routes/userRoutes");
 const sessionsRoute = require("./src/routes/session-route");
@@ -49,15 +49,15 @@ app.get("/", (req, res) => {
 app.use("/subjects", express.json(), require("./src/routes/subject-route"));
 
 //Users routes
-app.use("/users", tokent_md.verifyAuthToken, usersRoute);
+app.use("/users", auth.verifyAuthToken, usersRoute);
 
 // Auth routes
 app.use("/auth", authRoute);
 
-app.use("/sessions", sessionsRoute);
+app.use("/sessions", auth.verifyAuthToken, sessionsRoute);
 
 
-//app.use("/sessions/:uuid", tokent_md.verifyAuthToken, sessionsRoute);
+//app.use("/sessions/:uuid", auth.verifyAuthToken, sessionsRoute);
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
