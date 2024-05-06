@@ -1,35 +1,47 @@
 const express = require("express");
 const app = express();
 const router = express.Router();
+const auth = require("../middleware/tokens");
 
 const SessionsController = require("../controllers/sessions-controller");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-router.get("/", (req, res) => {
-  console.log("Getting sessions");
-  console.log("Oa debugando");
+router.get("/", auth.verifyAuthToken, (req, res) => {
   SessionsController.getSessions(req, res);
 });
 
-router.get("/:uuid", (req, res) => {
-  console.log("Getting session by uuid");
+router.get("/:uuid", auth.verifyAuthToken, (req, res) => {
   SessionsController.getSession(req, res);
 });
 
-router.post("/", (req, res) => {
-  console.log("Creating session");
+router.get("/teacher/:uuid", auth.verifyAuthToken, (req, res) => {
+  SessionsController.getTeacherSessions(req, res);
+});
+
+router.get("/student/:uuid", auth.verifyAuthToken, (req, res) => {
+  // verify type of SessionsController.getStudentSessions(req, res);
+  typeof SessionsController.getStudentSessions(req, res);
+});
+
+//router.get("/subject/:uuid", (req, res) => {
+//  SessionsController.getSubjectSessions(req, res);
+//});
+//
+//router.get("/status/:status", (req, res) => {
+//  SessionsController.getStatusSessions(req, res);
+//});
+
+router.post("/", auth.verifyAuthToken, (req, res) => {
   SessionsController.createSession(req, res);
 });
 
-router.put("/:uuid", (req, res) => {
-  console.log("Updating session");
+router.put("/:uuid", auth.verifyAuthToken, (req, res) => {
   SessionsController.updateSession(req, res);
 });
 
-router.delete("/:uuid", (req, res) => {
-  console.log("Deleting session");
+router.delete("/:uuid", auth.verifyAuthToken, (req, res) => {
   SessionsController.deleteSession(req, res);
 });
 

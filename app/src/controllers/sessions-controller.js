@@ -2,36 +2,13 @@ const Session = require("../models/Session");
 const User = require("../models/User");
 const Subject = require("../models/Subject");
 
-//const filterSessionsByDate = async (startDate, endDate) => {
-//  const dateStart = new Date(startDate);
-//  dateStart.setHours(0, 0, 0, 0);
-//  const dateEnd = new Date(endDate);
-//  dateEnd.setHours(23, 59, 59, 999);
-//
-//  const sessions = await Session.find({
-//    start: { $gte: dateStart, $lte: dateEnd },
-//  }).exec();
-//
-//  return sessions;
-//};
-//
-//const filterSessionsByTime = (sessions, startTime, endTime) => {
-//  const targetStartTime =
-//    parseInt(startTime.split(":")[0]) + parseInt(startTime.split(":")[1]) / 60;
-//  const targetEndTime =
-//    parseInt(endTime.split(":")[0]) + parseInt(endTime.split(":")[1]) / 60;
-//
-//  return sessions.filter((session) => {
-//    const sessionStartTime =
-//      session.start.getHours() + session.start.getMinutes() / 60;
-//    const sessionEndTime =
-//      session.end.getHours() + session.end.getMinutes() / 60;
-//
-//    return (
-//      sessionStartTime >= targetStartTime && sessionEndTime <= targetEndTime
-//    );
-//  });
-//};
+function filterSessionsByQuery () {
+  // filter by query params every parameter is optional
+  // if no query params are passed, return all sessions
+
+  const { teacher_uuid, subject_uuid, start, end, status } = req.query;
+  return sessions;
+};
 
 async function createSession(req, res) {
   try {
