@@ -27,7 +27,7 @@ sideBar.addEventListener("mouseleave", () => {
 sideBar.addEventListener("mouseenter", () => {
     sideBar.classList.remove("close");
 });
-// Hide the sidebar at first, but hide it after some time
+// show the sidebar at first, but hide it after some time
 const first = setTimeout(() => {
     sideBar.classList.add("close");
     clearTimeout(first);

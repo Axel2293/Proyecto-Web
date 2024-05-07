@@ -39,10 +39,6 @@ li {
     list-style: none;
 }
 
-html {
-    overflow-x: hidden;
-}
-
 body.dark {
     --light: #181a1e;
     --grey: #25252c;
@@ -328,7 +324,7 @@ body {
 
 .content main {
     width: 100%;
-    padding: 36px 24px;
+    padding: 14px 24px;
     max-height: calc(100vh - 56px);
 }
 
@@ -519,6 +515,134 @@ body {
 
 .content main .bottom-data .orders table tbody tr:hover {
     background: var(--grey);
+    border-left: 2px solid var(--primary);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.content main .search-bar {
+    position: relative;
+    top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--dark-normal);
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    z-index: 1000;
+}
+
+.content main .search-bar input[type="search"] {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background: none;
+    color: var(--dark);
+}
+
+.content main .search-bar .search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--normal);
+}
+
+.bottom-data .sessions {
+    width: 100%;
+    min-height: 487px;  
+}
+
+.bottom-data .sessions .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+}
+
+.bottom-data .sessions .session {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--dark);
+    background: var(--light);
+    transition: all 0.3s ease;
+}
+
+.bottom-data .sessions .session:hover {
+    background: var(--grey);
+    border-left: 2px solid var(--primary);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.bottom-data .sessions .session:last-child {
+    border-bottom: none;
+}
+
+.bottom-data .sessions .session .session-info {
+    flex: 1;
+}
+
+.bottom-data .sessions .session .session-info .session-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.bottom-data .sessions .session .session-info .session-teacher {
+    font-size: 14px;
+    color: var(--dark);
+    margin-bottom: 10px;
+}
+
+.bottom-data .sessions .session .session-info .session-description {
+    color: var(--dark-grey);
+    /* maximum wigth */
+    max-width: 300px;
+}
+
+.bottom-data .sessions .session .session-time {
+    flex: 1;
+    text-align: center;
+}
+
+.bottom-data .sessions .session .available .space {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottom-data .sessions .session .session-buttons {
+    flex: 1;
+    text-align: right;
+}
+
+.bottom-data .sessions .session .session-buttons .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--light);
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.bottom-data .sessions .session .session-buttons .btn:hover {
+    opacity: 0.8;
+}
+
+.bottom-data .sessions .session .session-buttons #enroll {
+    background-color: var(--success); /* Green for the Enroll button */
+}
+
+.bottom-data .sessions .session .session-buttons #cancel {
+    background-color: var(--danger); /* Red for the Cancel button */
+}
+
+.bottom-data .sessions .session .session-buttons #edit {
+    background-color: var(--primary); /* Blue for the Edit button */
 }
 
 .content main .bottom-data .orders table tr td .status {
