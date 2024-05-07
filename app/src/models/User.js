@@ -19,7 +19,16 @@ const userSchema = new mongoose.Schema({
     accountType: {
         type: String,
         required: true
+    },
+    pref_subjects:{
+        type: [String],
+        required: false
+    },
+    alerts:{
+        type: [String],
+        required:false
     }
+
 });
 
 // Operations on the Users endpoint
@@ -27,7 +36,7 @@ const userSchema = new mongoose.Schema({
 // Get teachers info (name and email)
 userSchema.statics.findTeachers = async function (page = 1, pagesize = 6){
     const teachers = this.find(
-        {accountType:"teacher"},
+        {accountType:{$in:["teacher", "both"]}},
         {name: 1,
         email: 1}
     )

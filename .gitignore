@@ -3,3 +3,4 @@ package-lock.json
 .env
 test.http
 .idea
+.DS_Store

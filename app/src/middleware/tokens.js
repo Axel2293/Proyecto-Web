@@ -9,6 +9,7 @@ function verifyAuthToken(req, res, next) {
             decoded=jwt.verify(sToken, process.env.JWT_SECRET);
             req.email = decoded.email;
             req.id = decoded.id;
+            req.accountType = decoded.accountType;
             next();
             return;
         } catch (error) {

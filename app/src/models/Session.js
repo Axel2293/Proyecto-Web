@@ -1,16 +1,24 @@
 const { mongoose } = require("../db/connection");
 
 const sessionSchema = new mongoose.Schema({
-  teacher_uuid: {
+  teacher_id: {
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
   },
-  student_uuid: {
-    type: mongoose.SchemaTypes.ObjectId,
-    required: false,
+  students: {
+    type: [mongoose.SchemaTypes.ObjectId],
+    required: true,
   },
-  subject_uuid: {
-    type: mongoose.SchemaTypes.ObjectId,
+  students_limit:{
+    type: Number,
+    required: true,
+  },
+  subject: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
     required: true,
   },
   start: {
@@ -21,24 +29,35 @@ const sessionSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  location: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
     required: true,
   },
-  created_at: {
-    type: Date,
-    required: true,
-  },
-  updated_at: {
-    type: Date,
-  },
-  updated_session: {
-    type: mongoose.SchemaTypes.ObjectId,
+  messages: {
+    type: [
+      {
+        sender: {
+          type: mongoose.SchemaTypes.ObjectId,
+          required: true,
+        },
+        content: {
+          type: String,
+          required: true,
+        },
+        timestamp: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
+    required: false,
   },
 });
 
 // Static methods
-
-// Instance methods
 
 module.exports = mongoose.model("Session", sessionSchema);

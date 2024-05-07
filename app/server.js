@@ -15,6 +15,7 @@ const authRoute = require("./src/routes/authRoutes");
 
 app.use(express.json());
 
+//CORS middleware
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*"); // O restringe a tu origen específico
   res.header(
@@ -45,8 +46,6 @@ app.get("/", (req, res) => {
   });
 });
 
-//Subjects routes
-app.use("/subjects", express.json(), require("./src/routes/subject-route"));
 
 //Users routes
 app.use("/users", tokent_md.verifyAuthToken, usersRoute);

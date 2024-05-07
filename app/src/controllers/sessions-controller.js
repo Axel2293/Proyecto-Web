@@ -1,6 +1,6 @@
 const Session = require("../models/Session");
 const User = require("../models/User");
-const Subject = require("../models/Subject");
+const { query } = require("express");
 
 function filterSessionsByQuery () {
   // filter by query params every parameter is optional
@@ -55,8 +55,48 @@ async function createSession(req, res) {
 }
 
 async function getSessions(req, res) {
+  
+  const {subject, showcreat, status, page, pagesize, from_date, to_date} = req.query;
+  const user_id = req.id;
+  let query = {}
+  if(status){
+    query["status"] = status
+  }
+
+  if(showcreat){
+    if (req.accountType != "student") {
+      query["teacher_uuid"] = user_id;
+    }else{
+      res.status(404).send({
+        error: "Account type doesnt match operation"
+      })
+    }
+  }
+  if(subject){
+    const subject_data = await Subject.findOne({"name":subject})
+    if (subject_data) {
+      query["subject_uuid"] = subject_data["_id"]
+    }else{
+      res.status(404).send({
+        error: "Subject \""+subject+"\" not found"
+      })
+    }
+  }
+
+  if(from_date){
+    query["start"] = {"$gte": from_date}
+  }
+
+  if (to_date) {
+    query["end"] = {"$lte": to_date}
+  }
+
   try {
-    const sessions = await Session.find();
+    const sessions = await Session.find(
+      query
+    )
+    .skip(((page-1) * pagesize) || 0)
+    .limit(pagesize|| 0);
     console.log("Sessions:", sessions);
     res.status(200).json(sessions);
   } catch (error) {
@@ -128,7 +168,7 @@ async function getSession(req, res) {
 //  res.status(200).json(sessions);
 //}
 
-async function updateSession(req, res) {
+
 async function updateSession(req, res) {
   try {
     const { uuid } = req.params;
@@ -146,9 +186,7 @@ async function updateSession(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
-}
 
-async function deleteSession(req, res) {
 async function deleteSession(req, res) {
   try {
     const { uuid } = req.query;
@@ -162,7 +200,6 @@ async function deleteSession(req, res) {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
 }
 
 module.exports = {

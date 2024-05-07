@@ -18,10 +18,13 @@ async function getUserInfo(req, res) {
     const user = await User.findById(id)
     if (user) {
       console.log(user);
+      //Send all user data
       res.send({
         name: user.name,
         accountType: user.accountType,
-        email: user.email
+        email: user.email,
+        pref_subjects: user.pref_subjects,
+        alerts: user.alerts
       });
       return;
     }else{
@@ -52,6 +55,10 @@ async function updateUser(req, res){
   }
   if ("password" in data) {
     query.passHash = bcrypt.hashSync(data["password"], 10)
+  }
+
+  if ("pref_subjects" in data) {
+    query.pref_subjects = {"$push":data["pref_subjects"]};
   }
   //Save user
   try {
