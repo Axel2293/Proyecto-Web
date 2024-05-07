@@ -74,8 +74,12 @@ const toggler = document.getElementById("theme-toggle");
 toggler.addEventListener("change", function () {
     if (this.checked) {
         document.body.classList.add("dark");
+        // create cookie to store theme preference
+        document.cookie = "theme=dark";
     } else {
         document.body.classList.remove("dark");
+        // create cookie to store theme preference
+        document.cookie = "theme=light";
     }
 });
 
