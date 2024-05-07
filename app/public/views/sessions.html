@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../assets/styles/dashboard-style.css">
+    <!-- TIP: Si quieren utilizar BS-5 Haganlo, igual cuando quieran y puedan, quiten este comentario -->
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#" class="logo">
+            <i class='bx bxl-joomla'>
+                <div class="logo-name">
+                    <span>&nbsp;&lt;Courses</span>
+                </div>
+            </i>
+        </a>
+        <a href="#" class="space">
+        </a>
+        <ul class="side-menu">
+            <li><a href="/dashboard"><i class='bx bxs-dashboard'>
+                    </i>Dashboard</a></li>
+            <li class="active"><a href="/sessions"><i class='bx bx-objects-horizontal-right'>
+                    </i>Sessions</a></li>
+            <!-- <li><a href="/teach"><i class='bx bx-group'>
+                    </i>Teach</a></li> -->
+            <li><a href="/settings"><i class='bx bx-cog'>
+                    </i>Settings</a></li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="#" class="logout" id="logout">
+                    <i class='bx bx-log-out-circle'></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End of Sidebar -->
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Navbar -->
+        <!-- <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="theme-toggle" hidden>
+            <label for="theme-toggle" class="theme-toggle"></label>
+
+            <a href="#" class="profile">
+                <img src="https://www.freeiconspng.com/thumbs/profile-icon-png/profile-icon-9.png">
+            </a>
+        </nav> -->
+
+        <!-- End of Navbar -->
+
+        <main>
+            <div class="header">
+                <div class="left">
+                    <h1>Sessions</h1>
+                    <ul class="breadcrumb">
+                        <li><a href="#">
+                                Sessions
+                            </a></li>
+                        /
+                        <li><a href="#" class="active">Search</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="search-bar">
+                <input type="search" placeholder="Search...">
+                <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+            </div>
+
+            <!-- End of Insights -->
+
+            <!-- Opinions -->
+            <div class="bottom-data">
+                <div class="sessions">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Sessions</h3>
+                    </div>
+
+                    <!-- Session -->
+                    <div class="session">
+                        <div class="session-info">
+                            <h4 class="session-title">Session Name</h4>
+                            <p class="session-teacher">Teacher: <span class="space">Teacher Name</span></p>
+                            <p class="session-description">This is a description of the session.</p>
+                        </div>
+
+                        <div class="session-time">
+                            <p>Time: 09:00 - 10:00</p>
+                            <p>Date: 01/04/2022</p>
+                        </div>
+
+                        <div class="available">
+                            <p>students: <span class="space">7</span>/10</p>
+                        </div>
+
+                        <div class="session-buttons">
+                            <button class="btn" id="enroll">Enroll</button>
+                            <button class="btn" id="cancel">Cancel</button>
+                            <button class="btn" id="edit">Edit</button>
+                        </div>
+                    </div>
+
+                    <!-- Session -->
+                    <div class="session">
+                        <div class="session-info">
+                            <h4 class="session-title">Session Name</h4>
+                            <p class="session-teacher">Teacher: <span class="space">Teacher Name</span></p>
+                            <p class="session-description">This is a description of the session.</p>
+                        </div>
+
+                        <div class="session-time">
+                            <p>Time: 13:00 - 14:00</p>
+                            <p>Date: 01/05/2022</p>
+                        </div>
+
+                        <div class="available">
+                            <p>students: <span class="space">3</span>/10</p>
+                        </div>
+
+                        <div class="session-buttons">
+                            <button class="btn" id="enroll">Enroll</button>
+                            <button class="btn" id="cancel">Cancel</button>
+                            <button class="btn" id="edit">Edit</button>
+                        </div>
+                    </div>
+
+                    <!-- Session -->
+                    <div class="session">
+                        <div class="session-info">
+                            <h4 class="session-title">Session Name</h4>
+                            <p class="session-teacher">Teacher: <span class="space">Teacher Name</span></p>
+                            <p class="session-description">This is a description of the session.</p>
+                        </div>
+
+                        <div class="session-time">
+                            <p>Time: 16:00 - 17:00</p>                            
+                            <p>Date: 01/03/2022</p>
+                        </div>
+
+                        <div class="available">
+                            <p>students: <span class="space">8</span>/10</p>
+                        </div>
+
+                        <div class="session-buttons">
+                            <button class="btn" id="enroll">Enroll</button>
+                            <button class="btn" id="cancel">Cancel</button>
+                            <button class="btn" id="edit">Edit</button>
+                        </div>
+                    </div>
+
+                    <!-- Session -->
+                    <div class="session">
+                        <div class="session-info">
+                            <h4 class="session-title">Session Name</h4>
+                            <p class="session-teacher">Teacher: <span class="space">Teacher Name</span></p>
+                            <p class="session-description">This is a description of the session.</p>
+                        </div>
+
+                        <div class="session-time">
+                            <p>Time: 16:00 - 17:00</p>                            
+                            <p>Date: 01/03/2022</p>
+                        </div>
+
+                        <div class="available">
+                            <p>students: <span class="space">8</span>/10</p>
+                        </div>
+
+                        <div class="session-buttons">
+                            <button class="btn" id="enroll">Enroll</button>
+                            <button class="btn" id="cancel">Cancel</button>
+                            <button class="btn" id="edit">Edit</button>
+                        </div>
+                    </div>
+
+                    <!-- Session -->
+                    <div class="session">
+                        <div class="session-info">
+                            <h4 class="session-title">Session Name</h4>
+                            <p class="session-teacher">Teacher: <span class="space">Teacher Name</span></p>
+                            <p class="session-description">This is a description of the session.</p>
+                        </div>
+
+                        <div class="session-time">
+                            <p>Time: 16:00 - 17:00</p>                            
+                            <p>Date: 01/03/2022</p>
+                        </div>
+
+                        <div class="available">
+                            <p>students: <span class="space">8</span>/10</p>
+                        </div>
+
+                        <div class="session-buttons">
+                            <button class="btn" id="enroll">Enroll</button>
+                            <button class="btn" id="cancel">Cancel</button>
+                            <button class="btn" id="edit">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="../scripts/dashboard.js"></script>
+</body>
+
+</html>

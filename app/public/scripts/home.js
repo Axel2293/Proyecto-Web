@@ -16,6 +16,16 @@ register_redirect_btn.addEventListener("click", function () {
     window.location.href = "/register";
 });
 
+course_redirect_btn.addEventListener("click", function () {
+    // redirect to route /course
+    window.location.href = "/sessions";
+});
+
+dashboard_redirect_btn.addEventListener("click", function () {
+    // redirect to route /dashboard
+    window.location.href = "/dashboard";
+});
+
 logo_redirect_btn.addEventListener("click", function () {
     // redirect to route /
     window.location.href = "/";
