@@ -548,6 +548,16 @@ body {
     color: var(--normal);
 }
 
+.content main .search-bar .add-session {
+    background: none;
+    color: var(--normal);
+    padding-left: 2%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+}
+
 .bottom-data .sessions {
     width: 100%;
     min-height: 487px;  

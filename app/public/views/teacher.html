@@ -20,7 +20,7 @@
         <a href="#" class="logo">
             <i class='bx bxl-joomla'>
                 <div class="logo-name">
-                    <span>&nbsp;&lt;Courses</span>
+                    <span>&nbsp;&lt;Teach</span>
                 </div>
             </i>
         </a>
@@ -29,11 +29,12 @@
         <ul class="side-menu">
             <li><a href="./dashboard.html"><i class='bx bxs-dashboard'>
                     </i>Dashboard</a></li>
-            <li class="active"><a href="./session.html"><i class='bx bx-objects-horizontal-right'>
+            <li><a href="./session.html"><i class='bx bx-objects-horizontal-right'>
                     </i>Sessions</a></li>
             <li><a href="/enrolled"><i class='bx bxs-bookmark-alt'>
                     </i>Enrolled</a></li>
-            <li><a href="/teacher"><i class='bx bx-group'>
+            </li>
+            <li class="active"><a href="/teacher"><i class='bx bx-group'>
                     </i>Teach</a></li>
             <li><a href="/settings"><i class='bx bx-cog'>
                     </i>Settings</a></li>
@@ -73,13 +74,13 @@
         <main>
             <div class="header">
                 <div class="left">
-                    <h1>Sessions</h1>
+                    <h1>Teacher Dashboard</h1>
                     <ul class="breadcrumb">
                         <li><a href="#">
                                 Sessions
                             </a></li>
                         /
-                        <li><a href="#" class="active">Search</a></li>
+                        <li><a href="#" class="active">Active</a></li>
                     </ul>
                 </div>
             </div>
@@ -88,6 +89,10 @@
             <div class="search-bar">
                 <input type="search" placeholder="Search..." id="querysearch">
                 <button class="search-btn" type="submit" onclick=showTable()><i class='bx bx-search'></i></button>
+                <!-- add subject button -->
+                <a href="#" class="add-session">
+                    <i class='bx bxs-add-to-queue'></i>
+                </a>
             </div>
 
             <!-- End of Insights -->
@@ -111,7 +116,7 @@
 
     </div>
 
-    <script src="../scripts/session.js"></script>
+    <script src="../scripts/teacher.js"></script>
 </body>
 
 </html>

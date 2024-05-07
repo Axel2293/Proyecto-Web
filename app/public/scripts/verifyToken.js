@@ -3,14 +3,6 @@ function verifyLoggedIn() {
     // Check if token exists in session storage
     const token = sessionStorage.getItem("sToken");
     if (token) {
-        // User is logged in
-        Swal.fire({
-            title: "Welcome back!",
-            text: "You are logged in as teacher",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false,
-        });
 
         //Get user info with a fetch request
         fetch("https://proyecto-web-0bpb.onrender.com/users", {
