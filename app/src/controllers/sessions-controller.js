@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 async function getSessions(req, res) {
   
-  const {q, showcreat, status, page, pagesize, from_date, to_date} = req.query;
+  const {q, showenrolled, showcreat, status, page, pagesize, from_date, to_date} = req.query;
   const user_id = req.id;
   let query = {}
   if(status){
@@ -37,6 +37,25 @@ async function getSessions(req, res) {
 
   if (to_date) {
     query["end"] = {"$lte": to_date}
+  }
+  // make a query to get all sessions if student is enrolled in
+
+  if(showenrolled == "1"){
+    if (req.accountType == "student" || req.accountType == "both") {
+      query["students"] = { $in: [user_id]};
+    }else{
+      res.status(404).send({
+        error: "Account type doesnt match operation"
+      })
+    }
+  }else if(showenrolled == "0"){
+    if (req.accountType == "student" || req.accountType == "both") {
+      query["students"] = { $nin: [user_id]};
+    }else{
+      res.status(404).send({
+        error: "Account type doesnt match operation"
+      })
+    }
   }
 
   try {
