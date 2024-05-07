@@ -1,5 +1,19 @@
 const {mongoose} = require('../db/connection');
 
+//Alerts schema
+const alertSchema = new mongoose.Schema(
+    {
+        session_id:{
+            type: mongoose.SchemaTypes.ObjectId,
+            required: true
+        },
+        alert:{
+            type: String,
+            required: true
+        }
+    }
+)
+
 // User schema
 const userSchema = new mongoose.Schema({
     email:{
@@ -19,7 +33,16 @@ const userSchema = new mongoose.Schema({
     accountType: {
         type: String,
         required: true
+    },
+    pref_subjects:{
+        type: [String],
+        required: false
+    },
+    alerts:{
+        type: [alertSchema],
+        required:false
     }
+
 });
 
 // Operations on the Users endpoint
