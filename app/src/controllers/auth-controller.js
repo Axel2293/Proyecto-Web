@@ -16,7 +16,7 @@ async function loginUser(req, res) {
                 const sToken = jwt.sign({email:userData.email, id:userData._id, accountType:userData.accountType}, process.env.JWT_SECRET,{
                     expiresIn: 18000
                 })
-                res.send({sToken})
+                res.send({sToken, accountType:userData.accountType})
             }else{
                 res.status(401).send({
                     authError: "Password or email are not correct."

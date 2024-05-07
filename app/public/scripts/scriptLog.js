@@ -98,15 +98,48 @@ document.addEventListener('DOMContentLoaded', function () {
             if(res.ok){
                 console.log(body["sToken"]);
                 sessionStorage.setItem("sToken", body["sToken"]);
+                console.log(body)
+                sessionStorage.setItem("accountType", body["accountType"]);
                 Swal.fire({
                     icon: 'success',
                     title: 'Login Successful! Welcome aboard!',
-                    text: 'Redirecting to dashboard...',
                     showConfirmButton: false
                 });
-                setTimeout(() => {
-                    window.location.href = host+'/dashboard';
-                }, 1500);
+                if(body["accountType"] == "student"){
+                    window.location.href = host+"/studentDashboard.html";
+                }
+                else if(body["accountType"] == "teacher"){
+                    window.location.href = host+"/teacherDashboard.html";
+                }
+                else if(body["accountType"] == "both"){
+                    // Get input with swal to select what type of account to use
+                    const { value: accountType } = await Swal.fire({
+                        title: 'Select account type to log in',
+                        input: 'select',
+                        inputOptions: {
+                            'student': 'Student',
+                            'teacher': 'Teacher'
+                        },
+                        inputPlaceholder: 'Select account type',
+                        showCancelButton: true
+                    });
+                    if (accountType) {
+                        sessionStorage.setItem("accountType", accountType);
+                        if(accountType == "student"){
+                            window.location.href = host+"/studentDashboard.html";
+                        }
+                        else if(accountType == "teacher"){
+                            window.location.href = host+"/teacherDashboard.html";
+                        }
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Account type not selected',
+                            text: 'Login failed',
+                            showConfirmButton: true
+                        });
+                    }
+                }
             }else{
                 Swal.fire({
                     icon: 'error',
