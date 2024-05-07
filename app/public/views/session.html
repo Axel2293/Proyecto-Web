@@ -27,9 +27,9 @@
         <a href="#" class="space">
         </a>
         <ul class="side-menu">
-            <li><a href="/dashboard"><i class='bx bxs-dashboard'>
+            <li><a href="./dashboard.html"><i class='bx bxs-dashboard'>
                     </i>Dashboard</a></li>
-            <li class="active"><a href="/sessions"><i class='bx bx-objects-horizontal-right'>
+            <li class="active"><a href="./session.html"><i class='bx bx-objects-horizontal-right'>
                     </i>Sessions</a></li>
             <!-- <li><a href="/teach"><i class='bx bx-group'>
                     </i>Teach</a></li> -->
@@ -84,8 +84,8 @@
 
             <!-- Search bar -->
             <div class="search-bar">
-                <input type="search" placeholder="Search...">
-                <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+                <input type="search" placeholder="Search..." id="querysearch">
+                <button class="search-btn" type="submit" onclick=showTable()><i class='bx bx-search'></i></button>
             </div>
 
             <!-- End of Insights -->
@@ -97,6 +97,7 @@
                         <i class='bx bx-receipt'></i>
                         <h3>Sessions</h3>
                     </div>
+                    <div id="sessionsData"></div>
 
                     
 
