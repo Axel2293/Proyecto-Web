@@ -9,13 +9,12 @@ app.use(express.json());
 
 router.get("/", (req, res) => {
   console.log("Getting sessions");
-  console.log("Oa debugando");
   SessionsController.getSessions(req, res);
 });
 
-router.get("/:uuid", (req, res) => {
-  console.log("Getting session by uuid");
-  SessionsController.getSession(req, res);
+router.get("/:id", (req, res) => {
+  console.log("Getting session by id");
+  SessionsController.getSessionById(req, res);
 });
 
 router.post("/", (req, res) => {

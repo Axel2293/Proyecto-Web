@@ -7,7 +7,7 @@ const sessionSchema = new mongoose.Schema({
   },
   students: {
     type: [mongoose.SchemaTypes.ObjectId],
-    required: true,
+    required: false,
   },
   students_limit:{
     type: Number,

@@ -34,52 +34,37 @@ const { query } = require("express");
 //};
 
 async function createSession(req, res) {
-  try {
-    console.log(req.body);
-    const { student_uuid, teacher_uuid, subject_uuid, start, end } = req.body;
+  const { subject, description, students_limit, start, end, location } = req.body;
+  const teacher_id = req.id;
 
-    const session = {
-      student_uuid,
-      teacher_uuid,
-      subject_uuid,
+  // Verify if new session overlaps with other session on same date range
+  const teacherSessions = await Session.find({ teacher_id , start: { $lt: end }, end: { $gt: start } });
+  if (teacherSessions.length > 0) {
+    res.status(400).json({ error: "Session overlaps with another session" });
+    return;
+  }
+  try {
+    const session = new Session({
+      teacher_id,
+      subject,
+      description,
+      students_limit,
       start,
       end,
-      status: "pending",
-      created_at: new Date(),
-    };
+      location,
+      status: "available",
+    });
 
-    console.log("Session:", session);
-
-    //IDEA: Must check that student and teacher does not have a session at the same time
-    //IDEA: Must check that student and teacher are not the same person
-
-    const student = await User.findById(student_uuid);
-    if (!student) {
-      return res.status(400).json({ error: "Student not found" });
-    }
-
-    const teacher = await User.findById(teacher_uuid);
-    if (!teacher) {
-      return res.status(400).json({ error: "Teacher not found" });
-    }
-
-    const subject = await Subject.findById(subject_uuid);
-    if (!subject) {
-      return res.status(400).json({ error: "Subject not found" });
-    }
-
-    const newSession = new Session(session);
-    console.log("New session:", newSession);
-    await newSession.save();
-    res.status(201).json(newSession);
+    session.save();
+    res.status(201).json(session);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 }
 
 async function getSessions(req, res) {
   
-  const {subject, showcreat, status, page, pagesize, from_date, to_date} = req.query;
+  const {q, showcreat, status, page, pagesize, from_date, to_date} = req.query;
   const user_id = req.id;
   let query = {}
   if(status){
@@ -87,25 +72,22 @@ async function getSessions(req, res) {
   }
 
   if(showcreat){
-    if (req.accountType != "student") {
-      query["teacher_uuid"] = user_id;
+    if (req.accountType == "teacher" || req.accountType == "both") {
+      query["teacher_id"] = user_id;
     }else{
       res.status(404).send({
         error: "Account type doesnt match operation"
       })
     }
   }
-  if(subject){
-    const subject_data = await Subject.findOne({"name":subject})
-    if (subject_data) {
-      query["subject_uuid"] = subject_data["_id"]
-    }else{
-      res.status(404).send({
-        error: "Subject \""+subject+"\" not found"
-      })
-    }
+  //Filtrar por materia y desc
+  if (q) {
+    query["$or"] = [
+      { subject: { $regex: q, $options: "i" } },
+      { description: { $regex: q, $options: "i" } },
+    ];
   }
-
+  
   if(from_date){
     query["start"] = {"$gte": from_date}
   }
@@ -127,12 +109,13 @@ async function getSessions(req, res) {
   }
 }
 
-async function getSession(req, res) {
+async function getSessionById(req, res) {
   try {
-    const { uuid } = req.params;
-    const session = await Session.findOne({ _id: uuid });
+    const { id } = req.params;
+    const session = await Session.findOne({ _id: id });
     if (!session) {
-      return res.status(404).json({ error: "Session not found" });
+      res.status(404).json({ error: "Session not found" });
+      return;
     }
     res.status(200).json(session);
   } catch (error) {
@@ -228,7 +211,7 @@ async function deleteSession(req, res) {
 module.exports = {
   createSession,
   getSessions,
-  getSession,
+  getSessionById,
   updateSession,
   deleteSession,
 };
