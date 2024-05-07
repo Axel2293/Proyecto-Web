@@ -23,6 +23,11 @@ router.post("/", (req, res) => {
     SessionsController.createSession(req, res);
 });
 
+router.put("/:id", (req, res) => {
+  console.log("Updating session");
+  SessionsController.updateSession(req, res);
+});
+
 router.put(
   "/enroll/:id",
   SessionsController.enrollStudent
