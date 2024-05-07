@@ -1,5 +1,6 @@
 const Session = require("../models/Session");
 const User = require("../models/User");
+const mongoose = require("mongoose");
 
 // IDEA: status completed must be set by the teacher or automatically when just the session date is in the past
 // status are available, cancelled, full
@@ -203,9 +204,12 @@ async function updateSession(req, res) {
       return res.status(404).json({ error: "Session not found" });
     }
 
-    const { teacher_id } = req.id;
-
-    if (session.teacher_id !== teacher_id) {
+    const teacher_id = req.id;
+    
+    //Cast teacher id in session to string
+    let query = {};
+    console.log(session.teacher_id, teacher_id, session.teacher_id == teacher_id)
+    if (session.teacher_id != teacher_id) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
@@ -222,18 +226,18 @@ async function updateSession(req, res) {
     }
 
     if (students_limit < session.students.length) {
-      session.status = "full";
+      query.status = "full";
     } else {
-      session.status = "available";
+      query.status = "available";
     }
-    session.subject = subject;
-    session.description = description;
-    session.students_limit = students_limit;
-    session.start = start;
-    session.end = end;
-    session.location = location;
-
-    await session.save();
+    query.subject = subject;
+    query.description = description;
+    query.students_limit = students_limit;
+    query.start = start;
+    query.end = end;
+    query.location = location;
+    
+    await Session.findOneAndUpdate({ _id: id }, query);
     res.status(200).json(session);
   } catch (error) {
     res.status(500).json({ error: error.message });
