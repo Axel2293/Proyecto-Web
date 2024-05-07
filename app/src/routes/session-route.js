@@ -8,8 +8,29 @@ const SessionsController = require("../controllers/sessions-controller");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-router.put("/enroll/:id", auth.verifyAuthToken, SessionsController.enrollStudent);
+router.get("/", (req, res) => {
+  console.log("Getting sessions");
+  SessionsController.getSessions(req, res);
+});
 
-router.delete("/unenroll/:id", auth.verifyAuthToken, SessionsController.unenrollStudent);
+router.get("/:id", (req, res) => {
+  console.log("Getting session by id");
+  SessionsController.getSessionById(req, res);
+});
+
+router.post("/", (req, res) => {
+    console.log("Creating session");
+    SessionsController.createSession(req, res);
+});
+
+router.put(
+  "/enroll/:id",
+  SessionsController.enrollStudent
+);
+
+router.delete(
+  "/unenroll/:id",
+  SessionsController.unenrollStudent
+);
 
 module.exports = router;

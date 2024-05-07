@@ -53,7 +53,7 @@ app.use("/users", tokent_md.verifyAuthToken, usersRoute);
 // Auth routes
 app.use("/auth", authRoute);
 
-app.use("/sessions", sessionsRoute);
+app.use("/sessions", tokent_md.verifyAuthToken, sessionsRoute);
 
 
 //app.use("/sessions/:uuid", tokent_md.verifyAuthToken, sessionsRoute);
