@@ -1,211 +1,139 @@
 const Session = require("../models/Session");
 const User = require("../models/User");
-const { query } = require("express");
 
-function filterSessionsByQuery () {
-  // filter by query params every parameter is optional
-  // if no query params are passed, return all sessions
+// IDEA: status completed must be set by the teacher or automatically when just the session date is in the past
+// status are available, cancelled, full
 
-  const { teacher_uuid, subject_uuid, start, end, status } = req.query;
-  return sessions;
-};
-
-async function createSession(req, res) {
+async function enrollStudent(req, res) {
   try {
-    console.log(req.body);
-    const { student_uuid, teacher_uuid, subject_uuid, start, end } = req.body;
+    const { id } = req.params;
+    const session = await Session.findOne({ _id: id });
+    if (!session) {
+      return res.status(404).json({ error: "Session not found" });
+    }
 
-    const session = {
-      student_uuid,
-      teacher_uuid,
-      subject_uuid,
-      start,
-      end,
-      status: "pending",
-      created_at: new Date(),
-    };
+    if (session.status !== "available") {
+      return res.status(400).json({ error: "Session is not available" });
+    }
 
-    console.log("Session:", session);
+    console.log("req.id: ", req.id);
+    const student_id = req.id;
 
-    //IDEA: Must check that student and teacher does not have a session at the same time
-    //IDEA: Must check that student and teacher are not the same person
+    console.log("student_id: ", student_id);
 
-    const student = await User.findById(student_uuid);
+    const student = await User.findById(student_id);
+    console.log("student: ", student);
+
     if (!student) {
       return res.status(400).json({ error: "Student not found" });
     }
 
-    const teacher = await User.findById(teacher_uuid);
-    if (!teacher) {
-      return res.status(400).json({ error: "Teacher not found" });
+    if (student.accountType === "teacher") {
+      return res.status(400).json({ error: "User is not a student" });
     }
 
-    const subject = await Subject.findById(subject_uuid);
-    if (!subject) {
-      return res.status(400).json({ error: "Subject not found" });
+    console.log("session.teacher_id: ", session.teacher_id);
+
+    if (session.teacher_id == student_id) {
+      return res
+        .status(400)
+        .json({ error: "Student can't register to his own session" });
     }
 
-    const newSession = new Session(session);
-    console.log("New session:", newSession);
-    await newSession.save();
-    res.status(201).json(newSession);
+    if (session.students.includes(student_id)) {
+      return res.status(400).json({ error: "Student is already registered" });
+    }
+
+    // add student to session if isn't full and update status
+    if (session.students.length < session.students_limit) {
+      session.students.push(student_id);
+      if (session.students.length === session.students_limit) {
+        session.status = "full";
+      }
+      await session.save();
+      res.status(200).json({ message: "Student enrolled" });
+    } else {
+      return res.status(400).json({ error: "Session is full" });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
 
-async function getSessions(req, res) {
-  
-  const {subject, showcreat, status, page, pagesize, from_date, to_date} = req.query;
-  const user_id = req.id;
-  let query = {}
-  if(status){
-    query["status"] = status
-  }
-
-  if(showcreat){
-    if (req.accountType != "student") {
-      query["teacher_uuid"] = user_id;
-    }else{
-      res.status(404).send({
-        error: "Account type doesnt match operation"
-      })
-    }
-  }
-  if(subject){
-    const subject_data = await Subject.findOne({"name":subject})
-    if (subject_data) {
-      query["subject_uuid"] = subject_data["_id"]
-    }else{
-      res.status(404).send({
-        error: "Subject \""+subject+"\" not found"
-      })
-    }
-  }
-
-  if(from_date){
-    query["start"] = {"$gte": from_date}
-  }
-
-  if (to_date) {
-    query["end"] = {"$lte": to_date}
-  }
-
+async function unenrollStudent(req, res) {
   try {
-    const sessions = await Session.find(
-      query
-    )
-    .skip(((page-1) * pagesize) || 0)
-    .limit(pagesize|| 0);
-    console.log("Sessions:", sessions);
-    res.status(200).json(sessions);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-async function getSession(req, res) {
-  try {
-    const { uuid } = req.params;
-    const session = await Session.findOne({ _id: uuid });
-    if (!session) {
-      return res.status(404).json({ error: "Session not found" });
-    }
-    res.status(200).json(session);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-//async function filterSessions(req, res) {
-//  // filter by query params every parameter is optional
-//  // if no query params are passed, return all sessions
-//
-//  const { teacher_uuid, subject_uuid, start, end, status } = req.query;
-//  const query = {};
-//
-//  if (teacher_uuid) query.teacher_uuid = teacher_uuid;
-//  if (subject_uuid) query.subject_uuid = subject_uuid;
-//  if (start) query.start = start;
-//  if (end) query.end = end;
-//  if (status) query.status = status;
-//
-//  if (start && end) {
-//    query.start = { $gte: new Date(start), $lte: new Date(end) };
-//  }
-//
-//  const sessions = await Session.find(query);
-//
-//  if (!sessions) {
-//    return res.status(404).json({ error: "No sessions found" });
-//  }
-//
-//  res.status(200).json(sessions);
-//}
-//async function filterSessions(req, res) {
-//  // filter by query params every parameter is optional
-//  // if no query params are passed, return all sessions
-//
-//  const { teacher_uuid, subject_uuid, start, end, status } = req.query;
-//  const query = {};
-//
-//  if (teacher_uuid) query.teacher_uuid = teacher_uuid;
-//  if (subject_uuid) query.subject_uuid = subject_uuid;
-//  if (start) query.start = start;
-//  if (end) query.end = end;
-//  if (status) query.status = status;
-//
-//  if (start && end) {
-//    query.start = { $gte: new Date(start), $lte: new Date(end) };
-//  }
-//
-//  const sessions = await Session.find(query);
-//
-//  if (!sessions) {
-//    return res.status(404).json({ error: "No sessions found" });
-//  }
-//
-//  res.status(200).json(sessions);
-//}
-
-
-async function updateSession(req, res) {
-  try {
-    const { uuid } = req.params;
-    const session = await Session.findOne({ _id: uuid });
+    
+    const { id } = req.params;
+    const session = await Session.findOne({ _id: id });
     if (!session) {
       return res.status(404).json({ error: "Session not found" });
     }
 
-    const { status } = req.body;
-    session.status = status;
+    if (session.status !== "available") {
+      return res.status(400).json({ error: "Session is not available" });
+    }
+
+    console.log("req.id: ", req.id);
+    const student_id = req.id;
+
+    console.log("student_id: ", student_id);
+
+    const student = await User.findById(student_id);
+    console.log("student: ", student);
+
+    if (!student) {
+      return res.status(400).json({ error: "Student not found" });
+    }
+
+    if (student.accountType === "teacher") {
+      return res.status(400).json({ error: "User is not a student" });
+    }
+
+    // remove student from session if student is registered
+    if (session.students.includes(student_id)) {
+      const index = session.students.indexOf(student_id);
+      session.students.splice(index, 1);
+      session.status = "available";
+
+      await session.save();
+      res.status(200).json({ message: "Student unenrolled" });
+    } else {
+      return res.status(400).json({ error: "Student is not registered" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function cancelSession(req, res) {
+  try {
+    const { id } = req.params;
+    const session = await Session.findOne({ _id: id });
+    if (!session) {
+      return res.status(404).json({ error: "Session not found" });
+    }
+
+    const { teacher_id } = req.id;
+
+    if (session.teacher_id !== teacher_id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    if (session.status !== "cancelled") {
+      return res.status(400).json({ error: "Session is already cancelled" });
+    }
+
+    session.status = "cancelled";
 
     await session.save();
-    res.status(200).json(session);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
-async function deleteSession(req, res) {
-  try {
-    const { uuid } = req.query;
-    const session = await Session.findOne({ _id: uuid });
-    if (!session) {
-      return res.status(404).json({ error: "Session not found" });
-    }
-
-    await session.remove();
-    res.status(204).json();
+    res.status(200).message("Session cancelled");
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
 
 module.exports = {
-  createSession,
-  getSessions,
-  getSession,
-  updateSession,
-  deleteSession,
+  enrollStudent,
+  unenrollStudent,
+  cancelSession,
 };
