@@ -195,6 +195,51 @@ async function unenrollStudent(req, res) {
   }
 }
 
+async function updateSession(req, res) {
+  try {
+    const { id } = req.params;
+    const session = await Session.findOne({ _id: id });
+    if (!session) {
+      return res.status(404).json({ error: "Session not found" });
+    }
+
+    const { teacher_id } = req.id;
+
+    if (session.teacher_id !== teacher_id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const { subject, description, students_limit, start, end, location } = req.body;
+
+    if (session.students_limit < session.students.length) {
+      return res.status(400).json({ error: "New session students limit is lower than enrolled students" });
+    }
+
+    const teacherSessions = await Session.find({ teacher_id , start: { $lt: end }, end: { $gt: start } });
+    if (teacherSessions.length > 0) {
+      res.status(400).json({ error: "New session dates overlap with another session" });
+      return;
+    }
+
+    if (students_limit < session.students.length) {
+      session.status = "full";
+    } else {
+      session.status = "available";
+    }
+    session.subject = subject;
+    session.description = description;
+    session.students_limit = students_limit;
+    session.start = start;
+    session.end = end;
+    session.location = location;
+
+    await session.save();
+    res.status(200).json(session);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 async function cancelSession(req, res) {
   try {
     const { id } = req.params;
@@ -226,6 +271,7 @@ module.exports = {
   getSessions,
   getSessionById,
   createSession,
+  updateSession,
   enrollStudent,
   unenrollStudent,
   cancelSession,
