@@ -18,7 +18,7 @@ register_redirect_btn.addEventListener("click", function () {
 
 course_redirect_btn.addEventListener("click", function () {
     // redirect to route /course
-    window.location.href = "/sessions";
+    window.location.href = "/session";
 });
 
 dashboard_redirect_btn.addEventListener("click", function () {
