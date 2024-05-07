@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                     if (accountType) {
                         sessionStorage.setItem("accountType", accountType);
-                        window.location.href = host+"/dashboard.html";
+                        window.location.href ="./dashboard.html";
                     }else{
                         Swal.fire({
                             icon: 'error',
