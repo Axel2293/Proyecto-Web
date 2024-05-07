@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const name = document.getElementById('name');
     const email = document.getElementById('email');
     const password = document.getElementById('password');
+    const accountType = document.getElementById('account-type')
     const host = 'https://proyecto-web-0bpb.onrender.com';
 
     form.addEventListener('submit', function (e) {
@@ -87,10 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function register(){
+        console.log("ON REGISTER")
         const regUser = {
             "email": email.value,
             "password": password.value,
-            "name": name.value
+            "name": name.value,
+            "accountType": accountType.value
         }
 
         const res = await fetch(host+"/auth/register", {

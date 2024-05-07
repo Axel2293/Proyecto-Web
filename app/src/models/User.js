@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
 // Get teachers info (name and email)
 userSchema.statics.findTeachers = async function (page = 1, pagesize = 6){
     const teachers = this.find(
-        {accountType:"teacher"},
+        {accountType:{$in:["teacher", "both"]}},
         {name: 1,
         email: 1}
     )
