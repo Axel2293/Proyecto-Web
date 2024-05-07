@@ -1,19 +1,5 @@
 const {mongoose} = require('../db/connection');
 
-//Alerts schema
-const alertSchema = new mongoose.Schema(
-    {
-        session_id:{
-            type: mongoose.SchemaTypes.ObjectId,
-            required: true
-        },
-        alert:{
-            type: String,
-            required: true
-        }
-    }
-)
-
 // User schema
 const userSchema = new mongoose.Schema({
     email:{
@@ -39,7 +25,7 @@ const userSchema = new mongoose.Schema({
         required: false
     },
     alerts:{
-        type: [alertSchema],
+        type: [String],
         required:false
     }
 
