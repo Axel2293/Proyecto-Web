@@ -13,7 +13,7 @@ async function loginUser(req, res) {
         if (userData){
             if (bcrypt.compareSync(password, userData["passHash"]) && email==userData["email"]) {
                 //Create JWT token (valid for 1 hour)
-                const sToken = jwt.sign({email:userData.email, id:userData._id}, process.env.JWT_SECRET,{
+                const sToken = jwt.sign({email:userData.email, id:userData._id, accountType:userData.accountType}, process.env.JWT_SECRET,{
                     expiresIn: 18000
                 })
                 res.send({sToken})
