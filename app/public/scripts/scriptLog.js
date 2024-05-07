@@ -105,13 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     title: 'Login Successful! Welcome aboard!',
                     showConfirmButton: false
                 });
-                if(body["accountType"] == "student"){
-                    window.location.href = host+"/studentDashboard.html";
-                }
-                else if(body["accountType"] == "teacher"){
-                    window.location.href = host+"/teacherDashboard.html";
-                }
-                else if(body["accountType"] == "both"){
+                if(body["accountType"] == "both"){
                     // Get input with swal to select what type of account to use
                     const { value: accountType } = await Swal.fire({
                         title: 'Select account type to log in',
@@ -125,12 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                     if (accountType) {
                         sessionStorage.setItem("accountType", accountType);
-                        if(accountType == "student"){
-                            window.location.href = host+"/studentDashboard.html";
-                        }
-                        else if(accountType == "teacher"){
-                            window.location.href = host+"/teacherDashboard.html";
-                        }
+                        window.location.href = host+"/dashboard.html";
                     }else{
                         Swal.fire({
                             icon: 'error',
