@@ -259,23 +259,23 @@ async function createSession(){
     // Create a form to create a session
     const form = `
     <form>
-        <label for="subject">Subject</label>
-        <input type="text" id="subject">
+        <label for="subject" class="form-label">Subject</label>
+        <input type="text" id="subject" class="form-input">
         <br>
-        <label for="description">Description</label>
-        <input type="text" id="description">
+        <label for="description" class="form-label">Description</label>
+        <input type="text" id="description" class="form-input">
         <br>
-        <label for="start">Start</label>
-        <input type="datetime-local" id="start">
+        <label for="start" class="form-label">Start</label>
+        <input type="datetime-local" id="start" class="form-input">
         <br>
-        <label for="end">End</label>
-        <input type="datetime-local" id="end">
+        <label for="end" class="form-label">End</label>
+        <input type="datetime-local" id="end" class="form-input">
         <br>
-        <label for="students_limit">Students limit</label>
-        <input type="number" id="students_limit">
+        <label for="students_limit" class="form-label">Students limit</label>
+        <input type="number" id="students_limit" class="form-input" min="1">
         <br>
-        <label for="location">Location</label>
-        <input type="text" id="location">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" id="location" class="form-input">
     </form>
     `;
     // Create a swal modal with the form

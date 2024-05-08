@@ -720,6 +720,23 @@ body {
     margin-bottom: 0;
 }
 
+/* Seetalerts */
+.swal2-popup .form-label {
+    display: block;
+    text-align: left;
+    margin-top: 1em;
+}
+
+.swal2-popup .form-input {
+    display: block;
+    width: 100%;
+    padding: 0.5em;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 0.5em;
+}
+
 @media screen and (max-width: 768px) {
     .sidebar {
         width: 200px;
