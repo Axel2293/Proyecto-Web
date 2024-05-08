@@ -183,6 +183,10 @@ async function showStudentTable(getEnrolled, q) {
 async function unenrollSession(id) {
     const token = sessionStorage.getItem("sToken");
     const host = `https://proyecto-web-0bpb.onrender.com/sessions/unenroll/${id}`;
+
+    // Hide the sidebar
+    document.querySelector('.sidebar').classList.add('hidden');
+
     try {
         const response = await fetch(host, {
             method: "DELETE",
@@ -200,7 +204,10 @@ async function unenrollSession(id) {
             icon: 'success',
             title: 'Session unenrolled!',
             showConfirmButton: false,
-            timer: 2000
+            timer: 2000,
+            didClose: () => {
+                document.querySelector('.sidebar').classList.remove('hidden');
+            }
         });
         showTable();
     } catch (error) {
@@ -208,7 +215,10 @@ async function unenrollSession(id) {
             icon: 'error',
             title: 'Failed to unenroll session: '+error.message.error,
             showConfirmButton: false,
-            timer: 5000
+            timer: 5000,
+            didClose: () => {
+                document.querySelector('.sidebar').classList.remove('hidden');
+            }
         });
     }
 }

@@ -202,6 +202,10 @@ async function showStudentTable(getEnrolled, q, status) {
 async function enrollSession(id) {
     const token = sessionStorage.getItem("sToken");
     const host = `https://proyecto-web-0bpb.onrender.com/sessions/enroll/${id}`;
+
+    // Close sidebar
+    document.querySelector('.sidebar').classList.add('hidden');
+
     try {
         const response = await fetch(host, {
             method: "PUT",
@@ -216,7 +220,10 @@ async function enrollSession(id) {
                 icon: 'error',
                 title: 'Failed to enroll session: '+error.error,
                 showConfirmButton: false,
-                timer: 1500
+                timer: 1500,
+                didClose: () => {
+                    document.querySelector('.sidebar').classList.remove('hidden');
+                }
             });
             return;
         }
@@ -226,7 +233,10 @@ async function enrollSession(id) {
             icon: 'success',
             title: 'Session Enrolled!',
             showConfirmButton: false,
-            timer: 2000
+            timer: 2000,
+            didClose: () => {
+                document.querySelector('.sidebar').classList.remove('hidden');
+            }
         });
         showTable();
     } catch (error) {
@@ -234,7 +244,10 @@ async function enrollSession(id) {
             icon: 'error',
             title: 'Failed to enroll session: '+error,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
+            didClose: () => {
+                document.querySelector('.sidebar').classList.remove('hidden');
+            }
         });
     }
 }
