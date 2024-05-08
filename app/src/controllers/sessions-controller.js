@@ -153,7 +153,13 @@ async function enrollStudent(req, res) {
     if (session.students.includes(student_id)) {
       return res.status(400).json({ error: "Student is already registered" });
     }
-
+    //Verify if student is already enrolled in another session at the same time
+    const studentSessions = await Session.find({ students: { $in: [student_id] }, start: { $lt: session.end }, end: { $gt: session.start } });
+    if (studentSessions.length > 0) {
+      res.status(400).json({ error: "Student is already enrolled in another session at the same time" });
+      return;
+    }
+    
     // add student to session if isn't full and update status
     if (session.students.length < session.students_limit) {
       session.students.push(student_id);
