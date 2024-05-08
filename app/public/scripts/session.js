@@ -76,6 +76,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Get session storage to identify the account type (student, teacher)
+const accountType = sessionStorage.getItem("accountType");
+// if the account type is student, write in the session.html in the "side_menu" a link to the session.html
+if (accountType === "student") {
+    document.querySelector(".side-menu").innerHTML += `
+        <li class="active"><a href="./session.html"><i class='bx bx-objects-horizontal-right'></i>Sessions</a></li>
+        <li><a href="./enrolled.html"><i class='bx bxs-bookmark-alt'></i>Enrolled</a></li>
+    `;
+}
+if (accountType === "teacher") {
+    document.querySelector(".side-menu").innerHTML += `
+        <li class="active"><a href="/teacher"><i class='bx bx-group'></i>Teacher</a></li>
+    `;
+}
 
 function showTable() {
     const accountType = sessionStorage.getItem('accountType');

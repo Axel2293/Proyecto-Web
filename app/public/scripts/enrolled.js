@@ -76,8 +76,15 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
-// -------------------
+// Get session storage to identify the account type (student, teacher)
+const accountType = sessionStorage.getItem("accountType");
+// if the account type is student, write in the session.html in the "side_menu" a link to the session.html
+if (accountType === "student") {
+    document.querySelector(".side-menu").innerHTML += `
+        <li><a href="./session.html"><i class='bx bx-objects-horizontal-right'></i>Sessions</a></li>
+        <li class="active"><a href="./enrolled.html"><i class='bx bxs-bookmark-alt'></i>Enrolled</a></li>
+    `;
+}
 
 function showTable() {
     const accountType = sessionStorage.getItem('accountType');
@@ -91,7 +98,6 @@ function showTable() {
 
     if (accountType == "teacher") {
         console.log("LOAD TEACHER TABLE")
-        showTeacherTable(q)
     }
     else if (accountType == "student") {
         console.log("LOAD STUDENT TABLE")
@@ -317,7 +323,7 @@ async function showTeacherTable(q) {
                 </div>
         
                 <div class="session-buttons">
-                    <button class="btn" id="cancel" onclick=modifySession("${session._id}")>Cancel</button>
+                    <button class="btn" id="edit" onclick=modifySession("${session._id}")>Edit</button>
                     <button class="btn" id="edit" onclick=showMessages("${session._id}")>Edit</button>
                 </div>
                 </div>

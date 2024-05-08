@@ -17,7 +17,7 @@ sideLinks.forEach((item) => {
     });
 });
 
-const menuBar = document.querySelector(".content nav .bx.bx-menu");
+// const menuBar = document.querySelector(".content nav .bx.bx-menu");
 const sideBar = document.querySelector(".sidebar");
 
 // if cursor not on top of the sidebar, hide it, else show it
@@ -33,29 +33,29 @@ const first = setTimeout(() => {
     clearTimeout(first);
 }, 1750);
 
-menuBar.addEventListener("click", () => {
-    sideBar.classList.toggle("close");
-});
+// menuBar.addEventListener("click", () => {
+//     sideBar.classList.toggle("close");
+// });
 
-const searchBtn = document.querySelector(
-    ".content nav form .form-input button"
-);
-const searchBtnIcon = document.querySelector(
-    ".content nav form .form-input button .bx"
-);
-const searchForm = document.querySelector(".content nav form");
+// const searchBtn = document.querySelector(
+//     ".content nav form .form-input button"
+// );
+// const searchBtnIcon = document.querySelector(
+//     ".content nav form .form-input button .bx"
+// );
+// const searchForm = document.querySelector(".content nav form");
 
-searchBtn.addEventListener("click", function (e) {
-    if (window.innerWidth < 576) {
-        e.preventDefault;
-        searchForm.classList.toggle("show");
-        if (searchForm.classList.contains("show")) {
-            searchBtnIcon.classList.replace("bx-search", "bx-x");
-        } else {
-            searchBtnIcon.classList.replace("bx-x", "bx-search");
-        }
-    }
-});
+// searchBtn.addEventListener("click", function (e) {
+//     if (window.innerWidth < 576) {
+//         e.preventDefault;
+//         searchForm.classList.toggle("show");
+//         if (searchForm.classList.contains("show")) {
+//             searchBtnIcon.classList.replace("bx-search", "bx-x");
+//         } else {
+//             searchBtnIcon.classList.replace("bx-x", "bx-search");
+//         }
+//     }
+// });
 
 window.addEventListener("resize", () => {
     if (window.innerWidth < 768) {
@@ -63,21 +63,21 @@ window.addEventListener("resize", () => {
     } else {
         sideBar.classList.remove("close");
     }
-    if (window.innerWidth > 576) {
-        searchBtnIcon.classList.replace("bx-x", "bx-search");
-        searchForm.classList.remove("show");
-    }
+    // if (window.innerWidth > 576) {
+    //     searchBtnIcon.classList.replace("bx-x", "bx-search");
+    //     searchForm.classList.remove("show");
+    // }
 });
 
-const toggler = document.getElementById("theme-toggle");
+// const toggler = document.getElementById("theme-toggle");
 
-toggler.addEventListener("change", function () {
-    if (this.checked) {
-        document.body.classList.add("dark");
-    } else {
-        document.body.classList.remove("dark");
-    }
-});
+// toggler.addEventListener("change", function () {
+//     if (this.checked) {
+//         document.body.classList.add("dark");
+//     } else {
+//         document.body.classList.remove("dark");
+//     }
+// });
 
 document.addEventListener("DOMContentLoaded", function () {
     // Logout button
@@ -99,3 +99,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+const sideMenu = document.querySelector(".side-menu");
+const accountType = sessionStorage.getItem("accountType");
+if (accountType === "student") {
+    sideMenu.innerHTML = `
+    <li class="active"><a href="/dashboard"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+    <li><a href="./session.html"><i class='bx bx-objects-horizontal-right'></i>Sessions</a></li>
+    <li><a href="/enrolled"><i class='bx bxs-bookmark-alt'></i>Enrolled</a></li>
+    `;
+} else if (accountType === "teacher") {
+    sideMenu.innerHTML = `
+    <li class="active"><a href="/dashboard"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+    <li><a href="/teacher"><i class='bx bx-group'></i>Teacher</a></li>
+    `;
+}
