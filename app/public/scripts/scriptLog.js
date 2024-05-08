@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "email": email.value,
             "password": password.value
         }
-        console.log(JSON.stringify(userCred))
+        //console.log(JSON.stringify(userCred))
         //Send request to get token if valid
         const res = await fetch(host+"/auth/login", {
             method:"POST",

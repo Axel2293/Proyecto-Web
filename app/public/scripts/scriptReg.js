@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const formControl = input.parentElement;
         const icon = formControl.querySelector('.icon');
         formControl.className = 'form-control success';
-        icon.className = 'icon fas fa-check-circle';
+        // icon.className = 'icon fas fa-check-circle';
     }
 
     function isEmail(email) {
