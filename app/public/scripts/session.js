@@ -103,6 +103,7 @@ function showTable() {
 
     if (accountType == "teacher") {
         console.log("LOAD TEACHER TABLE")
+        showTeacherTable(q)
     }
     else if (accountType == "student") {
         console.log("LOAD STUDENT TABLE")
@@ -329,7 +330,7 @@ async function showTeacherTable(q) {
         
                 <div class="session-buttons">
                     <button class="btn" id="edit" onclick=modifySession("${session._id}")>Edit</button>
-                    <button class="btn" id="edit" onclick=showMessages("${session._id}")>Edit</button>
+                    <button class="btn" id="cancel" onclick=showMessages("${session._id}")>Cancel</button>
                 </div>
                 </div>
             `;
