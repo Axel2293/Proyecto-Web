@@ -85,13 +85,31 @@ if (accountType === "teacher") {
         <li class="active"><a href="./teacher.html"><i class='bx bx-group'></i>Teacher</a></li>
     `;
 }
-console.log("Teacher page");
 
+const search = document.getElementById("querysearch");
+search.addEventListener("input", () => {
+    q = search.value;
+    if (q == "") {
+        q = undefined;
+    }
+    else if (accountType == "teacher") {
+        console.log("LOAD TEACHER TABLE")
+        showTeacherTable(q);
+    }
+    else {
+        swal.fire({
+            title: "Error",
+            text: "You are not a teacher :(",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 2000,
+        });
+    }
+});
 
 function showTable() {
     const accountType = sessionStorage.getItem('accountType');
 
-    const search = document.getElementById("querysearch");
     //Get value of search input
     let q = search.value;
     if (q == "") {
@@ -111,25 +129,6 @@ function showTable() {
             timer: 2000,
         })
     }
-    search.addEventListener("input", () => {
-        q = search.value;
-        if (q == "") {
-            q = undefined;
-        }
-        else if (accountType == "teacher") {
-            console.log("LOAD TEACHER TABLE")
-            showTeacherTable(q);
-        }
-        else {
-            swal.fire({
-                title: "Error",
-                text: "You are not a teacher :(",
-                icon: "error",
-                showConfirmButton: false,
-                timer: 2000,
-            });
-        }
-    });
 }
 
 async function editSession(id){
@@ -174,10 +173,10 @@ async function editSession(id){
         `;
         // Create a swal modal with the form
         Swal.fire({
-            title: "Modify session",
+            title: "Edit session",
             html: form,
             showCancelButton: true,
-            confirmButtonText: "Modify",
+            confirmButtonText: "Save",
             preConfirm: async() => {
                 // Get the values from the form
                 const subject = document.getElementById('subject').value;
@@ -209,19 +208,27 @@ async function editSession(id){
                         "Content-Type": "application/json",
                         "x-auth": sessionStorage.getItem("sToken"),
                     },
-                    body: query
+                    body: JSON.stringify(query)
                 })
-                .then(response => response.json())
-                .then(data => {
-                    swal.fire({
-                        title: "Session modified",
-                        text: "The session has been modified",
-                        icon: "success",
-                        showConfirmButton: false,
-                        timer: 2000,
-                    })
-                    // Get the updated sessions
-                    showTable();
+                .then(response => {
+                    if (response.ok) {
+                        swal.fire({
+                            title: "Session modified",
+                            text: "The session has been modified",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
+                        showTable();
+                    }else{
+                        swal.fire({
+                            title: "Error",
+                            text: "An error occurred while modifying the session",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
+                    }
                 })
                 .catch(error => {
                     console.log(error)
@@ -295,17 +302,25 @@ async function createSession(){
                 },
                 body: JSON.stringify({subject, description, start, end, students_limit, location})
             })
-            .then(response => response.json())
-            .then(data => {
-                swal.fire({
-                    title: "Session created",
-                    text: "The session has been created",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 2000,
-                })
-                // Get the updated sessions
-                showTable();
+            .then(response => {
+                if (response.ok) {
+                    swal.fire({
+                        title: "Session created",
+                        text: "The session has been created",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+                    showTable();
+                }else{
+                    swal.fire({
+                        title: "Error",
+                        text: "An error occurred while creating the session",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+                }
             })
             .catch(error => {
                 console.log(error)

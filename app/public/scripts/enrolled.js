@@ -137,7 +137,6 @@ async function showStudentTable(getEnrolled, q) {
             sessionsdiv.innerHTML = "";
             data.map(session => {
                 
-                //Separa la fehca en dia, mes y año y otra variable con la hora
                 const date_st = new Date(session.start);
                 const date_en = new Date(session.end);
                 const dateDayMonthYear = date_st.toLocaleDateString();
@@ -150,24 +149,24 @@ async function showStudentTable(getEnrolled, q) {
 
                 const shtml = `
                     <div class="session">
-                    <div class="session-info">
-                        <h4 class="session-title">${session.subject}</h4>
-                        <p class="session-teacher">Teacher: <span class="space">${session.teacher_id}</span></p>
-                        <p class="session-description">${session.description}</p>
-                    </div>
-            
-                    <div class="session-time">
-                        <p>Date: ${date_st}</p>
-                        <p>Time: ${hour_st} - ${hour_en}</p>
-                    </div>
-            
-                    <div class="available">
-                        <p>students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
-                    </div>
-            
-                    <div class="session-buttons">
-                        <button class="btn" id="enroll" onclick=enrollSession("${session._id}")>Enroll</button>
-                    </div>
+                        <div class="session-info">
+                            <h4 class="session-title">${session.subject}</h4>
+                            <p class="session-teacher">Teacher: <span class="space">${session.teacher_id}</span></p>
+                            <p class="session-description">${session.description}</p>
+                        </div>
+                
+                        <div class="session-time">
+                            <p>Date: ${dateDayMonthYear}</p>
+                            <p>Time: ${hour_st}:${minutes_st} - ${hour_en}:${minutes_en}</p>
+                        </div>
+                
+                        <div class="available">
+                            <p>students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
+                        </div>
+                
+                        <div class="session-buttons">
+                            <button class="btn" id="enroll" onclick=unenrollSession("${session._id}")>Unenroll</button>
+                        </div>
                     </div>
                 `;
                 // Add the html to the div at the end
@@ -180,7 +179,39 @@ async function showStudentTable(getEnrolled, q) {
     // Get sessions and display them with html template below
     
 }
-// FUNCTION TO ENROLL IN A SESSION
+
+async function unenrollSession(id) {
+    const token = sessionStorage.getItem("sToken");
+    const host = `https://proyecto-web-0bpb.onrender.com/sessions/unenroll/${id}`;
+    try {
+        const response = await fetch(host, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth": token,
+            }
+        });
+        if (!response.ok) {
+            throw new Error(response.json());
+        }
+        const data = await response.json();
+        console.log(data);
+        Swal.fire({
+            icon: 'success',
+            title: 'Session unenrolled!',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        showTable();
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Failed to unenroll session: '+error.message.error,
+            showConfirmButton: false,
+            timer: 5000
+        });
+    }
+}
 
 // Load first results
 showTable();

@@ -91,10 +91,14 @@ if (accountType === "teacher") {
     `;
 }
 
+const search = document.getElementById("querysearch");
+search.addEventListener("input", () => {
+    showTable();
+});
+
 function showTable() {
     const accountType = sessionStorage.getItem('accountType');
 
-    const search = document.getElementById("querysearch");
     //Get value of search input
     let q = search.value;
     if (q == "") {
@@ -102,65 +106,55 @@ function showTable() {
     }
 
     if (accountType == "student") {
-        console.log("LOAD STUDENT TABLE TO SE AVAILABLE SESSIONS")
+        console.log("LOAD STUDENT TABLE TO SEE AVAILABLE SESSIONS")
         showStudentTable("0", q)
     }
     else {
-        swal.fire({
-            title: "Error",
-            text: "You are not a teacher :(",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 2000,
-        });
+        window.location.href ="./login.html";
     }
-
-    search.addEventListener("input", () => {
-        q = search.value;
-        if (q == "") {
-            q = undefined;
-        }
-        else if (accountType == "student") {
-            console.log("LOAD STUDENT TABLE")
-            showStudentTable("0", q)
-        }
-        else {
-            swal.fire({
-                title: "Error",
-                text: "You are not a teacher :(",
-                icon: "error",
-                showConfirmButton: false,
-                timer: 2000,
-            });
-        }
-    });
 }
 
-async function showStudentTable(getEnrolled, q) {
-    if (getEnrolled) {
+async function showStudentTable(getEnrolled, q, status) {
+        
         const token = sessionStorage.getItem("sToken");
-        let host = `https://proyecto-web-0bpb.onrender.com/sessions?showenrolled=${getEnrolled}&status=available`
+        let host = `https://proyecto-web-0bpb.onrender.com/sessions?`;
         
         if (q) {
-            host += `&q=${q}`
+            host += `&q=${q}`;
         }
-        
-        await fetch(host, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "x-auth": token,
+
+        if (getEnrolled=='1') {
+            host+=`&showenrolled=1`
+        }else if (getEnrolled=='0') {
+            host+=`&showenrolled=0`
+        }
+
+        //Default is available
+        if (status) {
+            host+`&status=${status}`
+        }else{
+            host+=`&status=available`
+        }
+        try {
+            const response = await fetch(host, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth": token,
+                },
+            });
+            
+            if (!response.ok) {
+                throw new Error("Failed to fetch sessions");
             }
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-            //Transform sessions into html template
+            
+            const data = await response.json();
+            
+            // Transform sessions into html template
             const sessionsdiv = document.querySelector("#sessionsData");
             sessionsdiv.innerHTML = "";
-            data.map(session => {
-                
-                //Separa la fehca en dia, mes y año y otra variable con la hora
+            
+            data.forEach(session => {
                 const date_st = new Date(session.start);
                 const date_en = new Date(session.end);
                 const dateDayMonthYear = date_st.toLocaleDateString();
@@ -173,36 +167,79 @@ async function showStudentTable(getEnrolled, q) {
 
                 const shtml = `
                     <div class="session">
-                    <div class="session-info">
-                        <h4 class="session-title">${session.subject}</h4>
-                        <p class="session-teacher">Teacher: <span class="space">${session.teacher_id}</span></p>
-                        <p class="session-description">${session.description}</p>
-                    </div>
-            
-                    <div class="session-time">
-                        <p>Date: ${date_st}</p>
-                        <p>Time: ${hour_st} - ${hour_en}</p>
-                    </div>
-            
-                    <div class="available">
-                        <p>students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
-                    </div>
-            
-                    <div class="session-buttons">
-                        <button class="btn" id="enroll" onclick=enrollSession("${session._id}")>Enroll</button>
-                    </div>
+                        <div class="session-info">
+                            <h4 class="session-title">${session.subject}</h4>
+                            <p class="session-teacher">Teacher: <span class="space">${session.teacher_id}</span></p>
+                            <p class="session-description">${session.description}</p>
+                        </div>
+                
+                        <div class="session-time">
+                            <p>Date: ${dateDayMonthYear}</p>
+                            <p>Time: ${hour_st}:${minutes_st} - ${hour_en}:${minutes_en}</p>
+                        </div>
+                
+                        <div class="available">
+                            <p>students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
+                        </div>
+                
+                        <div class="session-buttons">
+                            <button class="btn" id="enroll" onclick=enrollSession("${session._id}")>Enroll</button>
+                        </div>
                     </div>
                 `;
+                
                 // Add the html to the div at the end
                 sessionsdiv.innerHTML += shtml;
-                console.log(shtml)
+                console.log(shtml);
             });
-        })
-        .catch((error) => console.log(error));
-    }
-    // Get sessions and display them with html template below
+        } catch (error) {
+            console.log(error);
+        }
     
+    // Get sessions and display them with html template below
 }
+
+async function enrollSession(id) {
+    const token = sessionStorage.getItem("sToken");
+    const host = `https://proyecto-web-0bpb.onrender.com/sessions/enroll/${id}`;
+    try {
+        const response = await fetch(host, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth": token,
+            }
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to enroll session: '+error.error,
+                showConfirmButton: false,
+                timer: 1500
+            });
+            return;
+        }
+        const data = await response.json();
+        console.log(data);
+        Swal.fire({
+            icon: 'success',
+            title: 'Session Enrolled!',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        showTable();
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Failed to enroll session: '+error,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+}
+
+
 
 
 showTable();
