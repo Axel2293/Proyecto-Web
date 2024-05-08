@@ -32,7 +32,7 @@ body.lock-scroll {
 }
 
 .container img {
-    width: 75%;
+    width: 65%;
     border-radius: 20px;
     object-fit: cover;
 }
@@ -59,6 +59,11 @@ form h2 {
     border: 2px solid #ddd;
     border-radius: 10px;
     outline: none;
+}
+
+.form-control:focus-within input,
+.form-control:focus-within textarea {
+    border-color: #555;
 }
 
 button {
@@ -188,4 +193,16 @@ footer{
     padding: 10px;
     background-color: #f5faf6;
     box-shadow: 0 0 10px 0 #5c615d;
+}
+
+.select{
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+}
+
+.select:focus{
+    border-color: #555;
 }

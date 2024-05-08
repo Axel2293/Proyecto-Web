@@ -216,6 +216,9 @@ async function editSession(id) {
                                     icon: "success",
                                     showConfirmButton: false,
                                     timer: 2000,
+                                    didClose: () => {
+                                        document.querySelector('#sidebar').classList.remove('hidden');
+                                    }
                                 })
                                 showTable();
                             } else {
@@ -225,6 +228,9 @@ async function editSession(id) {
                                     icon: "error",
                                     showConfirmButton: false,
                                     timer: 2000,
+                                    didClose: () => {
+                                        document.querySelector('#sidebar').classList.remove('hidden');
+                                    }
                                 })
                             }
                         })
@@ -236,6 +242,9 @@ async function editSession(id) {
                                 icon: "error",
                                 showConfirmButton: false,
                                 timer: 2000,
+                                didClose: () => {
+                                    document.querySelector('#sidebar').classList.remove('hidden');
+                                }
                             })
                         });
                 },
@@ -324,6 +333,9 @@ async function createSession() {
                             icon: "success",
                             showConfirmButton: false,
                             timer: 2000,
+                            didClose: () => {
+                                document.querySelector('#sidebar').classList.remove('hidden');
+                            }
                         })
                         showTable();
                     } else {
@@ -333,6 +345,9 @@ async function createSession() {
                             icon: "error",
                             showConfirmButton: false,
                             timer: 2000,
+                            didClose: () => {
+                                document.querySelector('#sidebar').classList.remove('hidden');
+                            }
                         })
                     }
                 })
@@ -344,6 +359,9 @@ async function createSession() {
                         icon: "error",
                         showConfirmButton: false,
                         timer: 2000,
+                        didClose: () => {
+                            document.querySelector('#sidebar').classList.remove('hidden');
+                        }
                     })
                 });
         },
@@ -371,6 +389,12 @@ async function showTeacherTable(q) {
         .then((res) => res.json())
         .then((data) => {
             console.log(data);
+            //Sort the sessions by date
+            data.sort((a, b) => {
+                const dateA = new Date(a.start);
+                const dateB = new Date(b.start);
+                return dateA.getHours() - dateB.getHours();
+            });
             //Transform sessions into html template
             const sessionsdiv = document.querySelector("#sessionsData");
             sessionsdiv.innerHTML = "";
@@ -381,11 +405,11 @@ async function showTeacherTable(q) {
                 const date_en = new Date(session.end);
                 const dateDayMonthYear = date_st.toLocaleDateString();
 
-                const hour_st = date_st.getHours();
-                const minutes_st = date_st.getMinutes();
+                const hour_st = date_st.getHours().toString().padStart(2, '0');
+                const minutes_st = date_st.getMinutes().toString().padStart(2, '0');
 
-                const hour_en = date_en.getHours();
-                const minutes_en = date_en.getMinutes();
+                const hour_en = date_en.getHours().toString().padStart(2, '0');
+                const minutes_en = date_en.getMinutes().toString().padStart(2, '0');
 
                 const shtml = `
                 <div class="session">
@@ -395,8 +419,8 @@ async function showTeacherTable(q) {
                 </div>
         
                 <div class="session-time">
-                    <p>Date: ${date_st}</p>
-                    <p>Time: ${hour_st} - ${hour_en}</p>
+                    <p>Date: ${dateDayMonthYear}</p>
+                    <p>Time: ${hour_st}:${minutes_st} - ${hour_en}:${minutes_en}</p>
                 </div>
         
                 <div class="available">

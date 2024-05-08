@@ -30,17 +30,23 @@ document.addEventListener('DOMContentLoaded', function () {
         // validateField(password, isPassword(passValue), 'Password must be at least 8 characters long');
     });
 
+    accountType.addEventListener('input', () => {
+        validateField(accountType, accountType.value !== 'Select an account type', 'Please select an account type');
+    });
+
     function checkInputs() {
         const isNameValid = name.value.trim() !== '';
         const isEmailValid = isEmail(email.value.trim());
         const passValue = password.value.trim();
         const isPasswordValid = passValue.length >= 8; // && isPassword(passValue);
+        const isAccountTypeValid = accountType.value !== 'Select an account type';
 
         validateField(name, isNameValid, 'Name cannot be blank');
         validateField(email, isEmailValid, 'Email is not valid');
         validateField(password, isPasswordValid, 'Password must be at least 8 characters long');
+        validateField(accountType, isAccountTypeValid, 'Please select an account type');
 
-        return isNameValid && isEmailValid && isPasswordValid;
+        return isNameValid && isEmailValid && isPasswordValid && isAccountTypeValid;
     }
 
     function validateField(input, condition, errorMessage) {

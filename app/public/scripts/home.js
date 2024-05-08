@@ -31,6 +31,11 @@ teacher_redirect_btn.addEventListener("click", function () {
     window.location.href = "/teacher";
 });
 
+settings_redirect_btn.addEventListener("click", function () {
+    // redirect to route /settings
+    window.location.href = "/settings";
+});
+
 logo_redirect_btn.addEventListener("click", function () {
     // redirect to route /
     window.location.href = "/";

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../assets/styles/dashboard-style.css">
+    <!-- TIP: Si quieren utilizar BS-5 Haganlo, igual cuando quieran y puedan, quiten este comentario -->
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="#" class="logo">
+            <i class='bx bxl-joomla'>
+                <div class="logo-name">
+                    <span>&nbsp;&lt;Teach</span>
+                </div>
+            </i>
+        </a>
+        <a href="#" class="space">
+        </a>
+        <ul class="side-menu">
+            <li><a href="./dashboard.html"><i class='bx bxs-dashboard'>
+                    </i>Dashboard</a></li>
+            <!-- <li><a href="./session.html"><i class='bx bx-objects-horizontal-right'>
+                    </i>Sessions</a></li>
+            <li><a href="/enrolled"><i class='bx bxs-bookmark-alt'>
+                    </i>Enrolled</a></li>
+            <li class="active"><a href="/teacher"><i class='bx bx-group'>
+                    </i>Teach</a></li> -->
+        </ul>
+        <ul class="side-menu">
+            <li class="active"><a href="/settings"><i class='bx bx-cog'>
+                    </i>Settings</a></li>
+            <li>
+                <a href="#" class="logout" id="logout">
+                    <i class='bx bx-log-out-circle'></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End of Sidebar -->
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Navbar -->
+        <!-- <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="theme-toggle" hidden>
+            <label for="theme-toggle" class="theme-toggle"></label>
+
+            <a href="#" class="profile">
+                <img src="https://www.freeiconspng.com/thumbs/profile-icon-png/profile-icon-9.png">
+            </a>
+        </nav> -->
+
+        <!-- End of Navbar -->
+
+        <main>
+            <div class="header">
+                <div class="left">
+                    <h1 id="titleType">
+
+                    </h1>
+                    <ul class="breadcrumb">
+                        <li><a href="#">
+                                Settings
+                            </a></li>
+                        /
+                        <li><a href="#" class="active">General</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- End of Insights -->
+
+            <!-- Opinions -->
+            <div class="bottom-data">
+                <div class="sessions">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Settings</h3>
+                    </div>
+                    <div id="sessionsData"></div>
+
+                    <div class="sessions">
+                        <div class="sessions-data">
+                            <div class="session">
+                                <div class="session-info">
+                                    <!-- Name -->
+                                    <div class="session-info">
+                                        <label for="currentPassword">Current Password</label>
+                                        <input type="password" id="currentPassword"
+                                            placeholder="Enter your current password">
+                                    </div>
+                                    <div class="session-info">
+                                        <label for="newPassword">New Password</label>
+                                        <input type="password" id="newPassword" placeholder="Enter your new password">
+                                    </div>
+                                    <div class="session-info">
+                                        <label for="confirmPassword">Confirm Password</label>
+                                        <input type="password" id="confirmPassword"
+                                            placeholder="Confirm your new password">
+                                    </div>
+                                    <button type="submit" onclick="changePassword()">Change Password</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Dark mode switch -->
+                        <div class="switch-container">
+                            <label for="dark-mode">Dark Mode</label>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+        </main>
+
+    </div>
+
+    <script src="../scripts/settings.js"></script>
+</body>
+
+</html>

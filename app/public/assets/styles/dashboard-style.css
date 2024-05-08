@@ -561,6 +561,7 @@ body {
 .bottom-data .sessions {
     width: 100%;
     min-height: 487px;  
+    margin-bottom: 15px;
 }
 
 .bottom-data .sessions .header {
@@ -655,26 +656,6 @@ body {
     background-color: var(--primary); /* Blue for the Edit button */
 }
 
-.content main .bottom-data .orders table tr td .status {
-    font-size: 10px;
-    padding: 6px 16px;
-    color: var(--light);
-    border-radius: 20px;
-    font-weight: 700;
-}
-
-.content main .bottom-data .orders table tr td .status.completed {
-    background: var(--success);
-}
-
-.content main .bottom-data .orders table tr td .status.process {
-    background: var(--primary);
-}
-
-.content main .bottom-data .orders table tr td .status.pending {
-    background: var(--warning);
-}
-
 .content main .bottom-data .reminders {
     flex-grow: 1;
     flex-basis: 300px;
@@ -718,6 +699,112 @@ body {
 
 .content main .bottom-data .reminders .task-list li:last-child {
     margin-bottom: 0;
+}
+
+.session-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.session-info label {
+    font-size: 14px;
+    color: var(--dark);
+    margin-bottom: 5px;
+}
+
+.session-info input[type="password"] {
+    padding: 10px;
+    border: 1px solid var(--dark);
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--dark);
+    margin-bottom: 10px;
+}
+
+.session-info button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--light);
+    background-color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.session-info button:hover {
+    background-color: var(--dark);
+}
+
+/* Switch darkmode */
+.switch-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.switch-container label {
+    margin-right: 10px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
 }
 
 /* Seetalerts */

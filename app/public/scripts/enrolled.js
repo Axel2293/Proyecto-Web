@@ -56,6 +56,8 @@ window.addEventListener("resize", () => {
 const toggler = document.getElementById("theme-toggle");
 
 document.addEventListener("DOMContentLoaded", function () {
+    // Hide sidebar
+    const sidebar = document.querySelector(".sidebar");
     // Logout button
     const logoutBtn = document.querySelector(".sidebar .side-menu li a.logout");
     logoutBtn.addEventListener("click", function () {
@@ -117,37 +119,43 @@ async function showStudentTable(getEnrolled, q) {
     if (getEnrolled) {
         const token = sessionStorage.getItem("sToken");
         let host = `https://proyecto-web-0bpb.onrender.com/sessions?showenrolled=${getEnrolled}&status=available`
-        
+
         if (q) {
             host += `&q=${q}`
         }
-        
+
         await fetch(host, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "x-auth": token,
-            }
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-            //Transform sessions into html template
-            const sessionsdiv = document.querySelector("#sessionsData");
-            sessionsdiv.innerHTML = "";
-            data.map(session => {
-                
-                const date_st = new Date(session.start);
-                const date_en = new Date(session.end);
-                const dateDayMonthYear = date_st.toLocaleDateString();
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth": token,
+                }
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                // Sort sessions by date
+                data.sort((a, b) => {
+                    const dateA = new Date(a.start);
+                    const dateB = new Date(b.start);
+                    return dateA.getHours() - dateB.getHours();
+                });
+                //Transform sessions into html template
+                const sessionsdiv = document.querySelector("#sessionsData");
+                sessionsdiv.innerHTML = "";
+                data.map(session => {
 
-                const hour_st = date_st.getHours();
-                const minutes_st = date_st.getMinutes();
+                    const date_st = new Date(session.start);
+                    const date_en = new Date(session.end);
+                    const dateDayMonthYear = date_st.toLocaleDateString();
 
-                const hour_en = date_en.getHours();
-                const minutes_en = date_en.getMinutes();
+                    const hour_st = date_st.getHours().toString().padStart(2, '0');
+                    const minutes_st = date_st.getMinutes().toString().padStart(2, '0');
 
-                const shtml = `
+                    const hour_en = date_en.getHours().toString().padStart(2, '0');
+                    const minutes_en = date_en.getMinutes().toString().padStart(2, '0');
+
+                    const shtml = `
                     <div class="session">
                         <div class="session-info">
                             <h4 class="session-title">${session.subject}</h4>
@@ -161,7 +169,7 @@ async function showStudentTable(getEnrolled, q) {
                         </div>
                 
                         <div class="available">
-                            <p>students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
+                            <p>Students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
                         </div>
                 
                         <div class="session-buttons">
@@ -169,15 +177,15 @@ async function showStudentTable(getEnrolled, q) {
                         </div>
                     </div>
                 `;
-                // Add the html to the div at the end
-                sessionsdiv.innerHTML += shtml;
-                console.log(shtml)
-            });
-        })
-        .catch((error) => console.log(error));
+                    // Add the html to the div at the end
+                    sessionsdiv.innerHTML += shtml;
+                    console.log(shtml)
+                });
+            })
+            .catch((error) => console.log(error));
     }
     // Get sessions and display them with html template below
-    
+
 }
 
 async function unenrollSession(id) {
@@ -213,7 +221,7 @@ async function unenrollSession(id) {
     } catch (error) {
         Swal.fire({
             icon: 'error',
-            title: 'Failed to unenroll session: '+error.message.error,
+            title: 'Failed to unenroll session: ' + error.message.error,
             showConfirmButton: false,
             timer: 5000,
             didClose: () => {
