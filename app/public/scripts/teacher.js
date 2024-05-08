@@ -251,12 +251,18 @@ async function editSession(id) {
                 icon: "error",
                 showConfirmButton: false,
                 timer: 2000,
+                didClose: () => {
+                    document.querySelector('#sidebar').classList.remove('hidden');
+                }
             })
         );
 
 }
 //m Make a create session function that will open a swal modal and create a session
 async function createSession() {
+    // Hide the sidebar
+    document.querySelector('#sidebar').classList.add('hidden');
+
     // Create a form to create a session
     const form = `
     <form>
@@ -340,6 +346,9 @@ async function createSession() {
                         timer: 2000,
                     })
                 });
+        },
+        didClose: () => {
+            document.querySelector('#sidebar').classList.remove('hidden');
         }
     });
 }
