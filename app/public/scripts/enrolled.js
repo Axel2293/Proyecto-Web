@@ -96,15 +96,9 @@ function showTable() {
         q = undefined;
     }
 
-    if (accountType == "teacher") {
-        console.log("LOAD TEACHER TABLE")
-    }
-    else if (accountType == "student") {
-        console.log("LOAD STUDENT TABLE")
-        showStudentTable("0", q)
-    }
-    else {
-        console.log("LOAD NONE TABLE")
+    if (accountType === "student") {
+        console.log("student");
+        showStudentTable("1", q); //
     }
 
     search.addEventListener("input", () => {
@@ -113,15 +107,8 @@ function showTable() {
             q = undefined;
         }
 
-        if (accountType == "teacher") {
-            console.log("LOAD TEACHER TABLE")
-        }
-        else if (accountType == "student") {
-            console.log("LOAD STUDENT TABLE")
-            showStudentTable("0", q)
-        }
-        else {
-            console.log("LOAD NONE TABLE")
+        if (accountType === "student") {
+            showStudentTable("1", q); //
         }
     });
 }
@@ -193,150 +180,7 @@ async function showStudentTable(getEnrolled, q) {
     // Get sessions and display them with html template below
     
 }
+// FUNCTION TO ENROLL IN A SESSION
 
-//Create a function modifySession that will open a swal modal and recieves the id to modify data of that session
-function modifySession(id){
-    console.log("Modify session with id: ", id)
-    // Get the session from the session storage
-    const sessions = JSON.parse(sessionStorage.getItem("sSessions"));
-    // Get the session that matches the id
-    const session = sessions.find(session => session._id === id);
-    // Create a form to modify the session
-    const form = `
-    <form>
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" value="${session.subject}">
-        <br>
-        <label for="description">Description</label>
-        <input type="text" id="description" value="${session.description}">
-        <br>
-        <label for="start">Start</label>
-        <input type="datetime-local" id="start" value="${session.start}">
-        <br>
-        <label for="end">End</label>
-        <input type="datetime-local" id="end" value="${session.end}">
-        <br>
-        <label for="students_limit">Students limit</label>
-        <input type="number" id="students_limit" value="${session.students_limit}">
-        <br>
-        <label for="location">Location</label>
-        <input type="text" id="location" value="${session.location}">
-        <br>
-        <label for="status">Status</label>
-        <select id="status">
-            <option value="available">Available</option>
-            <option value="cancelled">Cancelled</option>
-        </select>
-    </form>
-    `;
-    // Create a swal modal with the form
-    Swal.fire({
-        title: "Modify session",
-        html: form,
-        showCancelButton: true,
-        confirmButtonText: "Modify",
-        preConfirm: async() => {
-            // Get the values from the form
-            const subject = document.getElementById('subject').value;
-            const description = document.getElementById('description').value;
-            const start = document.getElementById('start').value;
-            const end = document.getElementById('end').value;
-            const students_limit = document.getElementById('students_limit').value;
-            const location = document.getElementById('location').value;
-            const status = document.getElementById('status').value;
-            // Modify the session with a fetch request
-            await fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-auth": sessionStorage.getItem("sToken"),
-                },
-                body: JSON.stringify({subject, description, start, end, students_limit, location, status})
-            })
-            .then(response => response.json())
-            .then(data => {
-                swal.fire({
-                    title: "Session modified",
-                    text: "The session has been modified",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 2000,
-                })
-                // Get the updated sessions
-                getCreatedSessions();
-            })
-            .catch(error => {
-                console.log(error)
-                swal.fire({
-                    title: "Error",
-                    text: "An error occurred while modifying the session",
-                    icon: "error",
-                    showConfirmButton: false,
-                    timer: 2000,
-                })
-            });
-        }
-    });
-}
-
-async function showTeacherTable(q) {
-    const token = sessionStorage.getItem("sToken");
-    await fetch(`https://proyecto-web-0bpb.onrender.com/sessions?showcreat=1`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "x-auth": token,
-        }
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-        //Transform sessions into html template
-        data.map(session => {
-            const sessionsdiv = document.querySelector(".sessions");
-            
-            //Separa la fehca en dia, mes y año y otra variable con la hora
-            const date_st = new Date(session.start);
-            const date_en = new Date(session.end);
-            const dateDayMonthYear = date_st.toLocaleDateString();
-
-            const hour_st = date_st.getHours();
-            const minutes_st = date_st.getMinutes();
-
-            const hour_en = date_en.getHours();
-            const minutes_en = date_en.getMinutes();
-
-            const shtml = `
-                <div class="session">
-                <div class="session-info">
-                    <h4 class="session-title">${session.subject}</h4>
-                    <p class="session-description">${session.description}</p>
-                </div>
-        
-                <div class="session-time">
-                    <p>Date: ${date_st}</p>
-                    <p>Time: ${hour_st} - ${hour_en}</p>
-                </div>
-        
-                <div class="available">
-                    <p>students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
-                </div>
-        
-                <div class="session-buttons">
-                    <button class="btn" id="edit" onclick=modifySession("${session._id}")>Edit</button>
-                    <button class="btn" id="edit" onclick=showMessages("${session._id}")>Edit</button>
-                </div>
-                </div>
-            `;
-            // Add the html to the div at the end
-            sessionsdiv.innerHTML += shtml;
-            console.log(shtml)
-        });
-    })
-    .catch((error) => console.log(error));
-    // Get sessions and display them with html template below
-    
-}
-
-
+// Load first results
 showTable();

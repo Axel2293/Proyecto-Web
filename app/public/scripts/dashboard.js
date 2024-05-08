@@ -106,11 +106,11 @@ if (accountType === "student") {
     sideMenu.innerHTML = `
     <li class="active"><a href="/dashboard"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
     <li><a href="./session.html"><i class='bx bx-objects-horizontal-right'></i>Sessions</a></li>
-    <li><a href="/enrolled"><i class='bx bxs-bookmark-alt'></i>Enrolled</a></li>
+    <li><a href="./enrolled.html"><i class='bx bxs-bookmark-alt'></i>Enrolled</a></li>
     `;
 } else if (accountType === "teacher") {
     sideMenu.innerHTML = `
     <li class="active"><a href="/dashboard"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
-    <li><a href="/teacher"><i class='bx bx-group'></i>Teacher</a></li>
+    <li><a href="./teacher.html"><i class='bx bx-group'></i>Teacher</a></li>
     `;
 }
