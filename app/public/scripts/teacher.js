@@ -164,7 +164,7 @@ async function editSession(id) {
             <br>
             <label for="status" class="form-label">Status</label>
             <select id="status" class="form-input">
-                option value="available">Available</option>
+                <option value="available">Available</option>
                 <option value="cancelled">Cancelled</option>
             </select>
         </form>
@@ -393,7 +393,7 @@ async function showTeacherTable(q) {
             data.sort((a, b) => {
                 const dateA = new Date(a.start);
                 const dateB = new Date(b.start);
-                return dateA.getHours() - dateB.getHours();
+                return dateA - dateB;
             });
             //Transform sessions into html template
             const sessionsdiv = document.querySelector("#sessionsData");
@@ -424,10 +424,11 @@ async function showTeacherTable(q) {
                 </div>
         
                 <div class="available">
-                    <p>students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
+                    <p>Students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
                 </div>
         
                 <div class="session-buttons">
+                    <button class="btn" id="cancel" onclick=deleteSession("${session._id}")>Cancel</button>
                     <button class="btn" id="edit" onclick=editSession("${session._id}")>Edit</button>
                 </div>
                 </div>

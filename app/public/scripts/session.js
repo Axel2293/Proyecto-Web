@@ -153,7 +153,7 @@ async function showStudentTable(getEnrolled, q, status) {
         data.sort((a, b) => {
             const dateA = new Date(a.start);
             const dateB = new Date(b.start);
-            return dateA.getHours() - dateB.getHours();
+            return dateA - dateB;
         });
 
         // Transform sessions into html template
