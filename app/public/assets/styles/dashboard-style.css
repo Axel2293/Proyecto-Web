@@ -721,6 +721,10 @@ body {
 }
 
 /* Seetalerts */
+.hidden {
+    display: none;
+}
+
 .swal2-popup .form-label {
     display: block;
     text-align: left;

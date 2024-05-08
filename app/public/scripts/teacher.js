@@ -129,6 +129,7 @@ function showTable() {
 }
 
 async function editSession(id) {
+    document.querySelector('#sidebar').classList.add('hidden');
     console.log("Modify session with id: ", id)
     // Get the session from the session storage
     const session = await fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`, {
@@ -237,6 +238,9 @@ async function editSession(id) {
                                 timer: 2000,
                             })
                         });
+                },
+                didClose: () => {
+                    document.querySelector('#sidebar').classList.remove('hidden');
                 }
             });
         })
