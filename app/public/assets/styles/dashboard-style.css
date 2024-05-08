@@ -768,7 +768,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: var(--grey);
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -780,17 +780,17 @@ body {
     width: 26px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
+    background-color: var(--light);
     -webkit-transition: .4s;
     transition: .4s;
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: var(--primary);
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px var(--primary);
 }
 
 input:checked + .slider:before {
@@ -823,7 +823,7 @@ input:checked + .slider:before {
     width: 100%;
     padding: 0.5em;
     font-size: 1em;
-    border: 1px solid #ccc;
+    border: 1px solid var(--grey);
     border-radius: 5px;
     margin-top: 0.5em;
 }
