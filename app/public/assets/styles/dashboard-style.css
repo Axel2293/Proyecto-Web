@@ -663,6 +663,7 @@ body {
 
 .content main .bottom-data .reminders .task-list {
     width: 100%;
+    padding-left: -10px;
 }
 
 .content main .bottom-data .reminders .task-list li {
