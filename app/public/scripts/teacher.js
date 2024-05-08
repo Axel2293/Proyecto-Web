@@ -91,12 +91,10 @@ search.addEventListener("input", () => {
     q = search.value;
     if (q == "") {
         q = undefined;
-    }
-    else if (accountType == "teacher") {
+    } else if (accountType == "teacher") {
         console.log("LOAD TEACHER TABLE")
         showTeacherTable(q);
-    }
-    else {
+    } else {
         swal.fire({
             title: "Error",
             text: "You are not a teacher :(",
@@ -119,8 +117,7 @@ function showTable() {
     if (accountType == "teacher") {
         console.log("LOAD TEACHER TABLE")
         showTeacherTable(q);
-    }
-    else {
+    } else {
         swal.fire({
             title: "Error",
             text: "You are not a teacher :(",
@@ -131,131 +128,131 @@ function showTable() {
     }
 }
 
-async function editSession(id){
+async function editSession(id) {
     console.log("Modify session with id: ", id)
     // Get the session from the session storage
-    const session = await fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`,{
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "x-auth": sessionStorage.getItem("sToken"),
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Create a form to modify the session
-        const form = `
+    const session = await fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth": sessionStorage.getItem("sToken"),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Create a form to modify the session
+            const form = `
         <form>
-            <label for="subject">Subject</label>
-            <input type="text" id="subject" value="${data.subject}">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" id="subject" value="${data.subject}" class="form-input">
             <br>
-            <label for="description">Description</label>
-            <input type="text" id="description" value="${data.description}">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" id="description" value="${data.description}" class="form-input">
             <br>
-            <label for="start">Start</label>
-            <input type="datetime-local" id="start" value="">
+            <label for="start" class="form-label">Start</label>
+            <input type="datetime-local" id="start" value="" class="form-input">
             <br>
-            <label for="end">End</label>
-            <input type="datetime-local" id="end" value="">
+            <label for="end" class="form-label">End</label>
+            <input type="datetime-local" id="end" value="" class="form-input">
             <br>
-            <label for="students_limit">Students limit</label>
-            <input type="number" id="students_limit" value="${data.students_limit}">
+            <label for="students_limit" class="form-label">Students limit</label>
+            <input type="number" id="students_limit" value="${data.students_limit}" class="form-input">
             <br>
-            <label for="location">Location</label>
-            <input type="text" id="location" value="${data.location}">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" id="location" value="${data.location}" class="form-input">
             <br>
-            <label for="status">Status</label>
-            <select id="status">
-                <option value="available">Available</option>
+            <label for="status" class="form-label">Status</label>
+            <select id="status" class="form-input">
+                option value="available">Available</option>
                 <option value="cancelled">Cancelled</option>
             </select>
         </form>
         `;
-        // Create a swal modal with the form
-        Swal.fire({
-            title: "Edit session",
-            html: form,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-            preConfirm: async() => {
-                // Get the values from the form
-                const subject = document.getElementById('subject').value;
-                const description = document.getElementById('description').value;
-                const start = document.getElementById('start').value;
-                const end = document.getElementById('end').value;
-                const students_limit = document.getElementById('students_limit').value;
-                const location = document.getElementById('location').value;
-                const status = document.getElementById('status').value;
+            // Create a swal modal with the form
+            Swal.fire({
+                title: "Edit session",
+                html: form,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                preConfirm: async () => {
+                    // Get the values from the form
+                    const subject = document.getElementById('subject').value;
+                    const description = document.getElementById('description').value;
+                    const start = document.getElementById('start').value;
+                    const end = document.getElementById('end').value;
+                    const students_limit = document.getElementById('students_limit').value;
+                    const location = document.getElementById('location').value;
+                    const status = document.getElementById('status').value;
 
-                let query ={
-                subject: subject,
-                description: description,
-                students_limit: students_limit,
-                location: location,
-                status: status
-               }
-               if (start != "") {
-                     query.start = start;
-                }
-                if (end != "") {
-                    query.end = end;
-                }
-
-                // Modify the session with a fetch request
-                await fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "x-auth": sessionStorage.getItem("sToken"),
-                    },
-                    body: JSON.stringify(query)
-                })
-                .then(response => {
-                    if (response.ok) {
-                        swal.fire({
-                            title: "Session modified",
-                            text: "The session has been modified",
-                            icon: "success",
-                            showConfirmButton: false,
-                            timer: 2000,
-                        })
-                        showTable();
-                    }else{
-                        swal.fire({
-                            title: "Error",
-                            text: "An error occurred while modifying the session",
-                            icon: "error",
-                            showConfirmButton: false,
-                            timer: 2000,
-                        })
+                    let query = {
+                        subject: subject,
+                        description: description,
+                        students_limit: students_limit,
+                        location: location,
+                        status: status
                     }
-                })
-                .catch(error => {
-                    console.log(error)
-                    swal.fire({
-                        title: "Error",
-                        text: "An error occurred while modifying the session",
-                        icon: "error",
-                        showConfirmButton: false,
-                        timer: 2000,
-                    })
-                });
-            }
-        });
-    })
-    .catch(error => 
-        swal.fire({
-            title: "Error",
-            text: "An error occurred while fetching the session",
-            icon: "error",
-            showConfirmButton: false,
-            timer: 2000,
+                    if (start != "") {
+                        query.start = start;
+                    }
+                    if (end != "") {
+                        query.end = end;
+                    }
+
+                    // Modify the session with a fetch request
+                    await fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "x-auth": sessionStorage.getItem("sToken"),
+                            },
+                            body: JSON.stringify(query)
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                swal.fire({
+                                    title: "Session modified",
+                                    text: "The session has been modified",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                })
+                                showTable();
+                            } else {
+                                swal.fire({
+                                    title: "Error",
+                                    text: "An error occurred while modifying the session",
+                                    icon: "error",
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                })
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            swal.fire({
+                                title: "Error",
+                                text: "An error occurred while modifying the session",
+                                icon: "error",
+                                showConfirmButton: false,
+                                timer: 2000,
+                            })
+                        });
+                }
+            });
         })
-    );
-    
+        .catch(error =>
+            swal.fire({
+                title: "Error",
+                text: "An error occurred while fetching the session",
+                icon: "error",
+                showConfirmButton: false,
+                timer: 2000,
+            })
+        );
+
 }
 //m Make a create session function that will open a swal modal and create a session
-async function createSession(){
+async function createSession() {
     // Create a form to create a session
     const form = `
     <form>
@@ -284,7 +281,7 @@ async function createSession(){
         html: form,
         showCancelButton: true,
         confirmButtonText: "Create",
-        preConfirm: async() => {
+        preConfirm: async () => {
             // Get the values from the form
             const subject = document.getElementById('subject').value;
             const description = document.getElementById('description').value;
@@ -295,24 +292,42 @@ async function createSession(){
 
             // Create the session with a fetch request
             await fetch(`https://proyecto-web-0bpb.onrender.com/sessions`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-auth": sessionStorage.getItem("sToken"),
-                },
-                body: JSON.stringify({subject, description, start, end, students_limit, location})
-            })
-            .then(response => {
-                if (response.ok) {
-                    swal.fire({
-                        title: "Session created",
-                        text: "The session has been created",
-                        icon: "success",
-                        showConfirmButton: false,
-                        timer: 2000,
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-auth": sessionStorage.getItem("sToken"),
+                    },
+                    body: JSON.stringify({
+                        subject,
+                        description,
+                        start,
+                        end,
+                        students_limit,
+                        location
                     })
-                    showTable();
-                }else{
+                })
+                .then(response => {
+                    if (response.ok) {
+                        swal.fire({
+                            title: "Session created",
+                            text: "The session has been created",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
+                        showTable();
+                    } else {
+                        swal.fire({
+                            title: "Error",
+                            text: "An error occurred while creating the session",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 2000,
+                        })
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
                     swal.fire({
                         title: "Error",
                         text: "An error occurred while creating the session",
@@ -320,19 +335,7 @@ async function createSession(){
                         showConfirmButton: false,
                         timer: 2000,
                     })
-                }
-            })
-            .catch(error => {
-                console.log(error)
-                swal.fire({
-                    title: "Error",
-                    text: "An error occurred while creating the session",
-                    icon: "error",
-                    showConfirmButton: false,
-                    timer: 2000,
-                })
-            }
-            );
+                });
         }
     });
 }
@@ -340,38 +343,38 @@ async function createSession(){
 async function showTeacherTable(q) {
     const token = sessionStorage.getItem("sToken");
     let host = `https://proyecto-web-0bpb.onrender.com/sessions?showcreat=1`
-    
+
     if (q) {
         host += `&q=${q}`
     }
-    
+
     await fetch(host, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "x-auth": token,
-        }
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-        //Transform sessions into html template
-        const sessionsdiv = document.querySelector("#sessionsData");
-        sessionsdiv.innerHTML = "";
-        data.map(session => {
-            
-            //Separa la fehca en dia, mes y año y otra variable con la hora
-            const date_st = new Date(session.start);
-            const date_en = new Date(session.end);
-            const dateDayMonthYear = date_st.toLocaleDateString();
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth": token,
+            }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            //Transform sessions into html template
+            const sessionsdiv = document.querySelector("#sessionsData");
+            sessionsdiv.innerHTML = "";
+            data.map(session => {
 
-            const hour_st = date_st.getHours();
-            const minutes_st = date_st.getMinutes();
+                //Separa la fehca en dia, mes y año y otra variable con la hora
+                const date_st = new Date(session.start);
+                const date_en = new Date(session.end);
+                const dateDayMonthYear = date_st.toLocaleDateString();
 
-            const hour_en = date_en.getHours();
-            const minutes_en = date_en.getMinutes();
+                const hour_st = date_st.getHours();
+                const minutes_st = date_st.getMinutes();
 
-            const shtml = `
+                const hour_en = date_en.getHours();
+                const minutes_en = date_en.getMinutes();
+
+                const shtml = `
                 <div class="session">
                 <div class="session-info">
                     <h4 class="session-title">${session.subject}</h4>
@@ -392,12 +395,12 @@ async function showTeacherTable(q) {
                 </div>
                 </div>
             `;
-            // Add the html to the div at the end
-            sessionsdiv.innerHTML += shtml;
-        });
-    })
-    .catch((error) => console.log(error));
-    
+                // Add the html to the div at the end
+                sessionsdiv.innerHTML += shtml;
+            });
+        })
+        .catch((error) => console.log(error));
+
 }
 
 showTable();
