@@ -128,6 +128,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             showConfirmButton: true
                         });
                     }
+                } else {
+                    // wait 2 seconds before redirecting to dashboard
+                    setTimeout(() => {
+                        window.location.href = "./dashboard.html";
+                    }, 2000);
                 }
             }else{
                 Swal.fire({
