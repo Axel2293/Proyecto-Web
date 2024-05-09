@@ -18,9 +18,6 @@ async function getSessions(req, res) {
   } = req.query;
   const user_id = req.id;
   let query = {};
-  if (status) {
-    query["status"] = status;
-  }
 
   if (showcreat) {
     if (req.accountType == "teacher" || req.accountType == "both") {
@@ -51,6 +48,8 @@ async function getSessions(req, res) {
   if (showenrolled == "1") {
     if (req.accountType == "student" || req.accountType == "both") {
       query["students"] = { $in: [user_id] };
+      // Add a query that filters only available and full sessions
+      query["status"] = { $in: ["available", "full"] };
     } else {
       res.status(404).send({
         error: "Account type doesnt match operation",
@@ -65,7 +64,7 @@ async function getSessions(req, res) {
       });
     }
   }
-
+  console.log("Query:", query);
   try {
     const sessions = await Session.find(query)
       .skip((page - 1) * pagesize || 0)
