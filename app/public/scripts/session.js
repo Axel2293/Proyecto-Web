@@ -113,7 +113,7 @@ function showTable() {
     }
 }
 
-async function showStudentTable(getEnrolled, q, status) {
+async function showStudentTable(getEnrolled, q) {
 
     const token = sessionStorage.getItem("sToken");
     let host = `https://proyecto-web-0bpb.onrender.com/sessions?`;
@@ -126,13 +126,6 @@ async function showStudentTable(getEnrolled, q, status) {
         host += `&showenrolled=1`
     } else if (getEnrolled == '0') {
         host += `&showenrolled=0`
-    }
-
-    //Default is available
-    if (status) {
-        host + `&status=${status}`
-    } else {
-        host += `&status=available`
     }
     try {
         const response = await fetch(host, {
