@@ -656,6 +656,10 @@ body {
     background-color: var(--primary); /* Blue for the Edit button */
 }
 
+.bottom-data .sessions .session .session-buttons #activate {
+    background-color: var(--success); /* Blue for the Edit button */
+}
+
 .content main .bottom-data .reminders {
     flex-grow: 1;
     flex-basis: 300px;

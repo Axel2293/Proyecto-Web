@@ -19,8 +19,8 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    console.log("Creating session");
-    SessionsController.createSession(req, res);
+  console.log("Creating session");
+  SessionsController.createSession(req, res);
 });
 
 router.put("/:id", (req, res) => {
@@ -28,14 +28,11 @@ router.put("/:id", (req, res) => {
   SessionsController.updateSession(req, res);
 });
 
-router.put(
-  "/enroll/:id",
-  SessionsController.enrollStudent
-);
+router.put("/enroll/:id", SessionsController.enrollStudent);
 
-router.delete(
-  "/unenroll/:id",
-  SessionsController.unenrollStudent
-);
+router.delete("/unenroll/:id", SessionsController.unenrollStudent);
+
+router.delete("/:id", SessionsController.cancelSession);
+router.put("/activate/:id", SessionsController.activateSession);
 
 module.exports = router;
