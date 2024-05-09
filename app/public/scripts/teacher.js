@@ -160,7 +160,7 @@ async function editSession(id) {
             <input type="datetime-local" id="end" value="" class="form-input">
             <br>
             <label for="students_limit" class="form-label">Students limit</label>
-            <input type="number" id="students_limit" value="${data.students_limit}" class="form-input">
+            <input type="number" id="students_limit" value="${data.students_limit}" class="form-input" min="1">
             <br>
             <label for="location" class="form-label">Location</label>
             <input type="text" id="location" value="${data.location}" class="form-input">
