@@ -467,19 +467,46 @@ async function showTeacherTable(q) {
 
 async function cancelSession(id) {
   const token = sessionStorage.getItem("sToken");
-  await fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      "x-auth": token,
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      showTable();
-    })
-    .catch((error) => console.log(error));
+  await Swal.fire({
+    title: "Are you sure?",
+    text: "This action cannot be undone",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, cancel session!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth": token,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          Swal.fire({
+            title: "Success",
+            text: "Session cancelled successfully",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          showTable();
+        })
+        .catch((error) => {
+          Swal.fire({
+            title: "Error",
+            text: "An error occurred while cancelling the session",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          console.log(error);
+        });
+    }
+  });
 }
 
 async function activateSession(id) {
@@ -498,8 +525,24 @@ async function activateSession(id) {
     .then((data) => {
       console.log(data);
       showTable();
+      Swal.fire({
+        title: "Session Activated",
+        text: "The session has been activated successfully",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      Swal.fire({
+        title: "Error",
+        text: "An error occurred while activating the session",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    });
 }
 
 showTable();
