@@ -182,6 +182,11 @@ async function editSession(id) {
             document.getElementById("students_limit").value;
           const location = document.getElementById("location").value;
 
+          if (students_limit < 1) {
+            Swal.showValidationMessage("Students limit must be at least 1");
+            return;
+          }
+
           let query = {
             subject: subject,
             description: description,
