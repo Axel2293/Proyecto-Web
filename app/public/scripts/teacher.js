@@ -408,11 +408,11 @@ async function showTeacherTable(q) {
         const date_en = new Date(session.end);
         const dateDayMonthYear = date_st.toLocaleDateString();
 
-        const hour_st = date_st.getHours().toString().padStart(2, "0");
-        const minutes_st = date_st.getMinutes().toString().padStart(2, "0");
+        const hour_st = (date_st.getUTCHours() + 0).toString().padStart(2, "0");
+        const minutes_st = date_st.getUTCMinutes().toString().padStart(2, "0");
 
-        const hour_en = date_en.getHours().toString().padStart(2, "0");
-        const minutes_en = date_en.getMinutes().toString().padStart(2, "0");
+        const hour_en = (date_en.getUTCHours() + 0).toString().padStart(2, "0");
+        const minutes_en = date_en.getUTCMinutes().toString().padStart(2, "0");
 
         const shtml_cancel = `
                 <div class="session">
