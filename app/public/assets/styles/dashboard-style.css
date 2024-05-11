@@ -881,6 +881,46 @@ body {
     transition: .4s;
 }
 
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination .pagination-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--light);
+    background-color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.pagination .pagination-btn:hover {
+    background-color: var(--dark);
+}
+
+.pagination .pagination-btn:disabled {
+    background-color: var(--grey);
+    cursor: not-allowed;
+}
+
+.pagination .pagination-number {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--dark);
+    background-color: var(--light);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin: 0 10px;
+}
+
 input:checked + .slider {
     background-color: var(--primary);
 }
