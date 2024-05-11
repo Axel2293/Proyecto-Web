@@ -319,6 +319,7 @@ async function cancelSession(req, res) {
     }
 
     session.status = "cancelled";
+    session.students = []; // Empty the array of enrolled students
 
     await session.save();
     res.status(200).json({ message: "Session cancelled" });
