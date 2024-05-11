@@ -115,26 +115,35 @@ if (accountType === "student") {
     `;
 }
 
-function loadData(){
-    if (accountType === "student") {
-        loadIncomingEnrolled();
-        loadPastEnrolled();
-    }
-    else if (accountType === "teacher") {
-        loadIncomingCreated();
-        loadPastCreated();
-    }
+function loadData() {
+    const accountType = sessionStorage.getItem("accountType");
 
+    loadIncoming(accountType);
+    loadPast(accountType);
+}
+
+function getDateTimeFormated(dStart, dEnd) {
+    // give format to the Hour
+    const start = dStart.split("T");
+    const end = dEnd.split("T");
+    const startHour = start[1].split(":");
+    const endHour = end[1].split(":");
+    const startHourFormat = `${startHour[0]}:${startHour[1]}`;
+    const endHourFormat = `${endHour[0]}:${endHour[1]}`;
+
+    const printable_hour = `${startHourFormat} - ${endHourFormat}`;
+
+    return {start: start[0], end:end[0], printable_hour: printable_hour};
 }
 
 /* 
     Axel 5/11/2024
-    This function will fetch the incoming enrolled sessions (limited to 4 closest sessions)
+    This function will fetch the incoming enrolled/created sessions (limited to 4 closest sessions)
 */
-async function loadIncomingEnrolled(){
+async function loadIncoming(accountType) {
     const token = sessionStorage.getItem("sToken");
-    const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
-    const  incomingDiv = document.getElementById("incomingCards");
+    let host = `https://proyecto-web-0bpb.onrender.com/sessions?`
+    const incomingDiv = document.getElementById("incomingCards");
 
     try {
         //Get current datetime
@@ -142,8 +151,18 @@ async function loadIncomingEnrolled(){
         //Transform to string
         const datetime = currentdate.toISOString();
         console.log(datetime);
-        console.log(`${host}showenrolled=1&page=1&pagesize=4&from_date=${datetime}`);
-        const response = await fetch(`${host}showenrolled=1&page=1&pagesize=4&from_date=${datetime}`, {
+
+        if (accountType === "student") {
+            host += "showenrolled=1&";
+            console.log("SHOW STUDENT ENROLLED");
+        } else if (accountType === "teacher")
+        {
+            host += "showcreat=1&";
+            console.log("SHOW TEACHER CREATED");
+        }
+
+        console.log(`${host}page=1&pagesize=4&from_date=${datetime}`);
+        const response = await fetch(`${host}page=1&pagesize=4&from_date=${datetime}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -155,6 +174,18 @@ async function loadIncomingEnrolled(){
         if (response.ok) {
             incomingDiv.innerHTML = "";
             data.forEach((session) => {
+                // give format to the Hour
+                const dateFormated = getDateTimeFormated(session.start, session.end);
+
+                // Limit description to 25 characters, if it's longer, add "..."
+                if (session.description.length > 25) {
+                    session.description = session.description.substring(0, 25) + "...";
+                }
+
+                if (session.subject.length > 14) {
+                    session.subject = session.subject.substring(0, 25) + "...";
+                }
+
                 incomingDiv.innerHTML += `
                 <li>
                     <i class='bx bx-calendar-check'></i>
@@ -163,14 +194,16 @@ async function loadIncomingEnrolled(){
                             ${session.subject}
                         </h3>
                         <p>${session.description}</p>
-                        <p><b>Where? :</b> ${session.location}</p>
-                        <p>${session.start}</p>
-                        <p>${session.end}</p>
+                        <p><b>Location:</b> ${session.location}</p>
+                        
+                        <p>From: ${dateFormated.start}</p>
+                        <p>to: ${dateFormated.end}</p>
+                        <p>Hours: ${dateFormated.printable_hour}</p>
                     </span>
                 </li>
                 `;
             });
-        }else{
+        } else {
             Swal.fire({
                 title: "Error!",
                 text: data || "Failed to fetch sessions",
@@ -189,15 +222,14 @@ async function loadIncomingEnrolled(){
     }
 }
 
-
 /* 
     Axel 5/11/2024
-    This function will show the past enrolled sessions on the history tab
+    This function will fetch the past enrolled/created sessions (limited to 4 closest sessions)
 */
-async function loadPastEnrolled(){
+async function loadPast(accountType) {
     const token = sessionStorage.getItem("sToken");
-    const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
-    const  historyTable = document.getElementById("history");
+    let  host = `https://proyecto-web-0bpb.onrender.com/sessions?`
+    const historyTable = document.getElementById("history");
 
     try {
         //Get current datetime
@@ -205,8 +237,18 @@ async function loadPastEnrolled(){
         //Transform to string
         const datetime = currentdate.toISOString();
         console.log(datetime);
-        console.log(`${host}showenrolled=1&page=1&pagesize=4&to_date=${datetime}`);
-        const response = await fetch(`${host}showenrolled=1&page=1&pagesize=4&to_date=${datetime}`, {
+
+        if (accountType === "student") {
+            host += "showenrolled=1&";
+            console.log("SHOW STUDENT PAST ENROLLED");
+        } else if (accountType === "teacher")
+        {
+            host += "showcreat=1&";
+            console.log("SHOW TEACHER PAST CREATED");
+        }
+
+        console.log(`${host}page=1&pagesize=4&to_date=${datetime}`);
+        const response = await fetch(`${host}page=1&pagesize=4&to_date=${datetime}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -218,18 +260,25 @@ async function loadPastEnrolled(){
         if (response.ok) {
             historyTable.innerHTML = "";
             data.forEach((session) => {
+                // give format to the date
+                const dateFormated = getDateTimeFormated(session.start, session.end);
+
+                if (session.subject.length > 14) {
+                    session.subject = session.subject.substring(0, 25) + "...";
+                }
+
                 historyTable.innerHTML += `
                 <tr>
                     <td>
                         <img src="https://www.freeiconspng.com/uploads/business-man-with-clock-to-control-time-of-work-3.png">
                         <p>${session.subject}</p>
                     </td>
-                    <td>${session.start}<br>${session.end}</td>
+                    <td>${dateFormated.start}</td>
                     <td><span class="status ${session.status}">${session.status}</span></td>
                 </tr>
                 `;
             });
-        }else{
+        } else {
             Swal.fire({
                 title: "Error!",
                 text: data || "Failed to fetch sessions",
@@ -248,122 +297,4 @@ async function loadPastEnrolled(){
     }
 }
 
-/* 
-    Axel 5/11/2024
-    This function will fetch the incoming created sessions (limited to 4 closest sessions)
-*/
-async function loadIncomingCreated(){
-    const token = sessionStorage.getItem("sToken");
-    const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
-    const  incomingDiv = document.getElementById("incomingCards");
-
-    try {
-        //Get current datetime
-        const currentdate = new Date();
-        //Transform to string
-        const datetime = currentdate.toISOString();
-        console.log(datetime);
-        console.log(`${host}showcreat=1&page=1&pagesize=4&from_date=${datetime}`);
-        const response = await fetch(`${host}showcreat=1&page=1&pagesize=4&from_date=${datetime}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "x-auth": token,
-            },
-        });
-        const data = await response.json();
-        console.log(data);
-        if (response.ok) {
-            incomingDiv.innerHTML = "";
-            data.forEach((session) => {
-                incomingDiv.innerHTML += `
-                <li>
-                    <i class='bx bx-calendar'></i>
-                    <span class="info">
-                        <h3>
-                            ${session.subject}
-                        </h3>
-                        <p><b>Where? :</b> ${session.location}</p>
-                        <p>${session.start}</p>
-                        <p>${session.end}</p>
-                    </span>
-                </li>
-                `;
-            });
-        }else{
-            Swal.fire({
-                title: "Error!",
-                text: data || "Failed to fetch sessions",
-                icon: "error",
-                confirmButtonText: "Ok",
-            });
-        }
-    }
-    catch (error) {
-        Swal.fire({
-            title: "Error!",
-            text: error || "Failed to fetch sessions",
-            icon: "error",
-            confirmButtonText: "Ok",
-        });
-    }
-}
-
-/* 
-    Axel 5/11/2024
-    This function will show the past created sessions on the history tab
-*/
-async function loadPastCreated(){
-    const token = sessionStorage.getItem("sToken");
-    const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
-    const  historyTable = document.getElementById("history");
-
-    try {
-        //Get current datetime
-        const currentdate = new Date();
-        //Transform to string
-        const datetime = currentdate.toISOString();
-        console.log(datetime);
-        console.log(`${host}showcreat=1&page=1&pagesize=4&to_date=${datetime}`);
-        const response = await fetch(`${host}showcreat=1&page=1&pagesize=4&to_date=${datetime}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "x-auth": token,
-            },
-        });
-        const data = await response.json();
-        console.log(data);
-        if (response.ok) {
-            historyTable.innerHTML = "";
-            data.forEach((session) => {
-                historyTable.innerHTML += `
-                <tr>
-                    <td>
-                        <img src="https://www.freeiconspng.com/uploads/business-man-with-clock-to-control-time-of-work-3.png">
-                        <p>${session.subject}</p>
-                    </td>
-                    <td>${session.start}<br>${session.end}</td>
-                    <td><span class="status ${session.status}">${session.status}</span></td>
-                </tr>
-                `;
-            });
-        }else{
-            Swal.fire({
-                title: "Error!",
-                text: data || "Failed to fetch sessions",
-                icon: "error",
-                confirmButtonText: "Ok",
-            });
-        }
-    }
-    catch (error) {
-        Swal.fire({
-            title: "Error!",
-            text: error || "Failed to fetch sessions",
-            icon: "error",
-            confirmButtonText: "Ok",
-        });
-    }
-}
 loadData();

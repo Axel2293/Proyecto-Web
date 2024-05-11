@@ -61,10 +61,10 @@ class paginationController {
         const paginationDiv = document.getElementById("sessionsData");
         //Insert the buttons inside a div with id sessionPagination
         const paginationButtons = `
-        <div id="sessionPagination"></div>
-                        <button class="pagination" id="prev" onclick="pagination.prevPage()" disabled=true>Prev</button>
-                        <span class="pagination" id="pageNumber">PAGE</span>
-                        <button class="pagination" id="next" onclick="pagination.nextPage()" disabled=true>Next</button>
+        <div id="sessionPagination" class="pagination">
+                        <button class="pagination-btn" id="prev" onclick="pagination.prevPage()" disabled=true>Prev</button>
+                        <span class="pagination-number" id="pageNumber">PAGE</span>
+                        <button class="pagination-btn" id="next" onclick="pagination.nextPage()" disabled=true>Next</button>
                     </div>
                 `;
         //Insert the div as adjacent at end

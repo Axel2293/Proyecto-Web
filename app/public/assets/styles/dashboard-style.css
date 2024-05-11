@@ -378,7 +378,7 @@ body {
 
 .content main .insights {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: 380.5px 1fr 1fr 1fr;
     grid-gap: 24px;
     margin-top: 36px;
 }
@@ -556,6 +556,97 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
 
+}
+
+.content main .search-bar .filter {
+    background: none;
+    color: var(--normal);
+    padding-left: 2%;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.content main .search-bar .filter-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--normal);
+    margin-left: 10px;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 15%; /* Could be more or less, depending on screen size */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.modal-content .modal-label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--dark);
+    /* Center */
+    width: 100%;
+}
+
+.modal-content .modal-input {
+    display: block;
+    padding: 10px;
+    border: 1px solid var(--dark);
+    border-radius: 5px;
+    font-size: 14px;
+    color: var(--dark);
+    margin-bottom: 10px;
+    /* Center */
+    width: 100%;
+}
+
+.modal-content .modal-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--light);
+    background-color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .bottom-data .sessions {
@@ -788,6 +879,46 @@ body {
     background-color: var(--light);
     -webkit-transition: .4s;
     transition: .4s;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination .pagination-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--light);
+    background-color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.pagination .pagination-btn:hover {
+    background-color: var(--dark);
+}
+
+.pagination .pagination-btn:disabled {
+    background-color: var(--grey);
+    cursor: not-allowed;
+}
+
+.pagination .pagination-number {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: var(--dark);
+    background-color: var(--light);
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin: 0 10px;
 }
 
 input:checked + .slider {
