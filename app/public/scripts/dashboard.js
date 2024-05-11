@@ -115,7 +115,7 @@ if (accountType === "student") {
     `;
 }
 
-function loadData(){
+function loadData() {
     if (accountType === "student") {
         loadIncomingEnrolled();
         loadPastEnrolled();
@@ -131,10 +131,10 @@ function loadData(){
     Axel 5/11/2024
     This function will fetch the incoming enrolled sessions (limited to 4 closest sessions)
 */
-async function loadIncomingEnrolled(){
+async function loadIncomingEnrolled() {
     const token = sessionStorage.getItem("sToken");
     const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
-    const  incomingDiv = document.getElementById("incomingCards");
+    const incomingDiv = document.getElementById("incomingCards");
 
     try {
         //Get current datetime
@@ -155,6 +155,21 @@ async function loadIncomingEnrolled(){
         if (response.ok) {
             incomingDiv.innerHTML = "";
             data.forEach((session) => {
+                // give format to the Hour
+                const start = session.start.split("T");
+                const end = session.end.split("T");
+                const startHour = start[1].split(":");
+                const endHour = end[1].split(":");
+                const startHourFormat = `${startHour[0]}:${startHour[1]}`;
+                const endHourFormat = `${endHour[0]}:${endHour[1]}`;
+
+                const printable_hour = `${startHourFormat} - ${endHourFormat}`;
+
+                // Limit description to 25 characters, if it's longer, add "..."
+                if (session.description.length > 25) {
+                    session.description = session.description.substring(0, 25) + "...";
+                }
+
                 incomingDiv.innerHTML += `
                 <li>
                     <i class='bx bx-calendar-check'></i>
@@ -163,14 +178,13 @@ async function loadIncomingEnrolled(){
                             ${session.subject}
                         </h3>
                         <p>${session.description}</p>
-                        <p><b>Where? :</b> ${session.location}</p>
-                        <p>${session.start}</p>
-                        <p>${session.end}</p>
+                        <p><b>Location:</b> ${session.location}</p>
+                        <p>${printable_hour}</p>
                     </span>
                 </li>
                 `;
             });
-        }else{
+        } else {
             Swal.fire({
                 title: "Error!",
                 text: data || "Failed to fetch sessions",
@@ -194,10 +208,10 @@ async function loadIncomingEnrolled(){
     Axel 5/11/2024
     This function will show the past enrolled sessions on the history tab
 */
-async function loadPastEnrolled(){
+async function loadPastEnrolled() {
     const token = sessionStorage.getItem("sToken");
     const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
-    const  historyTable = document.getElementById("history");
+    const historyTable = document.getElementById("history");
 
     try {
         //Get current datetime
@@ -218,18 +232,28 @@ async function loadPastEnrolled(){
         if (response.ok) {
             historyTable.innerHTML = "";
             data.forEach((session) => {
+                // give format to the Hour and date
+                const start = session.start.split("T");
+                const end = session.end.split("T");
+                const startHour = start[1].split(":");
+                const endHour = end[1].split(":");
+                const startHourFormat = `${startHour[0]}:${startHour[1]}`;
+                const endHourFormat = `${endHour[0]}:${endHour[1]}`;
+                const printable_hour = `${startHourFormat} - ${endHourFormat}`;
+                const printable_date = start[0];
+                const printable = `${printable_date} / ${printable_hour}`;
                 historyTable.innerHTML += `
                 <tr>
                     <td>
                         <img src="https://www.freeiconspng.com/uploads/business-man-with-clock-to-control-time-of-work-3.png">
                         <p>${session.subject}</p>
                     </td>
-                    <td>${session.start}<br>${session.end}</td>
+                    <td>${printable}</td>
                     <td><span class="status ${session.status}">${session.status}</span></td>
                 </tr>
                 `;
             });
-        }else{
+        } else {
             Swal.fire({
                 title: "Error!",
                 text: data || "Failed to fetch sessions",
@@ -252,10 +276,10 @@ async function loadPastEnrolled(){
     Axel 5/11/2024
     This function will fetch the incoming created sessions (limited to 4 closest sessions)
 */
-async function loadIncomingCreated(){
+async function loadIncomingCreated() {
     const token = sessionStorage.getItem("sToken");
     const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
-    const  incomingDiv = document.getElementById("incomingCards");
+    const incomingDiv = document.getElementById("incomingCards");
 
     try {
         //Get current datetime
@@ -276,6 +300,15 @@ async function loadIncomingCreated(){
         if (response.ok) {
             incomingDiv.innerHTML = "";
             data.forEach((session) => {
+                // give format to the Hour
+                const start = session.start.split("T");
+                const end = session.end.split("T");
+                const startHour = start[1].split(":");
+                const endHour = end[1].split(":");
+                const startHourFormat = `${startHour[0]}:${startHour[1]}`;
+                const endHourFormat = `${endHour[0]}:${endHour[1]}`;
+
+                const printable_hour = `${startHourFormat} - ${endHourFormat}`;
                 incomingDiv.innerHTML += `
                 <li>
                     <i class='bx bx-calendar'></i>
@@ -283,14 +316,13 @@ async function loadIncomingCreated(){
                         <h3>
                             ${session.subject}
                         </h3>
-                        <p><b>Where? :</b> ${session.location}</p>
-                        <p>${session.start}</p>
-                        <p>${session.end}</p>
+                        <p><b>Location:</b> ${session.location}</p>
+                        <p>${printable_hour}</p>
                     </span>
                 </li>
                 `;
             });
-        }else{
+        } else {
             Swal.fire({
                 title: "Error!",
                 text: data || "Failed to fetch sessions",
@@ -313,10 +345,10 @@ async function loadIncomingCreated(){
     Axel 5/11/2024
     This function will show the past created sessions on the history tab
 */
-async function loadPastCreated(){
+async function loadPastCreated() {
     const token = sessionStorage.getItem("sToken");
     const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
-    const  historyTable = document.getElementById("history");
+    const historyTable = document.getElementById("history");
 
     try {
         //Get current datetime
@@ -337,18 +369,27 @@ async function loadPastCreated(){
         if (response.ok) {
             historyTable.innerHTML = "";
             data.forEach((session) => {
+                const start = session.start.split("T");
+                const end = session.end.split("T");
+                const startHour = start[1].split(":");
+                const endHour = end[1].split(":");
+                const startHourFormat = `${startHour[0]}:${startHour[1]}`;
+                const endHourFormat = `${endHour[0]}:${endHour[1]}`;
+                const printable_hour = `${startHourFormat} - ${endHourFormat}`;
+                const printable_date = start[0];
+                const printable = `${printable_date} / ${printable_hour}`;
                 historyTable.innerHTML += `
                 <tr>
                     <td>
                         <img src="https://www.freeiconspng.com/uploads/business-man-with-clock-to-control-time-of-work-3.png">
                         <p>${session.subject}</p>
                     </td>
-                    <td>${session.start}<br>${session.end}</td>
+                    <td>${printable}</td>
                     <td><span class="status ${session.status}">${session.status}</span></td>
                 </tr>
                 `;
             });
-        }else{
+        } else {
             Swal.fire({
                 title: "Error!",
                 text: data || "Failed to fetch sessions",
