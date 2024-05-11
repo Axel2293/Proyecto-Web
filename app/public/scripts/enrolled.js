@@ -199,7 +199,7 @@ async function unenrollSession(id) {
     } catch (error) {
         Swal.fire({
             icon: 'error',
-            title: 'Failed to unenroll session: ' + error.message,
+            title: 'Failed to unenroll session: ' + error,
             showConfirmButton: false,
             timer: 5000,
             didClose: () => {
