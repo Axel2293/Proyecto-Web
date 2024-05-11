@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmButtonText: "Yes, log me out!",
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location.href = "/";
+        window.location.href = "./login.html";
       }
     });
   });
@@ -88,26 +88,18 @@ if (accountType === "teacher") {
 
 const search = document.getElementById("querysearch");
 search.addEventListener("input", () => {
-  q = search.value;
-  if (q == "") {
-    q = undefined;
-  } else if (accountType == "teacher") {
-    console.log("LOAD TEACHER TABLE");
-    showTeacherTable(q);
-  } else {
-    swal.fire({
-      title: "Error",
-      text: "You are not a teacher :(",
-      icon: "error",
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  }
+    pagination.setPage(1);
+    pagination.runFunction();
 });
 
-function showTable() {
-  const accountType = sessionStorage.getItem("accountType");
+document.getElementById("sendSearch").addEventListener("click", () => {
+    pagination.setPage(1);
+    pagination.runFunction();
+});
 
+function showTable(page, pageSize) {
+  const accountType = sessionStorage.getItem("accountType");
+  console.log("Page: ", page, "PageSize: ", pageSize);
   //Get value of search input
   let q = search.value;
   if (q == "") {
@@ -116,7 +108,7 @@ function showTable() {
 
   if (accountType == "teacher") {
     console.log("LOAD TEACHER TABLE");
-    showTeacherTable(q);
+    showTeacherTable(q, page, pageSize);
   } else {
     swal.fire({
       title: "Error",
@@ -200,6 +192,8 @@ async function editSession(id) {
             query.end = end;
           }
 
+          console.log(query);
+
           // Modify the session with a fetch request
           await fetch(`https://proyecto-web-0bpb.onrender.com/sessions/${id}`, {
             method: "PUT",
@@ -223,7 +217,7 @@ async function editSession(id) {
                       .classList.remove("hidden");
                   },
                 });
-                showTable();
+                pagination.runFunction();
               } else {
                 swal.fire({
                   title: "Error",
@@ -313,7 +307,30 @@ async function createSession() {
       const students_limit = document.getElementById("students_limit").value;
       const location = document.getElementById("location").value;
 
+      // Verify if the date input has something
+      if (!start || !end) {
+        swal.fire({
+          title: "Error",
+          text: "Please enter a valid start and end date",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 2000,
+          didClose: () => {
+            document.querySelector("#sidebar").classList.remove("hidden");
+          },
+        });
+        return;
+      }
+
       // Create the session with a fetch request
+      console.log({
+        subject,
+        description,
+        start,
+        end,
+        students_limit,
+        location,
+      });
       await fetch(`https://proyecto-web-0bpb.onrender.com/sessions`, {
         method: "POST",
         headers: {
@@ -327,39 +344,26 @@ async function createSession() {
           end,
           students_limit,
           location,
-        }),
-      })
-        .then((response) => {
-          if (response.ok) {
-            swal.fire({
-              title: "Session created",
-              text: "The session has been created",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 2000,
-              didClose: () => {
-                document.querySelector("#sidebar").classList.remove("hidden");
-              },
-            });
-            showTable();
-          } else {
-            swal.fire({
-              title: "Error",
-              text: "An error occurred while creating the session",
-              icon: "error",
-              showConfirmButton: false,
-              timer: 2000,
-              didClose: () => {
-                document.querySelector("#sidebar").classList.remove("hidden");
-              },
-            });
-          }
         })
-        .catch((error) => {
-          console.log(error);
+      })
+      .then(async (response) => {
+        const data = await response.json();
+        if (response.ok) {
+          swal.fire({
+            title: "Session created",
+            text: "The session has been created",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000,
+            didClose: () => {
+              document.querySelector("#sidebar").classList.remove("hidden");
+            },
+          });
+          pagination.runFunction();
+        } else {
           swal.fire({
             title: "Error",
-            text: "An error occurred while creating the session",
+            text: data.error,
             icon: "error",
             showConfirmButton: false,
             timer: 2000,
@@ -367,7 +371,21 @@ async function createSession() {
               document.querySelector("#sidebar").classList.remove("hidden");
             },
           });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        swal.fire({
+          title: "Error",
+          text: "An error occurred while creating the session",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 2000,
+          didClose: () => {
+            document.querySelector("#sidebar").classList.remove("hidden");
+          },
         });
+      });
     },
     didClose: () => {
       document.querySelector("#sidebar").classList.remove("hidden");
@@ -375,15 +393,15 @@ async function createSession() {
   });
 }
 
-async function showTeacherTable(q) {
+async function showTeacherTable(q, page, pageSize) {
   const token = sessionStorage.getItem("sToken");
-  let host = `https://proyecto-web-0bpb.onrender.com/sessions?showcreat=1`;
+  let host = `https://proyecto-web-0bpb.onrender.com/sessions?showcreat=1&`;
 
   if (q) {
-    host += `&q=${q}`;
+    host += `q=${q}&`;
   }
-
-  await fetch(host, {
+  console.log("Getting sessions from: ", host + `page=${page}&pagesize=${pageSize}`);
+  await fetch(host+`page=${page}&pagesize=${pageSize}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -466,8 +484,16 @@ async function showTeacherTable(q) {
           sessionsdiv.innerHTML += shtml_activate;
         }
       });
+
+      pagination.updateActiveButtons(data.length);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => 
+      swal.fire({ 
+        icon: "error", 
+        title: "Failed to fetch sessions: " + error, 
+        showConfirmButton: false, 
+        timer: 5000 
+      }));
 }
 
 async function cancelSession(id) {
@@ -498,7 +524,7 @@ async function cancelSession(id) {
             showConfirmButton: false,
             timer: 2000,
           });
-          showTable();
+          pagination.runFunction();
         })
         .catch((error) => {
           Swal.fire({
@@ -526,28 +552,26 @@ async function activateSession(id) {
       },
     }
   )
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      showTable();
-      Swal.fire({
-        title: "Session Activated",
-        text: "The session has been activated successfully",
-        icon: "success",
-        showConfirmButton: false,
-        timer: 2000,
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-      Swal.fire({
-        title: "Error",
-        text: "An error occurred while activating the session",
-        icon: "error",
-        showConfirmButton: false,
-        timer: 2000,
-      });
+  .then((res) => res.json())
+  .then((data) => {
+    console.log(data);
+    Swal.fire({
+      title: "Session Activated",
+      text: "The session has been activated successfully",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 2000,
     });
+    pagination.runFunction();
+  })
+  .catch((error) => {
+    console.log(error);
+    Swal.fire({
+      title: "Error",
+      text: "An error occurred while activating the session",
+      icon: "error",
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  });
 }
-
-showTable();
