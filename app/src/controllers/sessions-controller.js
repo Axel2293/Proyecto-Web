@@ -203,9 +203,6 @@ async function unenrollStudent(req, res) {
       return res.status(404).json({ error: "Session not found" });
     }
 
-    if (session.status !== "available" || session.status !== "full") {
-      return res.status(400).json({ error: "Session is not available" });
-    }
 
     console.log("req.id: ", req.id);
     const student_id = req.id;
