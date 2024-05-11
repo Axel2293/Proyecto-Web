@@ -121,7 +121,8 @@ function loadData(){
         loadPastEnrolled();
     }
     else if (accountType === "teacher") {
-        
+        loadIncomingCreated();
+        loadPastCreated();
     }
 
 }
@@ -247,4 +248,122 @@ async function loadPastEnrolled(){
     }
 }
 
+/* 
+    Axel 5/11/2024
+    This function will fetch the incoming created sessions (limited to 4 closest sessions)
+*/
+async function loadIncomingCreated(){
+    const token = sessionStorage.getItem("sToken");
+    const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
+    const  incomingDiv = document.getElementById("incomingCards");
+
+    try {
+        //Get current datetime
+        const currentdate = new Date();
+        //Transform to string
+        const datetime = currentdate.toISOString();
+        console.log(datetime);
+        console.log(`${host}showcreat=1&page=1&pagesize=4&from_date=${datetime}`);
+        const response = await fetch(`${host}showcreat=1&page=1&pagesize=4&from_date=${datetime}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth": token,
+            },
+        });
+        const data = await response.json();
+        console.log(data);
+        if (response.ok) {
+            incomingDiv.innerHTML = "";
+            data.forEach((session) => {
+                incomingDiv.innerHTML += `
+                <li>
+                    <i class='bx bx-calendar'></i>
+                    <span class="info">
+                        <h3>
+                            ${session.subject}
+                        </h3>
+                        <p><b>Where? :</b> ${session.location}</p>
+                        <p>${session.start}</p>
+                        <p>${session.end}</p>
+                    </span>
+                </li>
+                `;
+            });
+        }else{
+            Swal.fire({
+                title: "Error!",
+                text: data || "Failed to fetch sessions",
+                icon: "error",
+                confirmButtonText: "Ok",
+            });
+        }
+    }
+    catch (error) {
+        Swal.fire({
+            title: "Error!",
+            text: error || "Failed to fetch sessions",
+            icon: "error",
+            confirmButtonText: "Ok",
+        });
+    }
+}
+
+/* 
+    Axel 5/11/2024
+    This function will show the past created sessions on the history tab
+*/
+async function loadPastCreated(){
+    const token = sessionStorage.getItem("sToken");
+    const host = `https://proyecto-web-0bpb.onrender.com/sessions?`
+    const  historyTable = document.getElementById("history");
+
+    try {
+        //Get current datetime
+        const currentdate = new Date();
+        //Transform to string
+        const datetime = currentdate.toISOString();
+        console.log(datetime);
+        console.log(`${host}showcreat=1&page=1&pagesize=4&to_date=${datetime}`);
+        const response = await fetch(`${host}showcreat=1&page=1&pagesize=4&to_date=${datetime}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth": token,
+            },
+        });
+        const data = await response.json();
+        console.log(data);
+        if (response.ok) {
+            historyTable.innerHTML = "";
+            data.forEach((session) => {
+                historyTable.innerHTML += `
+                <tr>
+                    <td>
+                        <img src="https://www.freeiconspng.com/uploads/business-man-with-clock-to-control-time-of-work-3.png">
+                        <p>${session.subject}</p>
+                    </td>
+                    <td>${session.start}<br>${session.end}</td>
+                    <td><span class="status ${session.status}">${session.status}</span></td>
+                </tr>
+                `;
+            });
+        }else{
+            Swal.fire({
+                title: "Error!",
+                text: data || "Failed to fetch sessions",
+                icon: "error",
+                confirmButtonText: "Ok",
+            });
+        }
+    }
+    catch (error) {
+        Swal.fire({
+            title: "Error!",
+            text: error || "Failed to fetch sessions",
+            icon: "error",
+            confirmButtonText: "Ok",
+        });
+    }
+}
 loadData();
