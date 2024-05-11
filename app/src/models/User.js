@@ -1,4 +1,7 @@
+
 const {mongoose} = require('../db/connection');
+
+const Alert = require('./Alert');
 
 // User schema
 const userSchema = new mongoose.Schema({
@@ -25,7 +28,7 @@ const userSchema = new mongoose.Schema({
         required: false
     },
     alerts:{
-        type: [String],
+        type: [Alert.schema],
         required:false
     }
 

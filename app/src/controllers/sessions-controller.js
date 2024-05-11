@@ -1,20 +1,14 @@
 const Session = require("../models/Session");
 const User = require("../models/User");
+const AlertController = require("./alert-controller");
 const mongoose = require("mongoose");
 
 // IDEA: status completed must be set by the teacher or automatically when just the session date is in the past
 // status are available, cancelled, full
 
 async function getSessions(req, res) {
-  const {
-    q,
-    showenrolled,
-    showcreat,
-    page,
-    pagesize,
-    from_date,
-    to_date,
-  } = req.query;
+  const { q, showenrolled, showcreat, page, pagesize, from_date, to_date } =
+    req.query;
   const user_id = req.id;
   let query = {};
   console.log(req.query);
@@ -58,7 +52,7 @@ async function getSessions(req, res) {
     if (req.accountType == "student" || req.accountType == "both") {
       query["students"] = { $nin: [user_id] };
       // Add a query that filters only available
-      query["status"] = {$eq: "available" };
+      query["status"] = { $eq: "available" };
     } else {
       res.status(404).send({
         error: "Account type doesnt match operation",
@@ -68,7 +62,7 @@ async function getSessions(req, res) {
   console.log("Query:", query);
   try {
     const sessions = await Session.find(query)
-      .skip(((page - 1) * pagesize) || 0)
+      .skip((page - 1) * pagesize || 0)
       .limit(pagesize || 0);
     console.log("Page:", page);
     console.log("PageSize:", pagesize);
@@ -186,6 +180,12 @@ async function enrollStudent(req, res) {
         session.status = "full";
       }
       await session.save();
+      AlertController.createAlert({
+        user_id: session.teacher_id,
+        role: "teacher",
+        message: `Student ${student.name} enrolled in your session ${session.subject}`,
+        status: "unseen",
+      });
       res.status(200).json({ message: "Student enrolled" });
     } else {
       return res.status(400).json({ error: "Session is full" });
@@ -202,7 +202,6 @@ async function unenrollStudent(req, res) {
     if (!session) {
       return res.status(404).json({ error: "Session not found" });
     }
-
 
     console.log("req.id: ", req.id);
     const student_id = req.id;
@@ -227,6 +226,12 @@ async function unenrollStudent(req, res) {
       session.status = "available";
 
       await session.save();
+      AlertController.createAlert({
+        user_id: session.teacher_id,
+        role: "teacher",
+        message: `Student ${student.name} unenrolled from your session ${session.subject}`,
+        status: "unread",
+      });
       res.status(200).json({ message: "Student unenrolled" });
     } else {
       return res.status(400).json({ error: "Student is not registered" });
@@ -292,6 +297,15 @@ async function updateSession(req, res) {
     query.location = location;
 
     await Session.findOneAndUpdate({ _id: id }, query);
+    // create alert for students
+    session.students.forEach(async (student_id) => {
+      AlertController.createAlert({
+        user_id: student_id,
+        role: "student",
+        message: `Session ${session.subject} has been updated`,
+        status: "unread",
+      });
+    });
     res.status(200).json(session);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -321,6 +335,18 @@ async function cancelSession(req, res) {
     session.status = "cancelled";
 
     await session.save();
+    // create alert for students
+    session.students.forEach(async (student_id) => {
+      console.log("student_id: ", student_id);
+
+      AlertController.createAlert({
+        user_id: student_id,
+        role: "student",
+        message: `Session ${session.subject} has been cancelled`,
+        status: "unread",
+      });
+      
+    });
     res.status(200).json({ message: "Session cancelled" });
   } catch (error) {
     res.status(500).json({ error: error.message });
