@@ -138,7 +138,7 @@ function getDateTimeFormated(dStart, dEnd) {
 
 /* 
     Axel 5/11/2024
-    This function will fetch the incoming enrolled sessions (limited to 4 closest sessions)
+    This function will fetch the incoming enrolled/created sessions (limited to 4 closest sessions)
 */
 async function loadIncoming(accountType) {
     const token = sessionStorage.getItem("sToken");
@@ -224,7 +224,7 @@ async function loadIncoming(accountType) {
 
 /* 
     Axel 5/11/2024
-    This function will 
+    This function will fetch the past enrolled/created sessions (limited to 4 closest sessions)
 */
 async function loadPast(accountType) {
     const token = sessionStorage.getItem("sToken");
