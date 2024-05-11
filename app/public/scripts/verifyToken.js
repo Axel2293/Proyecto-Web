@@ -1,11 +1,14 @@
 // Start function to verify user is logged in
 function verifyLoggedIn() {
+    // GEt local route
+    const host = "https://proyecto-web-0bpb.onrender.com"
+
     // Check if token exists in session storage
     const token = sessionStorage.getItem("sToken");
     if (token) {
 
         //Get user info with a fetch request
-        fetch("https://proyecto-web-0bpb.onrender.com/users", {
+        fetch(host+"/users", {
             method: "GET",
             headers: {
                 "x-auth": token,
@@ -25,7 +28,7 @@ function verifyLoggedIn() {
                     timer: 2000,
                 }).then(() => {
                     // Redirect to login page
-                    window.location.href = "https://proyecto-web-0bpb.onrender.com";
+                    window.location.href = "./";
                 });
             });
 
@@ -40,7 +43,7 @@ function verifyLoggedIn() {
             timer: 2000,
         }).then(() => {
             // Redirect to login page
-            window.location.href = "https://proyecto-web-0bpb.onrender.com/login.html";
+            window.location.href = "./login.html";
         });
 
 
