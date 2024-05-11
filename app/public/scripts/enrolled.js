@@ -123,13 +123,7 @@ async function showStudentTable(showenrolled, q, page, pageSize) {
         });
         // Transform sessions into HTML template
         data.forEach(session => {
-            const date_st = new Date(session.start);
-            const date_en = new Date(session.end);
-            const dateDayMonthYear = date_st.toLocaleDateString();
-            const hour_st = (date_st.getUTCHours() + 0).toString().padStart(2, '0');
-            const minutes_st = date_st.getMinutes().toString().padStart(2, '0');
-            const hour_en = (date_en.getUTCHours() + 0).toString().padStart(2, '0');
-            const minutes_en = date_en.getMinutes().toString().padStart(2, '0');
+            const date = getDateTimeFormated(session.start, session.end);
 
             const shtml = `
                 <div class="session">
@@ -139,8 +133,8 @@ async function showStudentTable(showenrolled, q, page, pageSize) {
                         <p class="session-description">${session.description}</p>
                     </div>
                     <div class="session-time">
-                        <p>Date: ${dateDayMonthYear}</p>
-                        <p>Time: ${hour_st}:${minutes_st} - ${hour_en}:${minutes_en}</p>
+                        <p>Date: ${date.start}</p>
+                        <p>Time: ${date.printable_hour}</p>
                     </div>
                     <div class="available">
                         <p>Students: <span class="space">${session.students.length}</span>/${session.students_limit}</p>
