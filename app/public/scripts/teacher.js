@@ -421,16 +421,7 @@ async function showTeacherTable(q, page, pageSize) {
       const sessionsdiv = document.querySelector("#sessionsData");
       sessionsdiv.innerHTML = "";
       data.map((session) => {
-        //Separa la fehca en dia, mes y año y otra variable con la hora
-        const date_st = new Date(session.start);
-        const date_en = new Date(session.end);
-        const dateDayMonthYear = date_st.toLocaleDateString();
-
-        const hour_st = (date_st.getUTCHours() + 0).toString().padStart(2, "0");
-        const minutes_st = date_st.getUTCMinutes().toString().padStart(2, "0");
-
-        const hour_en = (date_en.getUTCHours() + 0).toString().padStart(2, "0");
-        const minutes_en = date_en.getUTCMinutes().toString().padStart(2, "0");
+        const date = getDateTimeFormated(session.start, session.end);
 
         const shtml_cancel = `
                 <div class="session">
@@ -440,8 +431,9 @@ async function showTeacherTable(q, page, pageSize) {
                 </div>
         
                 <div class="session-time">
-                    <p>Date: ${dateDayMonthYear}</p>
-                    <p>Time: ${hour_st}:${minutes_st} - ${hour_en}:${minutes_en}</p>
+                    <p>Date st: ${date.start}</p>
+                    <p>Date en: ${date.end}</p>
+                    <p>Time: ${date.printable_hour}</p>
                 </div>
         
                 <div class="available">
@@ -463,8 +455,9 @@ async function showTeacherTable(q, page, pageSize) {
                 </div>
         
                 <div class="session-time">
-                    <p>Date: ${dateDayMonthYear}</p>
-                    <p>Time: ${hour_st}:${minutes_st} - ${hour_en}:${minutes_en}</p>
+                  <p>Date st: ${date.start}</p>
+                  <p>Date en: ${date.end}</p>
+                  <p>Time: ${date.printable_hour}</p>
                 </div>
         
                 <div class="available">
