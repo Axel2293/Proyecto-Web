@@ -55,27 +55,6 @@ window.addEventListener("resize", () => {
 
 const toggler = document.getElementById("theme-toggle");
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Logout button
-    const logoutBtn = document.querySelector(".sidebar .side-menu li a.logout");
-    logoutBtn.addEventListener("click", function () {
-        // redirect to route /home with sweetalert confirmation
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You will be logged out",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, log me out!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = "/";
-            }
-        });
-    });
-});
-
 // Get session storage to identify the account type (student, teacher)
 const accountType = sessionStorage.getItem("accountType");
 // if the account type is student, write in the session.html in the "side_menu" a link to the session.html
@@ -93,42 +72,51 @@ if (accountType === "teacher") {
 
 const search = document.getElementById("querysearch");
 search.addEventListener("input", () => {
-    showTable();
+    pagination.setPage(1);
+    pagination.runFunction();
 });
 
-function showTable() {
-    const accountType = sessionStorage.getItem('accountType');
+document.getElementById("sendSearch").addEventListener("click", () => {
+    pagination.setPage(1);
+    pagination.runFunction();
+});
 
+function showTable(page, pageSize) {
+    const accountType = sessionStorage.getItem('accountType');
     //Get value of search input
     let q = search.value;
-    if (q == "") {
+    
+    if (q === "") {
         q = undefined;
     }
 
     if (accountType == "student") {
         console.log("LOAD STUDENT TABLE TO SEE AVAILABLE SESSIONS")
-        showStudentTable("0", q)
+        showStudentTable("0", q, page, pageSize);
     } else {
         window.location.href = "./login.html";
     }
 }
 
-async function showStudentTable(getEnrolled, q) {
+
+async function showStudentTable(showenrolled, q, page, pageSize) {
 
     const token = sessionStorage.getItem("sToken");
     let host = `https://proyecto-web-0bpb.onrender.com/sessions?`;
 
     if (q) {
-        host += `&q=${q}`;
+        host += `q=${q}&`;
     }
 
-    if (getEnrolled == '1') {
-        host += `&showenrolled=1`
-    } else if (getEnrolled == '0') {
-        host += `&showenrolled=0`
+    if (showenrolled) {
+        host += `showenrolled=${showenrolled}&`
     }
+
     try {
-        const response = await fetch(host, {
+        const sessionsdiv = document.querySelector("#sessionsData");
+        sessionsdiv.innerHTML = "";
+        console.log(host+`page=${page}&pagesize=${pageSize}`);
+        const response = await fetch(host+`page=${page}&pagesize=${pageSize}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -137,6 +125,7 @@ async function showStudentTable(getEnrolled, q) {
         });
 
         if (!response.ok) {
+            console.log();
             throw new Error("Failed to fetch sessions");
         }
 
@@ -149,9 +138,6 @@ async function showStudentTable(getEnrolled, q) {
             return dateA - dateB;
         });
 
-        // Transform sessions into html template
-        const sessionsdiv = document.querySelector("#sessionsData");
-        sessionsdiv.innerHTML = "";
 
         data.forEach(session => {
             const date_st = new Date(session.start);
@@ -189,10 +175,17 @@ async function showStudentTable(getEnrolled, q) {
 
             // Add the html to the div at the end
             sessionsdiv.innerHTML += shtml;
-            console.log(shtml);
         });
+        console.log(data);
+        pagination.updateActiveButtons(data.length);
+
     } catch (error) {
-        console.log(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Failed to fetch sessions: ' + error,
+            showConfirmButton: false,
+            timer: 5000,
+        })
     }
 
     // Get sessions and display them with html template below
@@ -202,6 +195,7 @@ async function enrollSession(id) {
     const token = sessionStorage.getItem("sToken");
     const host = `https://proyecto-web-0bpb.onrender.com/sessions/enroll/${id}`;
 
+    console.log("Enrolling session: " + id);
     // Close sidebar
     document.querySelector('.sidebar').classList.add('hidden');
 
@@ -237,7 +231,7 @@ async function enrollSession(id) {
                 document.querySelector('.sidebar').classList.remove('hidden');
             }
         });
-        showTable();
+        pagination.runFunction();
     } catch (error) {
         Swal.fire({
             icon: 'error',
@@ -251,7 +245,3 @@ async function enrollSession(id) {
     }
 }
 
-
-
-
-showTable();

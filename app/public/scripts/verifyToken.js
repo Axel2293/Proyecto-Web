@@ -1,5 +1,5 @@
 // Start function to verify user is logged in
-function verifyLoggedIn() {
+async function verifyLoggedIn() {
     // GEt local route
     const host = "https://proyecto-web-0bpb.onrender.com"
 
@@ -8,29 +8,37 @@ function verifyLoggedIn() {
     if (token) {
 
         //Get user info with a fetch request
-        fetch(host+"/users", {
+        await fetch(host+"/users", {
             method: "GET",
             headers: {
                 "x-auth": token,
             },
         })
-            .then((response) => response.json())
-            .then((data) => {
+        .then(async (response) => {
+            const data = await response.json(); 
+
+            if (response.ok) {
+                console.log("User is logged in");
                 sessionStorage.setItem("sUser", JSON.stringify(data));
                 console.log(data);
-            })
-            .catch((error) => {
-                swal.fire({
-                    title: "Error",
-                    text: "An error occurred while fetching user info",
-                    icon: "error",
-                    showConfirmButton: false,
-                    timer: 2000,
-                }).then(() => {
-                    // Redirect to login page
-                    window.location.href = "./";
-                });
+                pagination.runFunction();
+            }
+            else {
+                throw new Error(data.error);
+            }
+        })
+        .catch((error) => {
+            swal.fire({
+                title: "Error",
+                text: error,
+                icon: "error",
+                showConfirmButton: false,
+                timer: 2000,
+            }).then(() => {
+                // Redirect to login page
+                window.location.href = "./login.html";
             });
+        });
 
         // Continue with your code here
     } else {
@@ -46,10 +54,5 @@ function verifyLoggedIn() {
             window.location.href = "./login.html";
         });
 
-
-        // Redirect to login page or show login form
-        // Example: window.location.href = "/login";
     }
 }
-
-verifyLoggedIn();
