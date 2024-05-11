@@ -81,6 +81,20 @@ document.getElementById("sendSearch").addEventListener("click", () => {
     pagination.runFunction();
 });
 
+function getDateTimeFormated(dStart, dEnd) {
+    // give format to the Hour
+    const start = dStart.split("T");
+    const end = dEnd.split("T");
+    const startHour = start[1].split(":");
+    const endHour = end[1].split(":");
+    const startHourFormat = `${startHour[0]}:${startHour[1]}`;
+    const endHourFormat = `${endHour[0]}:${endHour[1]}`;
+
+    const printable_hour = `${startHourFormat} - ${endHourFormat}`;
+
+    return {start: start[0], end:end[0], printable_hour: printable_hour};
+}
+
 function showTable(page, pageSize) {
     const accountType = sessionStorage.getItem('accountType');
     //Get value of search input
@@ -90,16 +104,31 @@ function showTable(page, pageSize) {
         q = undefined;
     }
 
+    // Get the from date and to date
+    const dateFrom = document.getElementById('dateFrom');
+    const dateTo = document.getElementById('dateTo');
+
+    let dateFromValue = undefined;
+    let dateToValue = undefined;
+
+    if (dateFrom && dateFrom.value !== '') {
+        dateFromValue = dateFrom.value;
+    }
+
+    if (dateTo && dateTo.value !== '') {
+        dateToValue = dateTo.value;
+    }
+
     if (accountType == "student") {
         console.log("LOAD STUDENT TABLE TO SEE AVAILABLE SESSIONS")
-        showStudentTable("0", q, page, pageSize);
+        showStudentTable("0", q, page, pageSize, dateFromValue, dateToValue);
     } else {
         window.location.href = "./login.html";
     }
 }
 
 
-async function showStudentTable(showenrolled, q, page, pageSize) {
+async function showStudentTable(showenrolled, q, page, pageSize, dateFromValue, dateToValue) {
 
     const token = sessionStorage.getItem("sToken");
     let host = `https://proyecto-web-0bpb.onrender.com/sessions?`;
@@ -110,6 +139,14 @@ async function showStudentTable(showenrolled, q, page, pageSize) {
 
     if (showenrolled) {
         host += `showenrolled=${showenrolled}&`
+    }
+
+    if (dateFromValue) {
+        host += `from_date=${dateFromValue}&`;
+    }
+
+    if (dateToValue) {
+        host += `to_date=${dateToValue}&`;
     }
 
     try {
@@ -140,15 +177,8 @@ async function showStudentTable(showenrolled, q, page, pageSize) {
 
 
         data.forEach(session => {
-            const date_st = new Date(session.start);
-            const date_en = new Date(session.end);
-            const dateDayMonthYear = date_st.toLocaleDateString();
-
-            const hour_st = (date_st.getUTCHours() + 0).toString().padStart(2, '0');
-            const minutes_st = date_st.getUTCMinutes().toString().padStart(2, '0');
-
-            const hour_en = (date_en.getUTCHours() + 0).toString().padStart(2, '0');
-            const minutes_en = date_en.getUTCMinutes().toString().padStart(2, '0');
+            // give format to the Hour
+            const dateFormated = getDateTimeFormated(session.start, session.end);
 
             const shtml = `
                     <div class="session">
@@ -159,8 +189,9 @@ async function showStudentTable(showenrolled, q, page, pageSize) {
                         </div>
                 
                         <div class="session-time">
-                            <p>Date: ${dateDayMonthYear}</p>
-                            <p>Time: ${hour_st}:${minutes_st} - ${hour_en}:${minutes_en}</p>
+                            <p>Start: ${dateFormated.start}</p>
+                            <p>End: ${dateFormated.end}</p>
+                            <p>Time:${dateFormated.printable_hour}</p>
                         </div>
                 
                         <div class="available">
@@ -277,8 +308,11 @@ window.onclick = function (event) {
 function clearFilter() {
     document.getElementById('dateFrom').value = '';
     document.getElementById('dateTo').value = '';
+
+    pagination.runFunction();
 }
 
-async function filterDate() {
-    // Implement filter logic
+function filterDate() {
+    console.log("FILTERING BY DATE");
+    pagination.runFunction();
 }
