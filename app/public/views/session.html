@@ -40,10 +40,10 @@
             <!-- <li><a href="/settings"><i class='bx bx-cog'>
                     </i>Settings</a></li> -->
             <li>
-            <a href="#" class="logout" id="logout">
-                <i class='bx bx-log-out-circle'></i>
-                <span>Logout</span>
-            </a>
+                <a href="#" class="logout" id="logout">
+                    <i class='bx bx-log-out-circle'></i>
+                    <span>Logout</span>
+                </a>
             </li>
         </ul>
     </div>
@@ -88,6 +88,23 @@
             <div class="search-bar">
                 <input type="search" placeholder="Search..." id="querysearch">
                 <button class="search-btn" type="submit" id="sendSearch"><i class='bx bx-search'></i></button>
+                <!-- Filter Modal -->
+                <div id="filterModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <label for="dateFrom" class="modal-label">From date:</label>
+                        <input type="date" id="dateFrom" class="modal-input">
+                        <label for="dateTo" class="modal-label">To date:</label>
+                        <input type="date" id="dateTo" class="modal-input">
+                        <button onclick="clearFilter()" class="modal-btn">Clear</button>
+                        <button onclick="filterDate()" class="modal-btn">Filter</button>
+                    </div>
+                </div>
+
+                <!-- Filter Button -->
+                <div class="filter">
+                    <button class="filter-btn" id="filterDate" onclick="showFilter()"><i class='bx bx-filter'></i></button>
+                </div>
             </div>
 
             <!-- End of Insights -->

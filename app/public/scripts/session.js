@@ -85,7 +85,7 @@ function showTable(page, pageSize) {
     const accountType = sessionStorage.getItem('accountType');
     //Get value of search input
     let q = search.value;
-    
+
     if (q === "") {
         q = undefined;
     }
@@ -115,8 +115,8 @@ async function showStudentTable(showenrolled, q, page, pageSize) {
     try {
         const sessionsdiv = document.querySelector("#sessionsData");
         sessionsdiv.innerHTML = "";
-        console.log(host+`page=${page}&pagesize=${pageSize}`);
-        const response = await fetch(host+`page=${page}&pagesize=${pageSize}`, {
+        console.log(host + `page=${page}&pagesize=${pageSize}`);
+        const response = await fetch(host + `page=${page}&pagesize=${pageSize}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -245,3 +245,40 @@ async function enrollSession(id) {
     }
 }
 
+function showFilter() {
+    const filterModal = document.getElementById('filterModal');
+    filterModal.style.display = "block";
+    const sideBar = document.querySelector('.sidebar');
+    sideBar.classList.add('hidden');
+}
+
+// Get the modal
+var modal = document.getElementById("filterModal");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function () {
+    modal.style.display = "none";
+    const sideBar = document.querySelector('.sidebar');
+    sideBar.classList.remove('hidden');
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        const sideBar = document.querySelector('.sidebar');
+        sideBar.classList.remove('hidden');
+    }
+}
+
+function clearFilter() {
+    document.getElementById('dateFrom').value = '';
+    document.getElementById('dateTo').value = '';
+}
+
+async function filterDate() {
+    // Implement filter logic
+}
