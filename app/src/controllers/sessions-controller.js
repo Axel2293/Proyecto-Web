@@ -10,7 +10,6 @@ async function getSessions(req, res) {
     q,
     showenrolled,
     showcreat,
-    status,
     page,
     pagesize,
     from_date,
@@ -58,6 +57,8 @@ async function getSessions(req, res) {
   } else if (showenrolled == "0") {
     if (req.accountType == "student" || req.accountType == "both") {
       query["students"] = { $nin: [user_id] };
+      // Add a query that filters only available
+      query["status"] = {$eq: "available" };
     } else {
       res.status(404).send({
         error: "Account type doesnt match operation",
