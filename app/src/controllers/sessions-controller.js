@@ -18,7 +18,7 @@ async function getSessions(req, res) {
   } = req.query;
   const user_id = req.id;
   let query = {};
-
+  console.log(req.query);
   if (showcreat) {
     if (req.accountType == "teacher" || req.accountType == "both") {
       query["teacher_id"] = user_id;
@@ -67,9 +67,10 @@ async function getSessions(req, res) {
   console.log("Query:", query);
   try {
     const sessions = await Session.find(query)
-      .skip((page - 1) * pagesize || 0)
+      .skip(((page - 1) * pagesize) || 0)
       .limit(pagesize || 0);
-    console.log("Sessions:", sessions);
+    console.log("Page:", page);
+    console.log("PageSize:", pagesize);
     res.status(200).json(sessions);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -277,10 +278,6 @@ async function updateSession(req, res) {
         .status(400)
         .json({ error: "New session dates overlap with another session" });
       return;
-    }
-
-    if (session.status == "cancelled") {
-      return res.status(400).json({ error: "Session is cancelled" });
     }
 
     if (students_limit < session.students.length) {
