@@ -62,7 +62,30 @@ async function getSessions(req, res) {
       .limit(pagesize || 0);
     console.log("Page:", page);
     console.log("PageSize:", pagesize);
-    res.status(200).json(sessions);
+
+    let sessions_copy = [];
+
+    for (let i = 0; i < sessions.length; i++) {
+      let element = sessions[i];
+      let teacher_name = await User.findById(element.teacher_id);
+      console.log("Teacher name: ", teacher_name);
+      sessions_copy.push({
+        _id: element._id,
+        teacher_id: teacher_name.name,
+        students: element.students,
+        students_limit: element.students_limit,
+        subject: element.subject,
+        description: element.description,
+        start: element.start,
+        end: element.end,
+        location: element.location,
+        status: element.status,
+      });
+    }
+
+    // change every session.teacher_id to the teacher name in a for each
+
+    await res.status(200).json(sessions_copy);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -338,7 +361,6 @@ async function cancelSession(req, res) {
         message: `Session ${session.subject} has been cancelled`,
         status: "unread",
       });
-
     });
     res.status(200).json({ message: "Session cancelled" });
   } catch (error) {
