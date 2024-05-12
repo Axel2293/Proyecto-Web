@@ -306,7 +306,7 @@ async function loadAlerts() {
 
     try {
         const response = await fetch(
-            `http://localhost:3151/users/alerts`,
+            `https://proyecto-web-0bpb.onrender.com/users/alerts`,
             {
                 method: "GET",
                 headers: {
@@ -333,7 +333,7 @@ async function loadAlerts() {
                     `;
                     li.addEventListener('click', async () => {
                         try {
-                            const response = await fetch(`http://localhost:3151/users/alerts/${alert._id}`, {
+                            const response = await fetch(`https://proyecto-web-0bpb.onrender.com/users/alerts/${alert._id}`, {
                                 method: 'PUT',
                                 headers: {
                                     "Content-Type": "application/json",
