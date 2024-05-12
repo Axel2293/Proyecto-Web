@@ -247,7 +247,7 @@ async function unenrollStudent(req, res) {
       AlertController.createAlert({
         user_id: session.teacher_id,
         message: `Student ${student.name} unenrolled from your session ${session.subject}`,
-        status: "unread",
+        status: "unseen",
       });
       res.status(200).json({ message: "Student unenrolled" });
     } else {
@@ -319,7 +319,7 @@ async function updateSession(req, res) {
       AlertController.createAlert({
         user_id: student_id,
         message: `Session ${session.subject} has been updated`,
-        status: "unread",
+        status: "unseen",
       });
     });
     res.status(200).json(session);
@@ -359,7 +359,7 @@ async function cancelSession(req, res) {
       AlertController.createAlert({
         user_id: student_id,
         message: `Session ${session.subject} has been cancelled`,
-        status: "unread",
+        status: "unseen",
       });
     });
     res.status(200).json({ message: "Session cancelled" });
