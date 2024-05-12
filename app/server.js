@@ -13,6 +13,10 @@ const usersRoute = require("./src/routes/userRoutes");
 const sessionsRoute = require("./src/routes/session-route");
 const authRoute = require("./src/routes/authRoutes");
 
+const Utils = require("./src/utils/utils");
+const AlertController = require("./src/controllers/alert-controller");
+const UserContoller = require("./src/controllers/user-controller");
+
 app.use(express.json());
 
 //CORS middleware
@@ -46,7 +50,6 @@ app.get("/", (req, res) => {
   });
 });
 
-
 //Users routes
 app.use("/users", tokent_md.verifyAuthToken, usersRoute);
 
@@ -54,7 +57,6 @@ app.use("/users", tokent_md.verifyAuthToken, usersRoute);
 app.use("/auth", authRoute);
 
 app.use("/sessions", tokent_md.verifyAuthToken, sessionsRoute);
-
 
 //app.use("/sessions/:uuid", tokent_md.verifyAuthToken, sessionsRoute);
 

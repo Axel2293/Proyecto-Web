@@ -120,6 +120,7 @@ function loadData() {
 
     loadIncoming(accountType);
     loadPast(accountType);
+    loadAlerts();
 }
 
 function getDateTimeFormated(dStart, dEnd) {
@@ -133,7 +134,7 @@ function getDateTimeFormated(dStart, dEnd) {
 
     const printable_hour = `${startHourFormat} - ${endHourFormat}`;
 
-    return {start: start[0], end:end[0], printable_hour: printable_hour};
+    return { start: start[0], end: end[0], printable_hour: printable_hour };
 }
 
 /* 
@@ -142,7 +143,7 @@ function getDateTimeFormated(dStart, dEnd) {
 */
 async function loadIncoming(accountType) {
     const token = sessionStorage.getItem("sToken");
-    let host = `https://proyecto-web-0bpb.onrender.com/sessions?`
+    let host = `https://proyecto-web-0bpb.onrender.com/sessions?`;
     const incomingDiv = document.getElementById("incomingCards");
 
     try {
@@ -155,20 +156,22 @@ async function loadIncoming(accountType) {
         if (accountType === "student") {
             host += "showenrolled=1&";
             console.log("SHOW STUDENT ENROLLED");
-        } else if (accountType === "teacher")
-        {
+        } else if (accountType === "teacher") {
             host += "showcreat=1&";
             console.log("SHOW TEACHER CREATED");
         }
 
         console.log(`${host}page=1&pagesize=4&from_date=${datetime}`);
-        const response = await fetch(`${host}page=1&pagesize=4&from_date=${datetime}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "x-auth": token,
-            },
-        });
+        const response = await fetch(
+            `${host}page=1&pagesize=4&from_date=${datetime}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth": token,
+                },
+            }
+        );
         const data = await response.json();
         console.log(data);
         if (response.ok) {
@@ -182,8 +185,8 @@ async function loadIncoming(accountType) {
                     session.description = session.description.substring(0, 25) + "...";
                 }
 
-                if (session.subject.length > 14) {
-                    session.subject = session.subject.substring(0, 25) + "...";
+                if (session.subject.length > 16) {
+                    session.subject = session.subject.substring(0, 16) + "...";
                 }
 
                 incomingDiv.innerHTML += `
@@ -211,8 +214,7 @@ async function loadIncoming(accountType) {
                 confirmButtonText: "Ok",
             });
         }
-    }
-    catch (error) {
+    } catch (error) {
         Swal.fire({
             title: "Error!",
             text: error || "Failed to fetch sessions",
@@ -228,7 +230,7 @@ async function loadIncoming(accountType) {
 */
 async function loadPast(accountType) {
     const token = sessionStorage.getItem("sToken");
-    let  host = `https://proyecto-web-0bpb.onrender.com/sessions?`
+    let host = `https://proyecto-web-0bpb.onrender.com/sessions?`;
     const historyTable = document.getElementById("history");
 
     try {
@@ -241,20 +243,22 @@ async function loadPast(accountType) {
         if (accountType === "student") {
             host += "showenrolled=1&";
             console.log("SHOW STUDENT PAST ENROLLED");
-        } else if (accountType === "teacher")
-        {
+        } else if (accountType === "teacher") {
             host += "showcreat=1&";
             console.log("SHOW TEACHER PAST CREATED");
         }
 
         console.log(`${host}page=1&pagesize=4&to_date=${datetime}`);
-        const response = await fetch(`${host}page=1&pagesize=4&to_date=${datetime}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "x-auth": token,
-            },
-        });
+        const response = await fetch(
+            `${host}page=1&pagesize=4&to_date=${datetime}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth": token,
+                },
+            }
+        );
         const data = await response.json();
         console.log(data);
         if (response.ok) {
@@ -286,11 +290,76 @@ async function loadPast(accountType) {
                 confirmButtonText: "Ok",
             });
         }
-    }
-    catch (error) {
+    } catch (error) {
         Swal.fire({
             title: "Error!",
             text: error || "Failed to fetch sessions",
+            icon: "error",
+            confirmButtonText: "Ok",
+        });
+    }
+}
+
+async function loadAlerts() {
+    const token = sessionStorage.getItem("sToken");
+    const alertDiv = document.getElementById("alert-list");
+
+    try {
+        const response = await fetch(
+            `https://proyecto-web-0bpb.onrender.com/users/alerts`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth": token,
+                },
+            });
+
+        if (response.headers.get("content-type").includes("application/json")) {
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+                alertDiv.innerHTML = "";
+                data.forEach((alert) => {
+                    const li = document.createElement('li');
+                    li.className = "completed";
+                    li.id = alert._id;
+                    li.innerHTML = `
+                        <div class="task-title">
+                            <i class="bx bx-check-circle"></i>
+                            <p>${alert.message}</p>
+                        </div>
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                    `;
+                    li.addEventListener('click', async () => {
+                        try {
+                            const response = await fetch(`https://proyecto-web-0bpb.onrender.com/users/alerts/${alert._id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "x-auth": token,
+                                },
+                                body: JSON.stringify({ status: 'seen' })
+                            });
+                            if (response.ok) {
+                                location.reload();
+                            } else {
+                                console.error('Failed to update status');
+                            }
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    });
+                    alertDiv.appendChild(li);
+                });
+            }
+        } else {
+            console.error("Response was not JSON");
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "Error!",
+            text: error || "Failed to fetch alerts",
             icon: "error",
             confirmButtonText: "Ok",
         });
