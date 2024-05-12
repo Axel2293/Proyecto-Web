@@ -1,10 +1,6 @@
 const Session = require("../models/Session");
 const User = require("../models/User");
 const AlertController = require("./alert-controller");
-const mongoose = require("mongoose");
-
-// IDEA: status completed must be set by the teacher or automatically when just the session date is in the past
-// status are available, cancelled, full
 
 async function getSessions(req, res) {
   const { q, showenrolled, showcreat, page, pagesize, from_date, to_date } =
@@ -346,7 +342,7 @@ async function cancelSession(req, res) {
         message: `Session ${session.subject} has been cancelled`,
         status: "unread",
       });
-      
+
     });
     res.status(200).json({ message: "Session cancelled" });
   } catch (error) {

@@ -13,7 +13,6 @@ const usersRoute = require("./src/routes/userRoutes");
 const sessionsRoute = require("./src/routes/session-route");
 const authRoute = require("./src/routes/authRoutes");
 
-
 const Utils = require("./src/utils/utils");
 const AlertController = require("./src/controllers/alert-controller");
 const UserContoller = require("./src/controllers/user-controller");
@@ -51,8 +50,8 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/test/alerts", (req, res) => {
-  AlertController.getAlerts(req, res);
+app.get("/alert/:id", tokent_md.verifyAuthToken, (req, res) => {
+  AlertController.updateAlertStatus(req, res);
 });
 
 //Users routes

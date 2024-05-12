@@ -74,4 +74,36 @@ async function updateUser(req, res) {
   }
 }
 
+// return the alerts unseen and with the same role
+async function getAlerts(req, res) {
+  const id = req.id;
+  const user = await User.findById(id);
+  const alerts = user.alerts;
+  const role = user.accountType;
+  const alertsToSend = [];
+  for (let i = 0; i < alerts.length; i++) {
+    if (alerts[i].status == "unseen" && alerts[i].role == role) {
+      alertsToSend.push(alerts[i]);
+    }
+  }
+  res.send(alertsToSend);
+}
+
+// mark an alert as seen
+async function markAlertAsSeen(req, res) {
+  const id = req.id;
+  const alertId = req.params.id;
+  const user = await User.findById(id);
+
+  user.alerts.forEach((alert) => {
+    if (alert._id == alertId) {
+      alert.status = "seen";
+    }
+  });
+  await User.updateOne({ _id: id }, { alerts: user.alerts });
+  res.send({
+    msg: "Alert marked as seen",
+  });
+}
+
 module.exports = { getUserInfo, updateUser };
