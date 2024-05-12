@@ -178,7 +178,6 @@ async function enrollStudent(req, res) {
       await session.save();
       AlertController.createAlert({
         user_id: session.teacher_id,
-        role: "teacher",
         message: `Student ${student.name} enrolled in your session ${session.subject}`,
         status: "unseen",
       });
@@ -224,7 +223,6 @@ async function unenrollStudent(req, res) {
       await session.save();
       AlertController.createAlert({
         user_id: session.teacher_id,
-        role: "teacher",
         message: `Student ${student.name} unenrolled from your session ${session.subject}`,
         status: "unread",
       });
@@ -297,7 +295,6 @@ async function updateSession(req, res) {
     session.students.forEach(async (student_id) => {
       AlertController.createAlert({
         user_id: student_id,
-        role: "student",
         message: `Session ${session.subject} has been updated`,
         status: "unread",
       });
@@ -338,7 +335,6 @@ async function cancelSession(req, res) {
 
       AlertController.createAlert({
         user_id: student_id,
-        role: "student",
         message: `Session ${session.subject} has been cancelled`,
         status: "unread",
       });

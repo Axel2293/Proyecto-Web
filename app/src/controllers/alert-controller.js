@@ -3,13 +3,11 @@ const Alert = require("../models/Alert");
 
 async function createAlert(data) {
   const id = data.user_id;
-  const role = data.role;
   const message = data.message;
   const status = data.status;
 
   const alert = new Alert({
     user_id: id,
-    role: role,
     message: message,
     status: status,
   });
