@@ -78,14 +78,18 @@ async function updateUser(req, res) {
 async function getAlerts(req, res) {
   const id = req.id;
   const user = await User.findById(id);
+
   const alerts = user.alerts;
-  const role = user.accountType;
+  console.log(alerts);
   const alertsToSend = [];
-  for (let i = 0; i < alerts.length; i++) {
-    if (alerts[i].status == "unseen" && alerts[i].role == role) {
-      alertsToSend.push(alerts[i]);
+
+  // Filter alerts that have not been seen and are same type of user
+  alerts.forEach((alert) => {
+    if (alert.status == "unseen") {
+      alertsToSend.push(alert);
     }
-  }
+  });
+
   res.send(alertsToSend);
 }
 
@@ -95,15 +99,25 @@ async function markAlertAsSeen(req, res) {
   const alertId = req.params.id;
   const user = await User.findById(id);
 
+  // Find alert and update
   user.alerts.forEach((alert) => {
     if (alert._id == alertId) {
       alert.status = "seen";
     }
   });
-  await User.updateOne({ _id: id }, { alerts: user.alerts });
-  res.send({
-    msg: "Alert marked as seen",
-  });
+  // Update user
+  try {
+    await User.updateOne({ _id: id }, { alerts: user.alerts });
+    res.status(200).send({
+      msg: "Alert marked as seen",
+    });
+    return;
+  } catch (error) {
+    res.status(500).send({
+      error: "Could not mark alert as seen " + error,
+    });
+    return;
+  }
 }
 
-module.exports = { getUserInfo, updateUser };
+module.exports = { getUserInfo, updateUser, getAlerts, markAlertAsSeen};

@@ -5,10 +5,6 @@ const alertSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     required: true,
   },
-  role: {
-    type: String,
-    required: true,
-  },
   message: {
     type: String,
     required: true,

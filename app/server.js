@@ -50,10 +50,6 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/alert/:id", tokent_md.verifyAuthToken, (req, res) => {
-  AlertController.updateAlertStatus(req, res);
-});
-
 //Users routes
 app.use("/users", tokent_md.verifyAuthToken, usersRoute);
 
